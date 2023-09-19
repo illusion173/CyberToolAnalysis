@@ -9,3 +9,4 @@ CS490 Project - A tool to analyze cybersecurity tools!
 - Jeremiah Webb, <WebbJ31@my.erau.edu>
 - Nicolas Rodriguez, <Rodrin34@my.erau.edu>
 - Olivia Meholic, <meholico@my.erau.edu>
+- Max Murphy, <murphb22@my.erau.edu>
