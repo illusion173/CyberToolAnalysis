@@ -1,6 +1,8 @@
 # CyberToolAnalysis
 CS490 Project - A tool to analyze cybersecurity tools!
-
+[![License](https://img.shields.io/github/license/illusion173/CyberToolAnalysis)](https://github.com/illusion173/CyberToolAnalysis/blob/main/LICENSE)
+![Repo Size](https://img.shields.io/github/repo-size/illusion173/CyberToolAnalysis)
+![Language](https://img.shields.io/github/languages/top/illusion173/CyberToolAnalysis)
 # WORK IN PROGRESS
 
 ### Contributors
