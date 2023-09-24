@@ -1,0 +1,15 @@
+# Meeting Notes for Meeting on 9/24/2023
+
+## Research Assignments
+Jeremiah:  Industrial Control systems,
+Olivia:  Aircraft Log Anomaly Detection Tools,
+Sarah: cybersecurity AI/ML tools
+
+## Programming Assignments 
+### Front End
+Olivia, Sarah working on JavaScript, on the service Amplify & Cognito
+Nick will be working on developing Cogito's Authentication system into the website,
+API work, Max (LMK if you don''t want to do this and want to switch),  Max will be working with Joe on ensuring the website (Amplify) /backend logic (Lambda) /database (DynamoDb) can work together.
+### Back End
+Joe will focus on database operations and  develop the appropriate filter queries,
+Jeremiah,  Working on getting the end report form pdf functions, based on user choice/filter reccs
