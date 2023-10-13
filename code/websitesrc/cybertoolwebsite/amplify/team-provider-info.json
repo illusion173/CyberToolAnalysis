@@ -1,0 +1,15 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-cybertoolwebsite-dev-231805-authRole",
+      "UnauthRoleArn": "arn:aws:iam::417838760454:role/amplify-cybertoolwebsite-dev-231805-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::417838760454:role/amplify-cybertoolwebsite-dev-231805-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-cybertoolwebsite-dev-231805-deployment",
+      "UnauthRoleName": "amplify-cybertoolwebsite-dev-231805-unauthRole",
+      "StackName": "amplify-cybertoolwebsite-dev-231805",
+      "StackId": "arn:aws:cloudformation:us-east-1:417838760454:stack/amplify-cybertoolwebsite-dev-231805/21eb2f70-6977-11ee-b3f8-12e538c4def5",
+      "AmplifyAppId": "d203o7j8spiuus"
+    }
+  }
+}
