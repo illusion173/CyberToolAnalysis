@@ -2,12 +2,12 @@ use aws_sdk_s3::presigning::PresigningConfig;
 use aws_sdk_s3::Client as S3Client;
 use lambda_runtime::{run, service_fn, Error, LambdaEvent};
 use serde::{Deserialize, Serialize};
-use serde_json::{json, Value};
 use std::time::Duration;
 #[derive(Deserialize)]
 struct Request {
     bucket: String,
     object: String,
+    time: u64,
 }
 
 #[derive(Serialize, Deserialize)]
@@ -38,20 +38,22 @@ async fn get_presigned_request(client_opts: &Opts) -> Result<String, Error> {
     Ok(url)
 }
 
-async fn function_handler(event: LambdaEvent<Request>) -> Result<Value, Error> {
+async fn function_handler(event: LambdaEvent<Request>) -> Result<Response, Error> {
+    // Derive the options, bucket, object, time?
     let client_opts = Opts {
         bucket: event.payload.bucket,
         object: event.payload.object,
-        expires_in: 900,
+        expires_in: event.payload.time,
     };
 
     let presigned_url = get_presigned_request(&client_opts).await.unwrap();
-    // Return `Response` (it will be serialized to JSON automatically by the runtime)
+
+    // Return Response, contains url for physical object in s3
     let resp = Response {
         status_code: 200,
         url: presigned_url,
     };
-    Ok(json!(resp))
+    Ok(resp)
 }
 
 #[tokio::main]
