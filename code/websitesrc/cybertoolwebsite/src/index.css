@@ -11,3 +11,7 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+.Star1 {
+  position: relative;
+  top: 40px; left: 40px;
+}

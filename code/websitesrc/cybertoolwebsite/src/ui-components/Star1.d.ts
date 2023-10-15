@@ -8,10 +8,10 @@ import * as React from "react";
 import { EscapeHatchProps } from "@aws-amplify/ui-react/internal";
 import { IconProps } from "@aws-amplify/ui-react";
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
-export declare type Polygon1OverridesProps = {
-    Polygon1?: PrimitiveOverrideProps<IconProps>;
+export declare type Star1OverridesProps = {
+    Star1?: PrimitiveOverrideProps<IconProps>;
 } & EscapeHatchProps;
-export declare type Polygon1Props = React.PropsWithChildren<Partial<IconProps> & {
-    overrides?: Polygon1OverridesProps | undefined | null;
+export declare type Star1Props = React.PropsWithChildren<Partial<IconProps> & {
+    overrides?: Star1OverridesProps | undefined | null;
 }>;
-export default function Polygon1(props: Polygon1Props): React.ReactElement;
+export default function Star1(props: Star1Props): React.ReactElement;

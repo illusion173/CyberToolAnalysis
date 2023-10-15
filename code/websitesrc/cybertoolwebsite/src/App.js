@@ -1,8 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 import {
-  Polygon1,
-  Rectangle1
+  Star1 
  } from './ui-components';
 function App() {
   return (
@@ -10,10 +9,9 @@ function App() {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
-          Edit <code>src/App.js</code> and save to reload.
+          "My syndrome may be down but my hopes are up" -Jeremiah Webb
         </p>
-        <Polygon1 />
-        <Rectangle1/>
+        <Star1 />
         <a
           className="App-link"
           href="https://reactjs.org"
@@ -28,3 +26,4 @@ function App() {
 }
 
 export default App;
+
