@@ -1,55 +1,58 @@
+use aws_sdk_s3::presigning::PresigningConfig;
+use aws_sdk_s3::Client as S3Client;
 use lambda_runtime::{run, service_fn, Error, LambdaEvent};
-
 use serde::{Deserialize, Serialize};
-
-/// This is a made-up example. Requests come into the runtime as unicode
-/// strings in json format, which can map to any structure that implements `serde::Deserialize`
-/// The runtime pays no attention to the contents of the request payload.
+use std::time::Duration;
 #[derive(Deserialize)]
 struct Request {
-    command: String,
-}
-
-/// This is a made-up example of what a response structure may look like.
-/// There is no restriction on what it can be. The runtime requires responses
-/// to be serialized into json. The runtime pays no attention
-/// to the contents of the response payload.
-#[derive(Serialize)]
-struct Response {
-    req_id: String,
-    msg: String,
-}
-
-#[derive(Deserialize)]
-struct Opts {
-    region: Option<String>,
     bucket: String,
     object: String,
-    expires_in: Option<u64>,
+    time: u64,
 }
 
-[#derive(Serialize)]
+#[derive(Serialize, Deserialize)]
+pub struct Opts {
+    pub bucket: String,
+    pub object: String,
+    pub expires_in: u64,
+}
+
+#[derive(Serialize)]
 struct Response {
-    status_code: Option<u32>,
-    url: String
-
+    status_code: u32,
+    url: String,
 }
-/// This is the main body for the function.
-/// Write your code inside it.
-/// There are some code example in the following URLs:
-/// - https://github.com/awslabs/aws-lambda-rust-runtime/tree/main/examples
-/// - https://github.com/aws-samples/serverless-rust-demo/
-async fn function_handler(event: LambdaEvent<Request>) -> Result<Response, Error> {
-    // Extract some useful info from the request
-    let command = event.payload.command;
 
-    // Prepare the response
-    let resp = Response {
-        req_id: event.context.request_id,
-        msg: format!("Command {}.", command),
+async fn get_presigned_request(client_opts: &Opts) -> Result<String, Error> {
+    let config = aws_config::load_from_env().await;
+    let client = S3Client::new(&config);
+    let expires_in = Duration::from_secs(client_opts.expires_in);
+    let presigned_request = client
+        .get_object()
+        .bucket(&client_opts.bucket)
+        .key(&client_opts.object)
+        .presigned(PresigningConfig::expires_in(expires_in)?)
+        .await?;
+
+    let url = presigned_request.uri().to_string();
+    Ok(url)
+}
+
+async fn function_handler(event: LambdaEvent<Request>) -> Result<Response, Error> {
+    // Derive the options, bucket, object, time?
+    let client_opts = Opts {
+        bucket: event.payload.bucket,
+        object: event.payload.object,
+        expires_in: event.payload.time,
     };
 
-    // Return `Response` (it will be serialized to JSON automatically by the runtime)
+    let presigned_url = get_presigned_request(&client_opts).await.unwrap();
+
+    // Return Response, contains url for physical object in s3
+    let resp = Response {
+        status_code: 200,
+        url: presigned_url,
+    };
     Ok(resp)
 }
 
