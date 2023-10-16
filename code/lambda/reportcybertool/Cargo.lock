@@ -1424,10 +1424,12 @@ dependencies = [
  "aws-config",
  "aws-sdk-dynamodb",
  "aws-sdk-s3",
+ "futures",
  "genpdf",
  "lambda_runtime",
  "serde",
  "tokio",
+ "tokio-stream",
  "tracing",
  "tracing-subscriber",
 ]

@@ -1,15 +1,28 @@
 use aws_config;
-use aws_sdk_s3 as S3;
+use aws_sdk_s3::{error::SdkError, primitives::ByteStream, Client};
+
+use aws_sdk_s3::operation::{
+    copy_object::{CopyObjectError, CopyObjectOutput},
+    create_bucket::{CreateBucketError, CreateBucketOutput},
+    get_object::{GetObjectError, GetObjectOutput},
+    list_objects_v2::ListObjectsV2Output,
+    put_object::{PutObjectError, PutObjectOutput},
+};
 use genpdf;
 use lambda_runtime::{run, service_fn, Error, LambdaEvent};
 use serde::{Deserialize, Serialize};
-use std::fs;
+use std::{fs, fs::File, io::Write, path::Path};
+use tokio_stream::StreamExt;
 
 const TEMPDIR: &str = "/tmp";
 const FONTSDIR: &str = "/tmp/fonts";
+const FONTBUCKET: &str = "BUCKETNAME";
+const FONTKEY: &str = "FONTKEY";
+const REPORTBUCKET: &str = "REPORTBUCKETNAME";
 #[derive(Deserialize)]
 struct Request {
     status_code: u64,
+    file_name: String,
 }
 
 #[derive(Serialize)]
@@ -19,7 +32,21 @@ struct Response {
     object: String,
 }
 
-async fn save_file() -> Result<(), Error> {
+async fn put_file(
+    report_file_name: &String,
+    s3client: &Client,
+) -> Result<(), SdkError<PutObjectError>> {
+    let report_local_location = format!("{}{}{}", TEMPDIR, "/", report_file_name);
+    let body = ByteStream::from_path(Path::new(report_local_location.as_str()))
+        .await
+        .unwrap();
+    s3client
+        .put_object()
+        .body(body)
+        .bucket(REPORTBUCKET)
+        .key(report_file_name)
+        .send()
+        .await?;
     Ok(())
 }
 
@@ -31,22 +58,31 @@ async fn create_directories() -> Result<(), Error> {
     Ok(())
 }
 
-async fn load_fonts() -> Result<(), Error> {
-    create_directories().await?;
-    // Create client
-    let config = aws_config::load_from_env().await;
-    let s3client = aws_sdk_s3::Client::new(&config);
+async fn load_fonts(s3client: &Client) -> Result<(), SdkError<GetObjectError>> {
+    create_directories().await.unwrap();
 
-    // Set S3 bucket of location of font file
-    // Set object key
-    //
+    let joined_string = format!("{}{}{}", FONTSDIR, "/", FONTKEY);
+    // Create a local dummy file
+    let mut file = File::create(&joined_string).unwrap();
 
+    // Retrieve file
+    let mut s3_file_object = s3client
+        .get_object()
+        .bucket(FONTBUCKET)
+        .key(FONTKEY)
+        .send()
+        .await?;
+
+    // Write to /tmp/fonts
+    while let Some(bytes) = s3_file_object.body.try_next().await.unwrap() {
+        file.write(&bytes).unwrap();
+    }
     Ok(())
 }
 
-async fn make_file() -> Result<(), Error> {
+async fn make_file(report_file_name: &String, s3client: &Client) -> Result<(), Error> {
     // Load a font from the file system
-    load_fonts().await?;
+    load_fonts(&s3client).await?;
     let font_family = genpdf::fonts::from_files(FONTSDIR, "LiberationSans", None)?;
     // Create a document and set the default font family
     let mut doc = genpdf::Document::new(font_family);
@@ -60,24 +96,26 @@ async fn make_file() -> Result<(), Error> {
     // Add one or more elements
     doc.push(genpdf::elements::Paragraph::new("This is a demo document."));
     // Render the document and write it to a file
-    doc.render_to_file("output.pdf")?;
-    save_file().await?;
-
+    let joined_report_doc_file_location = format!("{}{}{}", TEMPDIR, "/", report_file_name);
+    // Save file locally to /tmp
+    doc.render_to_file(joined_report_doc_file_location)?;
     Ok(())
 }
 
 async fn function_handler(event: LambdaEvent<Request>) -> Result<Response, Error> {
     // Prepare the response
+    let report_file_name = event.payload.file_name;
+    // Create client
+    let config = aws_config::load_from_env().await;
+    let s3_client = Client::new(&config);
+    make_file(&report_file_name, &s3_client).await?;
+    put_file(&report_file_name, &s3_client).await?;
+
     let resp = Response {
         status_code: 200,
         bucket: "TEST".to_owned(),
         object: "TESTOBJECT".to_owned(),
     };
-
-    make_file().await?;
-
-    save_file().await?;
-
     Ok(resp)
 }
 
