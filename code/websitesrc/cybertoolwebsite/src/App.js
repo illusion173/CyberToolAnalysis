@@ -1,12 +1,8 @@
 import logo from './logo.svg';
 import './App.css';
 import {
-  Star1,
-<<<<<<< Updated upstream
-=======
-  Rectangle1,
-  Polygon1
->>>>>>> Stashed changes
+  SignupPage 
+
  } from './ui-components';
 function App() {
   return (
@@ -16,9 +12,7 @@ function App() {
         <p>
           "My syndrome may be down but my hopes are up" -Jeremiah Webb
         </p>
-        <Star1 />
-        <Rectangle1 />
-        <Polygon1 />
+        <SignupPage />
 
         <a
           className="App-link"
@@ -38,4 +32,3 @@ export default App;
 
 
  
-
