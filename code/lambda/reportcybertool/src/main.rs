@@ -1,52 +1,82 @@
 use aws_config;
 use aws_sdk_s3::{error::SdkError, primitives::ByteStream, Client};
 
-use aws_sdk_s3::operation::{
-    copy_object::{CopyObjectError, CopyObjectOutput},
-    create_bucket::{CreateBucketError, CreateBucketOutput},
-    get_object::{GetObjectError, GetObjectOutput},
-    list_objects_v2::ListObjectsV2Output,
-    put_object::{PutObjectError, PutObjectOutput},
-};
+use aws_sdk_dynamodb::types::AttributeValue;
+use aws_sdk_dynamodb::Client as dynamoClient;
+use aws_sdk_dynamodb::Error as DynamoError;
+use aws_sdk_s3::operation::{get_object::GetObjectError, put_object::PutObjectError};
 use genpdf;
 use lambda_runtime::{run, service_fn, Error, LambdaEvent};
 use serde::{Deserialize, Serialize};
 use std::{fs, fs::File, io::Write, path::Path};
 use tokio_stream::StreamExt;
+use uuid::Uuid;
 
 const TEMPDIR: &str = "/tmp";
 const FONTSDIR: &str = "/tmp/fonts";
 const FONTBUCKET: &str = "BUCKETNAME";
 const FONTKEY: &str = "FONTKEY";
 const REPORTBUCKET: &str = "REPORTBUCKETNAME";
+const FILETABLENAME: &str = "TEST";
+
 #[derive(Deserialize)]
 struct Request {
-    status_code: u64,
+    user_identifier: String,
     file_name: String,
 }
 
 #[derive(Serialize)]
 struct Response {
     status_code: u64,
+    file_name: String,
     bucket: String,
-    object: String,
+    object_key: String,
+}
+#[derive(Serialize)]
+pub struct FileItem {
+    pub cognito_user_data: String,
+    pub file_name: String,
+    pub bucket: String,
+    pub object_key: String,
 }
 
-async fn put_file(
-    report_file_name: &String,
+async fn put_file_dynamo(
+    file_item: &FileItem,
+    dynamo_client: &dynamoClient,
+) -> Result<(), DynamoError> {
+    let file_uuid_object_key = AttributeValue::S(file_item.object_key.clone());
+    let file_name = AttributeValue::S(file_item.file_name.clone());
+    let user_identifer = AttributeValue::S(file_item.cognito_user_data.clone());
+    dynamo_client
+        .put_item()
+        .table_name(FILETABLENAME)
+        .item("file_uuid_object_key", file_uuid_object_key)
+        .item("file_name", file_name)
+        .item("user_identifier", user_identifer)
+        .send()
+        .await?;
+
+    Ok(())
+}
+async fn put_file_s3(
+    file_item: &FileItem,
     s3client: &Client,
 ) -> Result<(), SdkError<PutObjectError>> {
-    let report_local_location = format!("{}{}{}", TEMPDIR, "/", report_file_name);
+    let report_local_location = format!("{}{}{}", TEMPDIR, "/", file_item.file_name);
+
     let body = ByteStream::from_path(Path::new(report_local_location.as_str()))
         .await
         .unwrap();
+
+    // Put the Item in the bucket
     s3client
         .put_object()
         .body(body)
         .bucket(REPORTBUCKET)
-        .key(report_file_name)
+        .key(file_item.object_key.clone())
         .send()
         .await?;
+
     Ok(())
 }
 
@@ -55,6 +85,7 @@ async fn create_directories() -> Result<(), Error> {
     std::env::set_current_dir(TEMPDIR.to_owned())?;
     // Create the /tmp/fonts directory
     fs::create_dir_all(FONTSDIR.to_owned())?;
+
     Ok(())
 }
 
@@ -80,9 +111,7 @@ async fn load_fonts(s3client: &Client) -> Result<(), SdkError<GetObjectError>> {
     Ok(())
 }
 
-async fn make_file(report_file_name: &String, s3client: &Client) -> Result<(), Error> {
-    // Load a font from the file system
-    load_fonts(&s3client).await?;
+async fn make_file(file_item: &FileItem) -> Result<(), Error> {
     let font_family = genpdf::fonts::from_files(FONTSDIR, "LiberationSans", None)?;
     // Create a document and set the default font family
     let mut doc = genpdf::Document::new(font_family);
@@ -96,26 +125,48 @@ async fn make_file(report_file_name: &String, s3client: &Client) -> Result<(), E
     // Add one or more elements
     doc.push(genpdf::elements::Paragraph::new("This is a demo document."));
     // Render the document and write it to a file
-    let joined_report_doc_file_location = format!("{}{}{}", TEMPDIR, "/", report_file_name);
+    let joined_report_doc_file_location = format!("{}{}{}", TEMPDIR, "/", file_item.file_name);
     // Save file locally to /tmp
     doc.render_to_file(joined_report_doc_file_location)?;
     Ok(())
 }
 
 async fn function_handler(event: LambdaEvent<Request>) -> Result<Response, Error> {
-    // Prepare the response
-    let report_file_name = event.payload.file_name;
     // Create client
     let config = aws_config::load_from_env().await;
     let s3_client = Client::new(&config);
-    make_file(&report_file_name, &s3_client).await?;
-    put_file(&report_file_name, &s3_client).await?;
+
+    // Create UUID for file object in bucket
+    let file_object_key = Uuid::new_v4();
+
+    // Convert to String
+    let file_object_key_string = Uuid::to_string(&file_object_key);
+    // Create a file_item to handle opts
+    let file_item = FileItem {
+        cognito_user_data: event.payload.user_identifier.clone(),
+        file_name: event.payload.file_name.clone(),
+        bucket: REPORTBUCKET.to_owned(),
+        object_key: file_object_key_string.clone(),
+    };
+
+    // Load fonts
+    load_fonts(&s3_client).await?;
+    // Create report
+    make_file(&file_item).await?;
+    // Send report to s3
+    put_file_s3(&file_item, &s3_client).await?;
+    // Create dynamo client
+    let dynamo_client = dynamoClient::new(&config);
+    // Write to dynamodb file entry
+    put_file_dynamo(&file_item, &dynamo_client).await?;
 
     let resp = Response {
         status_code: 200,
-        bucket: "TEST".to_owned(),
-        object: "TESTOBJECT".to_owned(),
+        file_name: event.payload.file_name.clone(),
+        bucket: REPORTBUCKET.to_owned(),
+        object_key: file_object_key_string.clone(),
     };
+
     Ok(resp)
 }
 
