@@ -1,7 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
 import {
-  Star1,
   SignupPage
  } from './ui-components';
 function App() {
@@ -12,8 +11,8 @@ function App() {
         <p>
           "My syndrome may be down but my hopes are up" -Jeremiah Webb
         </p>
-        <Star1 />
         <SignupPage />
+
         <a
           className="App-link"
           href="https://reactjs.org"
