@@ -1,7 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 import {
-  Star1 
+  Star1,
  } from './ui-components';
 function App() {
   return (
