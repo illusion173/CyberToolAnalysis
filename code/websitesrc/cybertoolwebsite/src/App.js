@@ -2,6 +2,11 @@ import logo from './logo.svg';
 import './App.css';
 import {
   Star1,
+<<<<<<< Updated upstream
+=======
+  Rectangle1,
+  Polygon1
+>>>>>>> Stashed changes
  } from './ui-components';
 function App() {
   return (
@@ -12,6 +17,9 @@ function App() {
           "My syndrome may be down but my hopes are up" -Jeremiah Webb
         </p>
         <Star1 />
+        <Rectangle1 />
+        <Polygon1 />
+
         <a
           className="App-link"
           href="https://reactjs.org"
@@ -26,4 +34,8 @@ function App() {
 }
 
 export default App;
+
+
+
+ 
 
