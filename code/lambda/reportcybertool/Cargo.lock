@@ -1471,6 +1471,7 @@ dependencies = [
  "aws-config",
  "aws-sdk-dynamodb",
  "aws-sdk-s3",
+ "chrono",
  "futures",
  "genpdf",
  "lambda_runtime",

@@ -12,12 +12,13 @@ use std::{fs, fs::File, io::Write, path::Path};
 use tokio_stream::StreamExt;
 use uuid::Uuid;
 
-const TEMPDIR: &str = "/tmp";
-const FONTSDIR: &str = "/tmp/fonts";
-const FONTBUCKET: &str = "BUCKETNAME";
-const FONTKEY: &str = "FONTKEY";
-const REPORTBUCKET: &str = "REPORTBUCKETNAME";
-const FILETABLENAME: &str = "TEST";
+const TEMPDIR: &'static str = "/tmp";
+const FONTSDIR: &'static str = "/tmp/fonts";
+const FONTBUCKET: &'static str = "BUCKETNAME";
+const FONTKEY: &'static str = "FONTKEY";
+const REPORTBUCKET: &'static str = "REPORTBUCKETNAME";
+const FILETABLENAME: &'static str = "TEST";
+const DEFAULT_FONT_NAME: &'static str = "LiberationSans";
 
 #[derive(Deserialize)]
 struct Request {
@@ -40,6 +41,7 @@ pub struct FileItem {
     pub object_key: String,
 }
 
+// This function loads an entry for the report for later lookup
 async fn put_file_dynamo(
     file_item: &FileItem,
     dynamo_client: &dynamoClient,
@@ -47,12 +49,14 @@ async fn put_file_dynamo(
     let file_uuid_object_key = AttributeValue::S(file_item.object_key.clone());
     let file_name = AttributeValue::S(file_item.file_name.clone());
     let user_identifer = AttributeValue::S(file_item.cognito_user_data.clone());
+    let date_made = AttributeValue::S(chrono::offset::Utc::now().to_string());
     dynamo_client
         .put_item()
         .table_name(FILETABLENAME)
         .item("file_uuid_object_key", file_uuid_object_key)
         .item("file_name", file_name)
         .item("user_identifier", user_identifer)
+        .item("date_made", date_made)
         .send()
         .await?;
 
@@ -108,11 +112,16 @@ async fn load_fonts(s3client: &Client) -> Result<(), SdkError<GetObjectError>> {
     while let Some(bytes) = s3_file_object.body.try_next().await.unwrap() {
         file.write(&bytes).unwrap();
     }
+
     Ok(())
 }
 
 async fn make_file(file_item: &FileItem) -> Result<(), Error> {
-    let font_family = genpdf::fonts::from_files(FONTSDIR, "LiberationSans", None)?;
+    let font_family = genpdf::fonts::from_files(
+        FONTSDIR,
+        DEFAULT_FONT_NAME,
+        Some(genpdf::fonts::Builtin::Helvetica),
+    )?;
     // Create a document and set the default font family
     let mut doc = genpdf::Document::new(font_family);
     doc.set_title("Demo document");
@@ -143,13 +152,14 @@ async fn function_handler(event: LambdaEvent<Request>) -> Result<Response, Error
     let file_object_key_string = Uuid::to_string(&file_object_key);
     // Create a file_item to handle opts
     let file_item = FileItem {
-        cognito_user_data: event.payload.user_identifier.clone(),
-        file_name: event.payload.file_name.clone(),
+        cognito_user_data: event.payload.user_identifier.to_owned(),
+        file_name: event.payload.file_name.to_owned(),
         bucket: REPORTBUCKET.to_owned(),
-        object_key: file_object_key_string.clone(),
+        object_key: file_object_key_string.to_owned(),
     };
 
     // Load fonts
+    //
     load_fonts(&s3_client).await?;
     // Create report
     make_file(&file_item).await?;
@@ -164,7 +174,7 @@ async fn function_handler(event: LambdaEvent<Request>) -> Result<Response, Error
         status_code: 200,
         file_name: event.payload.file_name.clone(),
         bucket: REPORTBUCKET.to_owned(),
-        object_key: file_object_key_string.clone(),
+        object_key: file_object_key_string,
     };
 
     Ok(resp)
