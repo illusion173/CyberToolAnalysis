@@ -5,20 +5,22 @@ use aws_sdk_dynamodb::types::AttributeValue;
 use aws_sdk_dynamodb::Client as dynamoClient;
 use aws_sdk_dynamodb::Error as DynamoError;
 use aws_sdk_s3::operation::{get_object::GetObjectError, put_object::PutObjectError};
+use flate2::read::GzDecoder;
 use genpdf;
 use lambda_runtime::{run, service_fn, Error, LambdaEvent};
 use serde::{Deserialize, Serialize};
 use std::{fs, fs::File, io::Write, path::Path};
+use tar::Archive;
 use tokio_stream::StreamExt;
 use uuid::Uuid;
 
 const TEMPDIR: &'static str = "/tmp";
 const FONTSDIR: &'static str = "/tmp/fonts";
+const DEFAULT_FONT_NAME: &'static str = "LiberationSans";
 const FONTBUCKET: &'static str = "BUCKETNAME";
-const FONTKEY: &'static str = "FONTKEY";
+const FONTZIPKEY: &'static str = "FONTKEY";
 const REPORTBUCKET: &'static str = "REPORTBUCKETNAME";
 const FILETABLENAME: &'static str = "TEST";
-const DEFAULT_FONT_NAME: &'static str = "LiberationSans";
 
 #[derive(Deserialize)]
 struct Request {
@@ -96,7 +98,7 @@ async fn create_directories() -> Result<(), Error> {
 async fn load_fonts(s3client: &Client) -> Result<(), SdkError<GetObjectError>> {
     create_directories().await.unwrap();
 
-    let joined_string = format!("{}{}{}", FONTSDIR, "/", FONTKEY);
+    let joined_string = format!("{}{}{}", FONTSDIR, "/", FONTZIPKEY);
     // Create a local dummy file
     let mut file = File::create(&joined_string).unwrap();
 
@@ -104,7 +106,7 @@ async fn load_fonts(s3client: &Client) -> Result<(), SdkError<GetObjectError>> {
     let mut s3_file_object = s3client
         .get_object()
         .bucket(FONTBUCKET)
-        .key(FONTKEY)
+        .key(FONTZIPKEY)
         .send()
         .await?;
 
@@ -112,6 +114,12 @@ async fn load_fonts(s3client: &Client) -> Result<(), SdkError<GetObjectError>> {
     while let Some(bytes) = s3_file_object.body.try_next().await.unwrap() {
         file.write(&bytes).unwrap();
     }
+
+    let tar_gz = File::open(joined_string).unwrap();
+
+    let tar = GzDecoder::new(tar_gz);
+    let mut archive = Archive::new(tar);
+    archive.unpack(FONTSDIR).unwrap();
 
     Ok(())
 }

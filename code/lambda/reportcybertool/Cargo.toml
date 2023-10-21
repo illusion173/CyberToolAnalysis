@@ -19,11 +19,13 @@ aws-config = "0.56.1"
 aws-sdk-dynamodb = "0.33.0"
 aws-sdk-s3 = "0.33.0"
 chrono = "0.4.31"
+flate2 = "1.0.28"
 futures = "0.3.28"
 genpdf = "0.2.0"
 
 lambda_runtime = "0.8.1"
 serde = "1.0.136"
+tar = "0.4.40"
 tokio = { version = "1", features = ["macros"] }
 tokio-stream = "0.1.14"
 tracing = { version = "0.1", features = ["log"] }
