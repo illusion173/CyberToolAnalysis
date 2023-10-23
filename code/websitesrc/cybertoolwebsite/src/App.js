@@ -1,34 +1,61 @@
-import logo from './logo.svg';
+import { Button } from '@aws-amplify/ui-react';
+import '@aws-amplify/ui-react/styles.css';
+import React from 'react';
+import ReactDOM from 'react-dom/client';
 import './App.css';
 import {
   SignupPage 
 
  } from './ui-components';
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          "My syndrome may be down but my hopes are up" -Jeremiah Webb
-        </p>
-        <SignupPage />
 
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+
+//button
+function clickMe(){
+  alert('You pretend signed in');
+}
+
+//form-username
+function Username_Signin(){
+  return(
+    <form>
+      <label>Username:
+        <input type="text" />
+      </label>
+    </form>
+  )
+}
+
+//form-password
+function Password_Signin(){
+  return(
+    <form>
+      <label>Password:
+        <input type="text" />
+      </label>
+    </form>
+  )
+}
+
+
+export default function App() {
+  return (
+    <div>
+      <Username_Signin />
+      <Password_Signin />
+      <button onClick = {clickMe}>
+        Sign-In
+      </button>
     </div>
+
+
+
   );
 }
 
-export default App;
 
 
 
- 
+
+
+
+
