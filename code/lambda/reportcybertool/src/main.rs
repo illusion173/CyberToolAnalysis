@@ -1,12 +1,11 @@
 use aws_config;
-use aws_sdk_s3::{error::SdkError, primitives::ByteStream, Client};
-
 use aws_sdk_dynamodb::types::AttributeValue;
 use aws_sdk_dynamodb::Client as dynamoClient;
 use aws_sdk_dynamodb::Error as DynamoError;
 use aws_sdk_s3::operation::{get_object::GetObjectError, put_object::PutObjectError};
+use aws_sdk_s3::{error::SdkError, primitives::ByteStream, Client};
 use flate2::read::GzDecoder;
-use genpdf;
+use genpdf::{elements, style, Element};
 use lambda_runtime::{run, service_fn, Error, LambdaEvent};
 use serde::{Deserialize, Serialize};
 use std::{fs, fs::File, io::Write, path::Path};
@@ -27,7 +26,6 @@ struct Request {
     user_identifier: String,
     file_name: String,
 }
-
 #[derive(Serialize)]
 struct Response {
     status_code: u64,
@@ -132,19 +130,56 @@ async fn make_file(file_item: &FileItem) -> Result<(), Error> {
     )?;
     // Create a document and set the default font family
     let mut doc = genpdf::Document::new(font_family);
-    doc.set_title("Demo document");
+    doc.set_title("CyberTool Analysis - Report");
     // Customize the pages
     let mut decorator = genpdf::SimplePageDecorator::new();
 
     decorator.set_margins(10);
 
     doc.set_page_decorator(decorator);
+
     // Add one or more elements
-    doc.push(genpdf::elements::Paragraph::new("This is a demo document."));
+    doc.push(elements::Paragraph::new("Below are the recommended tools").padded(1));
+
+    let mut tool_table = elements::TableLayout::new(vec![1, 5]);
+
+    tool_table.set_cell_decorator(elements::FrameCellDecorator::new(true, true, false));
+
+    tool_table
+        .row()
+        .element(
+            elements::Paragraph::new("Tool")
+                .styled(style::Effect::Bold)
+                .padded(1),
+        )
+        .element(
+            elements::Paragraph::new("Recommendation")
+                .styled(style::Effect::Bold)
+                .padded(1),
+        )
+        .push()
+        .expect("Invalid table row");
+
+    for i in 0..10 {
+        tool_table
+            .row()
+            // Insert into Tool column
+            .element(elements::Paragraph::new(format!("#{}", i)).padded(1))
+            // Insert into Recommendation column
+            .element(elements::Paragraph::new(format!("HELLO!")).padded(1))
+            .element(elements::Paragraph::new(format!("HELLO!")).padded(1))
+            .push()
+            .expect("Invalid table row");
+    }
+
+    doc.push(tool_table);
+
     // Render the document and write it to a file
     let joined_report_doc_file_location = format!("{}{}{}", TEMPDIR, "/", file_item.file_name);
+
     // Save file locally to /tmp
     doc.render_to_file(joined_report_doc_file_location)?;
+
     Ok(())
 }
 
@@ -167,7 +202,6 @@ async fn function_handler(event: LambdaEvent<Request>) -> Result<Response, Error
     };
 
     // Load fonts
-    //
     load_fonts(&s3_client).await?;
     // Create report
     make_file(&file_item).await?;
