@@ -49,7 +49,8 @@ async fn put_file_dynamo(
     file_item: &FileItem,
     dynamo_client: &dynamoClient,
 ) -> Result<(), DynamoError> {
-    let file_uuid_object_key = AttributeValue::S(file_item.object_key.clone());
+    let file_uuid_object_key =
+        AttributeValue::S(format!("{}{}", "reports/", file_item.object_key.clone()));
     let file_name = AttributeValue::S(file_item.file_name.clone());
     let user_identifer = AttributeValue::S(file_item.cognito_user_data.clone());
     let date_made = AttributeValue::S(chrono::offset::Utc::now().to_string());
@@ -75,7 +76,7 @@ async fn put_file_s3(
         .await
         .unwrap();
 
-    let report_s3_key = format!("{}{}{}", "reports", "/", file_item.object_key.clone());
+    let report_s3_key = format!("{}{}", "reports/", file_item.object_key.clone());
 
     // Put the Item in the bucket
     s3client
