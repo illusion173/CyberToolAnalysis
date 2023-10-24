@@ -16,9 +16,10 @@ use uuid::Uuid;
 const TEMPDIR: &'static str = "/tmp";
 const FONTSDIR: &'static str = "/tmp/fonts";
 const DEFAULT_FONT_NAME: &'static str = "LiberationSans";
-const FONTBUCKET: &'static str = "BUCKETNAME";
-const FONTZIPKEY: &'static str = "FONTKEY";
-const REPORTBUCKET: &'static str = "REPORTBUCKETNAME";
+const FONTBUCKET: &'static str = "reportcybertool-cs490";
+const FONTZIPNAME: &'static str = "fonts.tar.gz";
+const FONTZIPKEY: &'static str = "fonts/fonts.tar.gz";
+const REPORTBUCKET: &'static str = "reportcybertool-cs490";
 const FILETABLENAME: &'static str = "TEST";
 
 #[derive(Deserialize)]
@@ -26,6 +27,7 @@ struct Request {
     user_identifier: String,
     file_name: String,
 }
+
 #[derive(Serialize)]
 struct Response {
     status_code: u64,
@@ -33,6 +35,7 @@ struct Response {
     bucket: String,
     object_key: String,
 }
+
 #[derive(Serialize)]
 pub struct FileItem {
     pub cognito_user_data: String,
@@ -66,18 +69,20 @@ async fn put_file_s3(
     file_item: &FileItem,
     s3client: &Client,
 ) -> Result<(), SdkError<PutObjectError>> {
-    let report_local_location = format!("{}{}{}", TEMPDIR, "/", file_item.file_name);
+    let report_local_location = format!("{}{}{}{}", TEMPDIR, "/", file_item.file_name, ".pdf");
 
     let body = ByteStream::from_path(Path::new(report_local_location.as_str()))
         .await
         .unwrap();
+
+    let report_s3_key = format!("{}{}{}", "reports", "/", file_item.object_key.clone());
 
     // Put the Item in the bucket
     s3client
         .put_object()
         .body(body)
         .bucket(REPORTBUCKET)
-        .key(file_item.object_key.clone())
+        .key(report_s3_key)
         .send()
         .await?;
 
@@ -96,7 +101,7 @@ async fn create_directories() -> Result<(), Error> {
 async fn load_fonts(s3client: &Client) -> Result<(), SdkError<GetObjectError>> {
     create_directories().await.unwrap();
 
-    let joined_string = format!("{}{}{}", FONTSDIR, "/", FONTZIPKEY);
+    let joined_string = format!("{}{}{}", FONTSDIR, "/", FONTZIPNAME);
     // Create a local dummy file
     let mut file = File::create(&joined_string).unwrap();
 
@@ -175,7 +180,8 @@ async fn make_file(file_item: &FileItem) -> Result<(), Error> {
     doc.push(tool_table);
 
     // Render the document and write it to a file
-    let joined_report_doc_file_location = format!("{}{}{}", TEMPDIR, "/", file_item.file_name);
+    let joined_report_doc_file_location =
+        format!("{}{}{}{}", TEMPDIR, "/", file_item.file_name, ".pdf");
 
     // Save file locally to /tmp
     doc.render_to_file(joined_report_doc_file_location)?;

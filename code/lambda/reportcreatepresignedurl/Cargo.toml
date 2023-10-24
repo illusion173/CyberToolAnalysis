@@ -24,3 +24,16 @@ serde = { version="1.0.136", features = ["derive"]}
 tokio = { version = "1", features = ["macros"] }
 tracing = { version = "0.1", features = ["log"] }
 tracing-subscriber = { version = "0.3", default-features = false, features = ["fmt"] }
+
+
+[package.metadata.lambda.deploy]
+memory = 512                   # Function's memory
+timeout = 60                   # Function's execution timeout
+tracing = "active"             # Tracing mode
+role = "arn:aws:iam::417838760454:role/RustTestAdminRole"         # Function's execution role
+#env_file = ".env.production"   # File to load environment variables from
+#env = { "VAR1" = "VAL1" }      # Additional environment variables
+#layers = [                     # List of layers to deploy with your function
+    #"layer-full-arn"
+#]
+#tags = { "team" = "lambda" }   # List of AWS resource tags for this function

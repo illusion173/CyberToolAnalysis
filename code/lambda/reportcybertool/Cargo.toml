@@ -37,3 +37,16 @@ features = [
     "fast-rng",          # Use a faster (but still sufficiently random) RNG
     "macro-diagnostics", # Enable better diagnostics for compile-time UUIDs
 ]
+
+
+[package.metadata.lambda.deploy]
+memory = 512                   # Function's memory
+timeout = 60                   # Function's execution timeout
+tracing = "active"             # Tracing mode
+role = "arn:aws:iam::417838760454:role/RustTestAdminRole"         # Function's execution role
+#env_file = ".env.production"   # File to load environment variables from
+#env = { "VAR1" = "VAL1" }      # Additional environment variables
+#layers = [                     # List of layers to deploy with your function
+    #"layer-full-arn"
+#]
+#tags = { "team" = "lambda" }   # List of AWS resource tags for this function
