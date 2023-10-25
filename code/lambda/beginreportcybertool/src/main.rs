@@ -1,4 +1,3 @@
-
 use aws_sdk_sfn as sfn;
 use lambda_http::{run, service_fn, Body, Error, Request, RequestExt, Response};
 use serde::{Deserialize, Serialize};

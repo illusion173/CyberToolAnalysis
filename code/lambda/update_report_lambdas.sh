@@ -3,13 +3,13 @@
 #
 #
 cd /home/illusion/CS490Project/CyberToolAnalysis/code/lambda/reportcybertool
-cargo build --release
-cargo lambda deploy
+cargo lambda build --release
+cargo lambda deploy -a LatestVersion
 
 cd /home/illusion/CS490Project/CyberToolAnalysis/code/lambda/reportcreatepresignedurl
-cargo build --release
-cargo lambda deploy
+cargo lambda build --release
+cargo lambda deploy -a LatestVersion
 
 cd /home/illusion/CS490Project/CyberToolAnalysis/code/lambda/beginreportcybertool
-cargo build --release
-cargo lambda deploy
+cargo lambda build --release
+cargo lambda deploy -a LatestVersion

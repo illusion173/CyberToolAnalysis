@@ -1,4 +1,4 @@
-use aws_config;
+
 use aws_sdk_dynamodb::types::AttributeValue;
 use aws_sdk_dynamodb::Client as dynamoClient;
 use aws_sdk_dynamodb::Error as DynamoError;
@@ -13,14 +13,14 @@ use tar::Archive;
 use tokio_stream::StreamExt;
 use uuid::Uuid;
 
-const TEMPDIR: &'static str = "/tmp";
-const FONTSDIR: &'static str = "/tmp/fonts";
-const DEFAULT_FONT_NAME: &'static str = "LiberationSans";
-const FONTBUCKET: &'static str = "reportcybertool-cs490";
-const FONTZIPNAME: &'static str = "fonts.tar.gz";
-const FONTZIPKEY: &'static str = "fonts/fonts.tar.gz";
-const REPORTBUCKET: &'static str = "reportcybertool-cs490";
-const FILETABLENAME: &'static str = "TEST";
+const TEMPDIR: &str = "/tmp";
+const FONTSDIR: &str = "/tmp/fonts";
+const DEFAULT_FONT_NAME: &str = "LiberationSans";
+const FONTBUCKET: &str = "reportcybertool-cs490";
+const FONTZIPNAME: &str = "fonts.tar.gz";
+const FONTZIPKEY: &str = "fonts/fonts.tar.gz";
+const REPORTBUCKET: &str = "reportcybertool-cs490";
+const FILETABLENAME: &str = "TEST";
 
 #[derive(Deserialize, Debug)]
 struct Request {
@@ -93,9 +93,9 @@ async fn put_file_s3(
 
 async fn create_directories() -> Result<(), Error> {
     // Change the current working directory to /tmp
-    std::env::set_current_dir(TEMPDIR.to_owned())?;
+    std::env::set_current_dir(TEMPDIR)?;
     // Create the /tmp/fonts directory
-    fs::create_dir_all(FONTSDIR.to_owned())?;
+    fs::create_dir_all(FONTSDIR)?;
 
     Ok(())
 }
@@ -173,8 +173,8 @@ async fn make_file(file_item: &FileItem) -> Result<(), Error> {
             // Insert into Tool column
             .element(elements::Paragraph::new(format!("#{}", i)).padded(1))
             // Insert into Recommendation column
-            .element(elements::Paragraph::new(format!("HELLO!")).padded(1))
-            .element(elements::Paragraph::new(format!("HELLO!")).padded(1))
+            .element(elements::Paragraph::new("HELLO!".to_string()).padded(1))
+            .element(elements::Paragraph::new("HELLO!".to_string()).padded(1))
             .push()
             .expect("Invalid table row");
     }

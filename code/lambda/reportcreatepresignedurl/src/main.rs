@@ -38,7 +38,7 @@ async fn get_presigned_request(client_opts: &Request) -> Result<String, Error> {
 async fn function_handler(event: LambdaEvent<Request>) -> Result<Response, Error> {
     // Derive the options, bucket, object, time?
     let client_opts = &event.payload;
-    let presigned_url = get_presigned_request(&client_opts).await?;
+    let presigned_url = get_presigned_request(client_opts).await?;
 
     // Return Response, contains url for physical object in s3
     let resp = Response {
