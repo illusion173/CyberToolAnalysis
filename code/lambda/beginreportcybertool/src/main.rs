@@ -1,4 +1,4 @@
-use aws_config;
+
 use aws_sdk_sfn as sfn;
 use lambda_http::{run, service_fn, Body, Error, Request, RequestExt, Response};
 use serde::{Deserialize, Serialize};
@@ -31,7 +31,7 @@ async fn function_handler(event: Request) -> Result<Response<Body>, Error> {
 
     let serialized_file_data_struct = serde_json::to_string(&file_data_struct).unwrap();
 
-    let message = format!("SUCCESS! Report Being Created Now.");
+    let message = "SUCCESS! Report Being Created Now.".to_string();
 
     // Begin Report Step Function
 
