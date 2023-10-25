@@ -22,7 +22,7 @@ const FONTZIPKEY: &'static str = "fonts/fonts.tar.gz";
 const REPORTBUCKET: &'static str = "reportcybertool-cs490";
 const FILETABLENAME: &'static str = "TEST";
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Debug)]
 struct Request {
     user_identifier: String,
     file_name: String,
@@ -31,6 +31,7 @@ struct Request {
 #[derive(Serialize)]
 struct Response {
     status_code: u64,
+    cognito_user_data: String,
     file_name: String,
     bucket: String,
     object_key: String,
@@ -192,6 +193,8 @@ async fn make_file(file_item: &FileItem) -> Result<(), Error> {
 
 async fn function_handler(event: LambdaEvent<Request>) -> Result<Response, Error> {
     // Create client
+    //
+    println!("{:?}", event);
     let config = aws_config::load_from_env().await;
     let s3_client = Client::new(&config);
 
@@ -214,13 +217,10 @@ async fn function_handler(event: LambdaEvent<Request>) -> Result<Response, Error
     make_file(&file_item).await?;
     // Send report to s3
     put_file_s3(&file_item, &s3_client).await?;
-    // Create dynamo client
-    let dynamo_client = dynamoClient::new(&config);
-    // Write to dynamodb file entry
-    put_file_dynamo(&file_item, &dynamo_client).await?;
 
     let resp = Response {
         status_code: 200,
+        cognito_user_data: file_item.cognito_user_data,
         file_name: event.payload.file_name.clone(),
         bucket: REPORTBUCKET.to_owned(),
         object_key: file_object_key_string,
