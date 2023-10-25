@@ -11,25 +11,18 @@ struct Request {
     time: u64,
 }
 
-#[derive(Serialize, Deserialize)]
-pub struct Opts {
-    pub bucket: String,
-    pub object: String,
-    pub expires_in: u64,
-}
-
 #[derive(Serialize)]
 struct Response {
     status_code: u32,
     url: String,
 }
 
-async fn get_presigned_request(client_opts: &Opts) -> Result<String, Error> {
+async fn get_presigned_request(client_opts: &Request) -> Result<String, Error> {
     // Get config from env
     let config = aws_config::load_from_env().await;
     // Create a new s3 client
     let client = S3Client::new(&config);
-    let expires_in = Duration::from_secs(client_opts.expires_in);
+    let expires_in = Duration::from_secs(client_opts.time);
     // Generate request & send, await feedback
     let presigned_request = client
         .get_object()
