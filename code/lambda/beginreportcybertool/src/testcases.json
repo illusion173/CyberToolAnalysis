@@ -1,4 +1,8 @@
-{
+Header: {
+  "Content-Type": "application/json"
+}
+
+Body: {
   "file_name": "IAMANOTHERTEST",
   "cognito_user_data": "IAMATEST"
 }

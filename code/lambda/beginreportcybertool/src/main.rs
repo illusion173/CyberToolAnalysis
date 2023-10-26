@@ -1,5 +1,5 @@
 use aws_sdk_sfn as sfn;
-use lambda_http::{run, service_fn, Body, Error, Request, Response};
+use lambda_http::{http::HeaderValue, run, service_fn, Body, Error, Request, Response};
 use serde::{Deserialize, Serialize};
 #[derive(Serialize, Deserialize, Debug)]
 struct FileData {
@@ -8,7 +8,17 @@ struct FileData {
 }
 async fn function_handler(event: Request) -> Result<Response<Body>, Error> {
     // Get the body of the request
+    /*
+    if event.headers().get("Content-Type") != Some(&HeaderValue::from_static("application/json")) {
+        return Ok(Response::builder()
+            .status(400)
+            .body(Body::from("Invalid Content-Type"))
+            .expect("Failed to build a response"));
+    }
+    */
+
     let body_str = std::str::from_utf8(event.body().as_ref()).unwrap();
+    println!("{:?}", body_str);
     let file_data_struct: FileData = serde_json::from_str(body_str).unwrap();
 
     let serialized_file_data_struct = serde_json::to_string(&file_data_struct).unwrap();
