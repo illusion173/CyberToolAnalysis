@@ -1,22 +1,25 @@
 import '@aws-amplify/ui-react/styles.css';
-import React from 'react';
+import * as React from 'react';
 import ReactDOM from 'react-dom/client';
+import { Button as ButtonCustom } from './Button';
 import './App.css';
 import {
   SignupPage 
 
  } from './ui-components';
+import { CheckboxField } from '@aws-amplify/ui-react';
 
 
 //button
 function clickMe(){
   alert('You pretend signed in');
+
 }
 
 //form-username
-function Username_Signin(){
+function Username_Signin(props){
   return(
-    <form>
+    <form className={props.className}>
       <label>Username:
         <input type="text" />
       </label>
@@ -25,9 +28,9 @@ function Username_Signin(){
 }
 
 //form-password
-function Password_Signin(){
+function Password_Signin(props){
   return(
-    <form>
+    <form className={props.className}>
       <label>Password:
         <input type="text" />
       </label>
@@ -36,24 +39,54 @@ function Password_Signin(){
 }
 
 
+const Checkbox = ({label, value, onChange, className }) => {
+  return(
+    <label className={className}>
+      <input type = "checkbox" checked = {value} onChange = {onChange} />
+      {label}
+    </label>
+  );
+};
+
+
+
 export default function App() {
+  const[checked, setChecked] = React.useState(false);
+
+  const handleChange = () => {
+    setChecked(!checked);
+  };
+
+
   return (
-    <div>
-      <Username_Signin />
-      <Password_Signin />
-      <button onClick = {clickMe}>
+    <div className = "center-container">
+      <h1>CyberTools</h1>
+      <Username_Signin className= "margin-bottom"/>
+      <Password_Signin className= "margin-bottom" />
+      <button onClick = {clickMe} className = "margin-bottom">
         Sign-In
       </button>
+
+      <p> No Account?</p>
+      <button onClick = {clickMe}>
+        Create an account
+      </button>
+      <p> or </p>
+      <button onClick = {clickMe} className = "margin-bottom">
+        Continue as guest
+      </button>
+      
+
+      <Checkbox
+          label = "Do you agree with the Terms or whateva?"
+          value = {checked}
+          onChange = {handleChange}
+          className = "margin-top"
+        />
+        <p>Is my value checked? {checked.toString()}</p>
     </div>
-
-
-
   );
-}
-
-
-
-
+};
 
 
 

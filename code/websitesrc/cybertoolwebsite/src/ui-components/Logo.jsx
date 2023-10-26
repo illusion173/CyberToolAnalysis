@@ -7,26 +7,33 @@
 /* eslint-disable */
 import * as React from "react";
 import { getOverrideProps } from "@aws-amplify/ui-react/internal";
-import { Text, View } from "@aws-amplify/ui-react";
-export default function Button(props) {
+import { Icon, Text, View } from "@aws-amplify/ui-react";
+export default function Logo(props) {
   const { overrides, ...rest } = props;
   return (
     <View
-      width="655px"
-      height="120px"
+      width="1045px"
+      height="376px"
       display="block"
       gap="unset"
       alignItems="unset"
       justifyContent="unset"
       position="relative"
       padding="0px 0px 0px 0px"
-      backgroundColor="rgba(217,217,217,1)"
-      {...getOverrideProps(overrides, "Button")}
+      {...getOverrideProps(overrides, "Logo")}
       {...rest}
     >
-      <View
-        width="655px"
-        height="120px"
+      <Icon
+        width="774px"
+        height="376px"
+        viewBox={{ minX: 0, minY: 0, width: 774, height: 376 }}
+        paths={[
+          {
+            d: "M0 150C0 67.1573 67.1573 0 150 0L624 0C706.843 0 774 67.1573 774 150L774 226C774 308.843 706.843 376 624 376L150 376C67.1573 376 0 308.843 0 226L0 150Z",
+            fill: "rgba(212,223,226,1)",
+            fillRule: "nonzero",
+          },
+        ]}
         display="block"
         gap="unset"
         alignItems="unset"
@@ -35,35 +42,32 @@ export default function Button(props) {
         top="0%"
         bottom="0%"
         left="0%"
-        right="0%"
-        borderRadius="100px"
-        padding="0px 0px 0px 0px"
-        backgroundColor="rgba(156,192,247,1)"
-        {...getOverrideProps(overrides, "Button4820")}
-      ></View>
+        right="25.93%"
+        {...getOverrideProps(overrides, "Rectangle 16")}
+      ></Icon>
       <Text
-        fontFamily="Josefin Sans"
-        fontSize="48px"
+        fontFamily="Gruppo"
+        fontSize="128px"
         fontWeight="400"
-        color="rgba(0,0,0,1)"
-        lineHeight="48px"
-        textAlign="center"
+        color="rgba(81,59,59,1)"
+        lineHeight="123.6875px"
+        textAlign="left"
         display="block"
         direction="column"
         justifyContent="unset"
-        width="317.96px"
-        height="64.43px"
+        width="985px"
+        height="256px"
         gap="unset"
         alignItems="unset"
         position="absolute"
-        top="32.02%"
-        bottom="14.29%"
-        left="23.04%"
-        right="28.42%"
+        top="31.91%"
+        bottom="0%"
+        left="5.74%"
+        right="0%"
         padding="0px 0px 0px 0px"
         whiteSpace="pre-wrap"
-        children="Login"
-        {...getOverrideProps(overrides, "Login")}
+        children="CyberTools"
+        {...getOverrideProps(overrides, "CyberTools")}
       ></Text>
     </View>
   );

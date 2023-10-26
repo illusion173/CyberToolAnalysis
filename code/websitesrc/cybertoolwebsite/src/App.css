@@ -42,3 +42,18 @@
   }
 }
 
+.center-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh; 
+}
+
+.margin-bottom {
+  margin-bottom : 20px;
+}
+
+.margin-top{
+  margin-top: 20px;
+}
