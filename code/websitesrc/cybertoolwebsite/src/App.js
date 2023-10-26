@@ -1,7 +1,6 @@
 import '@aws-amplify/ui-react/styles.css';
 import * as React from 'react';
 import ReactDOM from 'react-dom/client';
-import { Button as ButtonCustom } from './Button';
 import './App.css';
 import {
   SignupPage 

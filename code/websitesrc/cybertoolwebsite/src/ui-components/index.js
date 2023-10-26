@@ -4,7 +4,6 @@
  * Any changes to this file will be overwritten when running amplify pull. *
  **************************************************************************/
 
-export { default as Button } from "./Button";
 export { default as Logo } from "./Logo";
 export { default as SigninPage } from "./SigninPage";
 export { default as SignupPage } from "./SignupPage";
