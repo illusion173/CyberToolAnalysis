@@ -18,7 +18,9 @@ async fn function_handler(event: Request) -> Result<Response<Body>, Error> {
     */
 
     let body_str = std::str::from_utf8(event.body().as_ref()).unwrap();
+
     println!("{:?}", body_str);
+
     let file_data_struct: FileData = serde_json::from_str(body_str).unwrap();
 
     let serialized_file_data_struct = serde_json::to_string(&file_data_struct).unwrap();
