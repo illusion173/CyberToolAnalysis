@@ -5,10 +5,10 @@
  **************************************************************************/
 
 /* eslint-disable */
-import * as React from "react";
+import React from "react";
 import { getOverrideProps } from "@aws-amplify/ui-react/internal";
 import { Icon, Text, View } from "@aws-amplify/ui-react";
-import { Button as ButtonCustom } from "./Button";
+import ButtonCustom from "./ButtonCustom";
 export default function SigninPage(props) {
   const { overrides, ...rest } = props;
   return (
@@ -21,8 +21,8 @@ export default function SigninPage(props) {
       justifyContent="unset"
       position="relative"
       padding="0px 0px 0px 0px"
-      {...getOverrideProps(overrides, "SigninPage")}
       {...rest}
+      {...getOverrideProps(overrides, "SigninPage")}
     >
       <View
         width="911px"
