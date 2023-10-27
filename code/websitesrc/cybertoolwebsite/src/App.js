@@ -2,10 +2,7 @@ import '@aws-amplify/ui-react/styles.css';
 import * as React from 'react';
 import ReactDOM from 'react-dom/client';
 import './App.css';
-import {
-  SignupPage 
-
- } from './ui-components';
+import Login from "./Login";
 import { CheckboxField } from '@aws-amplify/ui-react';
 
 
@@ -60,6 +57,10 @@ export default function App() {
   return (
     <div className = "center-container">
       <h1>CyberTools</h1>
+      <Login />
+
+      
+      {/*
       <Username_Signin className= "margin-bottom"/>
       <Password_Signin className= "margin-bottom" />
       <button onClick = {clickMe} className = "margin-bottom">
@@ -74,8 +75,10 @@ export default function App() {
       <button onClick = {clickMe} className = "margin-bottom">
         Continue as guest
       </button>
-      
 
+     */}
+      
+    
       <Checkbox
           label = "Do you agree with the Terms or whateva?"
           value = {checked}

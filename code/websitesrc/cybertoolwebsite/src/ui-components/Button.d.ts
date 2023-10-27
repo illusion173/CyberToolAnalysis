@@ -6,14 +6,14 @@
 
 import * as React from "react";
 import { EscapeHatchProps } from "@aws-amplify/ui-react/internal";
-import { IconProps, TextProps, ViewProps } from "@aws-amplify/ui-react";
+import { TextProps, ViewProps } from "@aws-amplify/ui-react";
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
-export declare type LogoOverridesProps = {
-    Logo?: PrimitiveOverrideProps<ViewProps>;
-    "Rectangle 16"?: PrimitiveOverrideProps<IconProps>;
-    CyberTools?: PrimitiveOverrideProps<TextProps>;
+export declare type ButtonOverridesProps = {
+    Button?: PrimitiveOverrideProps<ViewProps>;
+    Button4820?: PrimitiveOverrideProps<ViewProps>;
+    Login?: PrimitiveOverrideProps<TextProps>;
 } & EscapeHatchProps;
-export declare type LogoProps = React.PropsWithChildren<Partial<ViewProps> & {
-    overrides?: LogoOverridesProps | undefined | null;
+export declare type ButtonProps = React.PropsWithChildren<Partial<ViewProps> & {
+    overrides?: ButtonOverridesProps | undefined | null;
 }>;
-export default function Logo(props: LogoProps): React.ReactElement;
+export default function Button(props: ButtonProps): React.ReactElement;
