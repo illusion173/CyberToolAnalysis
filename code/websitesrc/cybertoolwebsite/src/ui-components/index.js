@@ -5,7 +5,6 @@
  **************************************************************************/
 
 export { default as Button } from "./Button";
+export { default as SignupPage } from "./SignupPage";
 export { default as Logo } from "./Logo";
 export { default as SigninPage } from "./SigninPage";
-export { default as SignupPage } from "./SignupPage";
-export { default as studioTheme } from "./studioTheme";

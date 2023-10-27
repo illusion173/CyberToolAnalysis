@@ -7,14 +7,14 @@ import { CheckboxField } from '@aws-amplify/ui-react';
 
 
 //button
-function clickMe(){
+function clickMe() {
   alert('You pretend signed in');
 
 }
 
 //form-username
-function Username_Signin(props){
-  return(
+function Username_Signin(props) {
+  return (
     <form className={props.className}>
       <label>Username:
         <input type="text" />
@@ -24,8 +24,8 @@ function Username_Signin(props){
 }
 
 //form-password
-function Password_Signin(props){
-  return(
+function Password_Signin(props) {
+  return (
     <form className={props.className}>
       <label>Password:
         <input type="text" />
@@ -35,10 +35,10 @@ function Password_Signin(props){
 }
 
 
-const Checkbox = ({label, value, onChange, className }) => {
-  return(
+const Checkbox = ({ label, value, onChange, className }) => {
+  return (
     <label className={className}>
-      <input type = "checkbox" checked = {value} onChange = {onChange} />
+      <input type="checkbox" checked={value} onChange={onChange} />
       {label}
     </label>
   );
@@ -47,7 +47,7 @@ const Checkbox = ({label, value, onChange, className }) => {
 
 
 export default function App() {
-  const[checked, setChecked] = React.useState(false);
+  const [checked, setChecked] = React.useState(false);
 
   const handleChange = () => {
     setChecked(!checked);
@@ -55,11 +55,11 @@ export default function App() {
 
 
   return (
-    <div className = "center-container">
+    <div className="center-container">
       <h1>CyberTools</h1>
       <Login />
 
-      
+
       {/*
       <Username_Signin className= "margin-bottom"/>
       <Password_Signin className= "margin-bottom" />
@@ -77,19 +77,17 @@ export default function App() {
       </button>
 
      */}
-      
-    
+
+
       <Checkbox
-          label = "Do you agree with the Terms or whateva?"
-          value = {checked}
-          onChange = {handleChange}
-          className = "margin-top"
-        />
-        <p>Is my value checked? {checked.toString()}</p>
+        label="Do you agree with the Terms or whateva?"
+        value={checked}
+        onChange={handleChange}
+        className="margin-top"
+      />
+      <p>Is my value checked? {checked.toString()}</p>
     </div>
   );
 };
-
-
 
 

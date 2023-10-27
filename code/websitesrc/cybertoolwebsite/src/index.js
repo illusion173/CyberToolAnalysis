@@ -5,19 +5,19 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { Amplify } from 'aws-amplify';
 import awsExports from './aws-exports';
-import { BrowserRouter, Route, Routes } from "react-router-dom"; 
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Login from "./Login"
 import Dashboard from "./Dashboard"
-  
+
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-    <Routes>
-      <Route index element = {<App />} />
-
-    </Routes>
+      <Routes>
+        <Route index element={<App />} />
+        <Route path="login" element={<Login />} />
+        <Route path="dashboard" element={<Dashboard />} />    </Routes>
     </BrowserRouter>
   </React.StrictMode>
 );

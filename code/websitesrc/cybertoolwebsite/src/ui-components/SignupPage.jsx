@@ -5,7 +5,7 @@
  **************************************************************************/
 
 /* eslint-disable */
-import * as React from "react";
+import React from "react";
 import { getOverrideProps } from "@aws-amplify/ui-react/internal";
 import { Text, View } from "@aws-amplify/ui-react";
 export default function SignupPage(props) {
@@ -20,8 +20,8 @@ export default function SignupPage(props) {
       justifyContent="unset"
       position="relative"
       padding="0px 0px 0px 0px"
-      {...getOverrideProps(overrides, "SignupPage")}
       {...rest}
+      {...getOverrideProps(overrides, "SignupPage")}
     >
       <View
         width="1417px"
