@@ -1,0 +1,1 @@
+To get to the SDD-V2 document click [here](https://myerauedu-my.sharepoint.com/:w:/r/personal/webbj31_my_erau_edu/Documents/CS490Docs%20-%20CyberTools/SDD-v2.docx?d=wa08e8cc0f31744c8938601a25452862f&csf=1&web=1&e=AD4pmW)
