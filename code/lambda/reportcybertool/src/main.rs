@@ -1,4 +1,3 @@
-
 use aws_sdk_dynamodb::types::AttributeValue;
 use aws_sdk_dynamodb::Client as dynamoClient;
 use aws_sdk_dynamodb::Error as DynamoError;
