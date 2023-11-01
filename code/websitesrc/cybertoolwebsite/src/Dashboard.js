@@ -1,9 +1,17 @@
+import { useNavigate } from "react-router-dom"
 
-const Dashboard = () => {
+function Dashboard() {
+    const navigate = useNavigate();
+    const handleReportListClick = (e) => {
+        navigate("/reportlist")
+    }
+
+
     return (
         <div>
             <p>Welcome to your Dashboard!</p>
-        </div>
+            <button onClick={handleReportListClick}>Report List</button>
+        </div >
     );
 };
 export default Dashboard;

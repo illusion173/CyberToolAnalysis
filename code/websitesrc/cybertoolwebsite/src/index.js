@@ -8,6 +8,7 @@ import awsExports from './aws-exports';
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Login from "./Login"
 import Dashboard from "./Dashboard"
+import Reportlist from "./ReportList"
 
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
@@ -17,7 +18,9 @@ root.render(
       <Routes>
         <Route index element={<App />} />
         <Route path="login" element={<Login />} />
-        <Route path="dashboard" element={<Dashboard />} />    </Routes>
+        <Route path="dashboard" element={<Dashboard />} />
+        <Route path="reportlist" element={<Reportlist />} />    </Routes>
+
     </BrowserRouter>
   </React.StrictMode>
 );
