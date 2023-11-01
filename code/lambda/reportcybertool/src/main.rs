@@ -1,5 +1,6 @@
 use aws_sdk_s3::operation::{get_object::GetObjectError, put_object::PutObjectError};
 use aws_sdk_s3::{error::SdkError, primitives::ByteStream, Client};
+use chrono::*;
 use flate2::read::GzDecoder;
 use genpdf::{elements, style, Element};
 use lambda_runtime::{run, service_fn, Error, LambdaEvent};
@@ -77,10 +78,13 @@ async fn create_directories() -> Result<(), Error> {
     Ok(())
 }
 
-fn iso8601(st: &std::time::SystemTime) -> String {
-    let dt: DateTime<Utc> = st.clone().into();
-    format!("{}", dt.format("%+"))
-    // formats like "2001-07-08T00:34:60.026490+09:30"
+fn iso8601() -> String {
+    NaiveDateTime::new(
+        Local::now().naive_local().date(),
+        NaiveTime::from_hms_milli_opt(0, 0, 0, 000).expect("Failed to create a NaiveTime!"),
+    )
+    .format("%Y-%m-%dT%H:%M:%S%.3fZ")
+    .to_string()
 }
 
 async fn load_fonts(s3client: &Client) -> Result<(), SdkError<GetObjectError>> {
@@ -191,7 +195,7 @@ async fn function_handler(event: LambdaEvent<Request>) -> Result<Response, Error
     make_file(&file_item).await?;
     // Send report to s3
     put_file_s3(&file_item, &s3_client).await?;
-    let time_made = iso8601(&SystemTime::now());
+    let time_made = iso8601();
     let resp = Response {
         status_code: 200,
         user_identifier: file_item.user_identifier,
