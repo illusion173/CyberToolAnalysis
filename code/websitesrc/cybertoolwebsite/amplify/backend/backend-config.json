@@ -1,3 +1,11 @@
 {
-  "auth": {}
+  "auth": {},
+  "storage": {
+    "ReportLocationTable": {
+      "service": "DynamoDB",
+      "serviceType": "imported",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": []
+    }
+  }
 }
