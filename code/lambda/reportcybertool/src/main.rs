@@ -1,12 +1,10 @@
-use aws_sdk_dynamodb::types::AttributeValue;
-use aws_sdk_dynamodb::Client as dynamoClient;
-use aws_sdk_dynamodb::Error as DynamoError;
 use aws_sdk_s3::operation::{get_object::GetObjectError, put_object::PutObjectError};
 use aws_sdk_s3::{error::SdkError, primitives::ByteStream, Client};
 use flate2::read::GzDecoder;
 use genpdf::{elements, style, Element};
 use lambda_runtime::{run, service_fn, Error, LambdaEvent};
 use serde::{Deserialize, Serialize};
+use std::time::SystemTime;
 use std::{fs, fs::File, io::Write, path::Path};
 use tar::Archive;
 use tokio_stream::StreamExt;
@@ -19,7 +17,8 @@ const FONTBUCKET: &str = "reportcybertool-cs490";
 const FONTZIPNAME: &str = "fonts.tar.gz";
 const FONTZIPKEY: &str = "fonts/fonts.tar.gz";
 const REPORTBUCKET: &str = "reportcybertool-cs490";
-const FILETABLENAME: &str = "TEST";
+const FILETABLENAME: &str = "ReportLocationTable";
+use chrono::prelude::{DateTime, Utc};
 
 #[derive(Deserialize, Debug)]
 struct Request {
@@ -30,42 +29,21 @@ struct Request {
 #[derive(Serialize)]
 struct Response {
     status_code: u64,
-    cognito_user_data: String,
+    user_identifier: String,
     file_name: String,
     bucket: String,
     object_key: String,
+    time_made: String,
 }
 
 #[derive(Serialize)]
 pub struct FileItem {
-    pub cognito_user_data: String,
+    pub user_identifier: String,
     pub file_name: String,
     pub bucket: String,
     pub object_key: String,
 }
 
-// This function loads an entry for the report for later lookup
-async fn put_file_dynamo(
-    file_item: &FileItem,
-    dynamo_client: &dynamoClient,
-) -> Result<(), DynamoError> {
-    let file_uuid_object_key =
-        AttributeValue::S(format!("{}{}", "reports/", file_item.object_key.clone()));
-    let file_name = AttributeValue::S(file_item.file_name.clone());
-    let user_identifer = AttributeValue::S(file_item.cognito_user_data.clone());
-    let date_made = AttributeValue::S(chrono::offset::Utc::now().to_string());
-    dynamo_client
-        .put_item()
-        .table_name(FILETABLENAME)
-        .item("file_uuid_object_key", file_uuid_object_key)
-        .item("file_name", file_name)
-        .item("user_identifier", user_identifer)
-        .item("date_made", date_made)
-        .send()
-        .await?;
-
-    Ok(())
-}
 async fn put_file_s3(
     file_item: &FileItem,
     s3client: &Client,
@@ -99,10 +77,16 @@ async fn create_directories() -> Result<(), Error> {
     Ok(())
 }
 
+fn iso8601(st: &std::time::SystemTime) -> String {
+    let dt: DateTime<Utc> = st.clone().into();
+    format!("{}", dt.format("%+"))
+    // formats like "2001-07-08T00:34:60.026490+09:30"
+}
+
 async fn load_fonts(s3client: &Client) -> Result<(), SdkError<GetObjectError>> {
     create_directories().await.unwrap();
 
-    let joined_string = format!("{}{}{}", FONTSDIR, "/", FONTZIPNAME);
+    let joined_string = format!("{}{}{}", TEMPDIR, "/", FONTZIPNAME);
     // Create a local dummy file
     let mut file = File::create(&joined_string).unwrap();
 
@@ -113,17 +97,20 @@ async fn load_fonts(s3client: &Client) -> Result<(), SdkError<GetObjectError>> {
         .key(FONTZIPKEY)
         .send()
         .await?;
+    println!("FINISHED DOWNLOADING FONT FROM S3");
 
     // Write to /tmp/fonts
     while let Some(bytes) = s3_file_object.body.try_next().await.unwrap() {
         file.write(&bytes).unwrap();
     }
 
+    println!("FINISHED WRITING TO /tmp/fonts");
+
     let tar_gz = File::open(joined_string).unwrap();
 
     let tar = GzDecoder::new(tar_gz);
     let mut archive = Archive::new(tar);
-    archive.unpack(FONTSDIR).unwrap();
+    archive.unpack(".").unwrap();
 
     Ok(())
 }
@@ -166,18 +153,6 @@ async fn make_file(file_item: &FileItem) -> Result<(), Error> {
         .push()
         .expect("Invalid table row");
 
-    for i in 0..10 {
-        tool_table
-            .row()
-            // Insert into Tool column
-            .element(elements::Paragraph::new(format!("#{}", i)).padded(1))
-            // Insert into Recommendation column
-            .element(elements::Paragraph::new("HELLO!".to_string()).padded(1))
-            .element(elements::Paragraph::new("HELLO!".to_string()).padded(1))
-            .push()
-            .expect("Invalid table row");
-    }
-
     doc.push(tool_table);
 
     // Render the document and write it to a file
@@ -204,7 +179,7 @@ async fn function_handler(event: LambdaEvent<Request>) -> Result<Response, Error
     let file_object_key_string = Uuid::to_string(&file_object_key);
     // Create a file_item to handle opts
     let file_item = FileItem {
-        cognito_user_data: event.payload.user_identifier.to_owned(),
+        user_identifier: event.payload.user_identifier.to_owned(),
         file_name: event.payload.file_name.to_owned(),
         bucket: REPORTBUCKET.to_owned(),
         object_key: file_object_key_string.to_owned(),
@@ -216,13 +191,14 @@ async fn function_handler(event: LambdaEvent<Request>) -> Result<Response, Error
     make_file(&file_item).await?;
     // Send report to s3
     put_file_s3(&file_item, &s3_client).await?;
-
+    let time_made = iso8601(&SystemTime::now());
     let resp = Response {
         status_code: 200,
-        cognito_user_data: file_item.cognito_user_data,
+        user_identifier: file_item.user_identifier,
         file_name: event.payload.file_name.clone(),
         bucket: REPORTBUCKET.to_owned(),
         object_key: file_object_key_string,
+        time_made: time_made.to_owned(),
     };
 
     Ok(resp)

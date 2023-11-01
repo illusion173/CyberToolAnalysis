@@ -4,5 +4,5 @@ Header: {
 
 Body: {
   "file_name": "IAMANOTHERTEST",
-  "cognito_user_data": "IAMATEST"
+  "user_identifier": "IAMATEST"
 }

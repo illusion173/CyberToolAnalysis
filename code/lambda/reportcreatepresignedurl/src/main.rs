@@ -1,33 +1,48 @@
+use aws_sdk_dynamodb::types::AttributeValue;
+use aws_sdk_dynamodb::Client as DynamoDBClient;
 use aws_sdk_s3::presigning::PresigningConfig;
 use aws_sdk_s3::Client as S3Client;
 use lambda_runtime::{run, service_fn, Error, LambdaEvent};
 use serde::{Deserialize, Serialize};
 use std::time::Duration;
-
 #[derive(Deserialize)]
 struct Request {
-    bucket: String,
-    object: String,
-    time: u64,
+    user_identifier: String,
+    file_name: String,
 }
 
-#[derive(Serialize)]
+#[derive(Deserialize, Serialize)]
 struct Response {
     status_code: u32,
     url: String,
 }
 
+const REPORTBUCKET: &str = "reportcybertool-cs490";
+const REPORTTABLENAME: &str = "ReportLocationTable";
+async fn get_file_object_key(file_name: String, user_identifier: String) -> Result<String, Error> {
+    let file_uuid = "TEST".to_string();
+    let config = aws_config::load_from_env().await;
+    // Create a new s3 client
+    let client = DynamoDBClient::new(&config);
+
+    Ok(file_uuid)
+}
 async fn get_presigned_request(client_opts: &Request) -> Result<String, Error> {
+    let file_key = get_file_object_key(
+        client_opts.file_name.clone(),
+        client_opts.user_identifier.clone(),
+    )
+    .await?;
     // Get config from env
     let config = aws_config::load_from_env().await;
     // Create a new s3 client
     let client = S3Client::new(&config);
-    let expires_in = Duration::from_secs(client_opts.time);
+    let expires_in = Duration::from_secs(604800);
     // Generate request & send, await feedback
     let presigned_request = client
         .get_object()
-        .bucket(&client_opts.bucket)
-        .key(&client_opts.object)
+        .bucket(REPORTBUCKET)
+        .key(file_key)
         .presigned(PresigningConfig::expires_in(expires_in)?)
         .await?;
     // When presigned_url dont, get url convert to string.

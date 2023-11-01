@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Serialize, Deserialize, Debug)]
 struct FileData {
     file_name: String,
-    cognito_user_data: String,
+    user_identifier: String,
 }
 async fn function_handler(event: Request) -> Result<Response<Body>, Error> {
     if event.headers().get("content-type").unwrap() != &HeaderValue::from_static("application/json")
@@ -15,7 +15,6 @@ async fn function_handler(event: Request) -> Result<Response<Body>, Error> {
             .expect("Failed to build a response"));
     }
 
-    //let body_str = std::str::from_utf8(event.body().as_ref()).unwrap();
     let body_str = match std::str::from_utf8(event.body().as_ref()) {
         Ok(body_str) => body_str,
         Err(_error) => {
