@@ -6,35 +6,6 @@ import Login from "./Login";
 import { CheckboxField } from '@aws-amplify/ui-react';
 
 
-//button
-function clickMe() {
-  alert('You pretend signed in');
-
-}
-
-//form-username
-function Username_Signin(props) {
-  return (
-    <form className={props.className}>
-      <label>Username:
-        <input type="text" />
-      </label>
-    </form>
-  )
-}
-
-//form-password
-function Password_Signin(props) {
-  return (
-    <form className={props.className}>
-      <label>Password:
-        <input type="text" />
-      </label>
-    </form>
-  )
-}
-
-
 const Checkbox = ({ label, value, onChange, className }) => {
   return (
     <label className={className}>
@@ -58,27 +29,6 @@ export default function App() {
     <div className="center-container">
       <h1>CyberTools</h1>
       <Login />
-
-
-      {/*
-      <Username_Signin className= "margin-bottom"/>
-      <Password_Signin className= "margin-bottom" />
-      <button onClick = {clickMe} className = "margin-bottom">
-        Sign-In
-      </button>
-
-      <p> No Account?</p>
-      <button onClick = {clickMe}>
-        Create an account
-      </button>
-      <p> or </p>
-      <button onClick = {clickMe} className = "margin-bottom">
-        Continue as guest
-      </button>
-
-     */}
-
-
       <Checkbox
         label="Do you agree with the Terms or whateva?"
         value={checked}

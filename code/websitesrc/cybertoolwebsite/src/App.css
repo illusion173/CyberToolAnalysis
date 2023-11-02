@@ -57,3 +57,16 @@
 .margin-top{
   margin-top: 20px;
 }
+
+.margin-left-Welcome{
+  margin-left:35px
+}
+.margin-left-login-button{
+  margin-left:60px
+}
+
+.input-field{
+  display: block;
+  margin: 10px 0;
+  width: 100%;
+}

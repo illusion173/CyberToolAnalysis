@@ -7,7 +7,7 @@ function Login() {
     const [username, setusername] = useState("");
     const [password, setpassword] = useState("");
     const [authenticated, setauthenticated] = useState(localStorage.getItem(localStorage.getItem("authenticated") || false));
-    const users = [{ username: "Sarah", password: "testpassword" }];
+    const users = [{ username: "Sarah", password: "password" }];
     const handleSubmit = (e) => {
         e.preventDefault()
         console.log(username);
@@ -16,14 +16,16 @@ function Login() {
         if (password === users[0].password) {
             navigate("/dashboard")
         } else {
+            alert('Incorrect username/password');
             console.log("");
         }
-    };
+    }; 
 
 
     return (
         <div>
-            <p>Welcome Back</p>
+            <p className = "margin-left-Welcome">Welcome Back</p>
+            <p> Username:</p>
             <form onSubmit={handleSubmit}>
                 <input
                     type="text"
@@ -32,13 +34,17 @@ function Login() {
                     value={username}
                     onChange={(e) => setusername(e.target.value)}
                 />
+            <p>Password:</p>
                 <input
+                    className = "input-field"
                     type="password"
                     id="password"
                     name="password"
                     onChange={(e) => setpassword(e.target.value)}
                 />
-                <button type="submit">Submit</button>
+                <button className="margin-left-login-button" type="submit">Login</button>
+                <p>Don't have an account? </p>
+                <button className ="margin-left-login-button" type = "submit">SignUp</button>
             </form>
         </div>
     )
