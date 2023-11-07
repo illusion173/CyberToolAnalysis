@@ -1,24 +1,32 @@
+
 import { useState } from "react";
 import Dashboard from "./Dashboard";
 import Signup from "./Signup";
-import { useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom";
+import { Auth } from 'aws-amplify'; // Make sure to import Auth from AWS Amplify
+
+////////////////////////////////////////////////////////////////
+import awsExports from "./aws-exports";
+import {Amplify} from 'aws-amplify'
+
+Amplify.configure(awsExports);
 
 function Login() {
     const navigate = useNavigate();
-    const [username, setusername] = useState("");
-    const [password, setpassword] = useState("");
-    const [authenticated, setauthenticated] = useState(localStorage.getItem(localStorage.getItem("authenticated") || false));
-    const users = [{ username: "Sarah", password: "password" }];
-    const handleSubmit = (e) => {
-        e.preventDefault()
-        console.log(username);
-        console.log(password);
-        console.log(users.password);
-        if (password === users[0].password) {
-            navigate("/dashboard")
-        } else {
-            alert('Incorrect username/password');
-            console.log("");
+    const [username, setUsername] = useState(""); // Changed to setUsername for consistency
+    const [password, setPassword] = useState(""); // Changed to setPassword for consistency
+
+    // This function will be called when the user submits the form
+    const signIn = async () => {
+        try {
+            const user = await Auth.signIn(username, password);
+            console.log(user); // You can remove this after confirming it works
+            // Set authenticated in localStorage or manage the state as needed
+            localStorage.setItem("authenticated", true);
+            navigate("/dashboard"); // Navigate to the dashboard after successful sign in
+        } catch (error) {
+            console.log('error signing in', error);
+            alert('Incorrect username/password'); // Display an error message
         }
     };
 
@@ -26,7 +34,12 @@ function Login() {
         navigate("/signup")
     };
 
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        signIn(); // Call the signIn function here
+    };
 
+  
     return (
         <div>
             <p className="margin-left-Welcome">Welcome Back</p>
@@ -37,7 +50,7 @@ function Login() {
                     id='username'
                     name="username"
                     value={username}
-                    onChange={(e) => setusername(e.target.value)}
+                    onChange={(e) => setUsername(e.target.value)} // Use setUsername here
                 />
                 <p>Password:</p>
                 <input
@@ -45,7 +58,8 @@ function Login() {
                     type="password"
                     id="password"
                     name="password"
-                    onChange={(e) => setpassword(e.target.value)}
+                    value={password} // Add value attribute to control the input
+                    onChange={(e) => setPassword(e.target.value)} // Use setPassword here
                 />
                 <button className="margin-left-login-button" type="submit">Login</button>
                 <p>Don't have an account? </p>
@@ -56,3 +70,4 @@ function Login() {
 }
 
 export default Login;
+

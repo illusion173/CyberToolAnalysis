@@ -1,16 +1,17 @@
 export type AmplifyDependentResourcesAttributes = {
-    "auth": {
-        "cybertoolwebsite1c5eb582": {
-            "IdentityPoolId": "string",
-            "IdentityPoolName": "string",
-            "UserPoolId": "string",
-            "UserPoolArn": "string",
-            "UserPoolName": "string",
-            "AppClientIDWeb": "string",
-            "AppClientID": "string"
-        },
-        "userPoolGroups": {
-            "GuestUsersGroupRole": "string"
-        }
+  "auth": {
+    "cybertoolwebsite1c5eb582": {
+      "AppClientID": "string",
+      "AppClientIDWeb": "string",
+      "IdentityPoolId": "string",
+      "IdentityPoolName": "string",
+      "UserPoolArn": "string",
+      "UserPoolId": "string",
+      "UserPoolName": "string"
+    },
+    "userPoolGroups": {
+      "GuestUsersGroupRole": "string",
+      "authenticatedGroupRole": "string"
     }
+  }
 }

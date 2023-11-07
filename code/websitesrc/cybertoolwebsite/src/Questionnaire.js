@@ -1,7 +1,11 @@
 import "./Questionnaire.css"
 import React, { useState } from 'react';
 import { question_list } from "./questions";
-import { useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom";
+import { Auth } from 'aws-amplify';
+
+//const user = await Auth.currentAuthenticatedUser();
+//const { attributes } = user;
 
 const Questionnaire = () => {
   // Define the state to store user responses
@@ -13,7 +17,7 @@ const Questionnaire = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     // You can access the user's responses in the 'responses' state and perform actions like sending the data to a server or displaying it.
-    console.log(responses);
+    //console.log(attributes);
   };
 
   const navigate = useNavigate();

@@ -3,6 +3,7 @@ import "./ReportList.css"
 import React, { useState, useEffect } from 'react';
 //import API from 'aws-amplify';
 import { useNavigate } from "react-router-dom"
+import { Auth } from 'aws-amplify';
 
 const test_report_list = [{ "user_identifier": "", "report_id": "d542cfff-7dd5-4250-bf2a-436b1af70b18", "date_made": "2023-11-02T00:00:00.000Z", "file_name": "IAMANOTHERTEST" },
 { "user_identifier": "", "report_id": "d342cfff-7dd5-4250-bf2a-436b1af70b18", "date_made": "2023-11-02T00:00:00.000Z", "file_name": "IAMANOTHERTEST" },

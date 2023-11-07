@@ -42,7 +42,8 @@
     ],
     "triggers": {},
     "userPoolGroupList": [
-      "GuestUsers"
+      "GuestUsers",
+      "authenticated"
     ],
     "serviceName": "Cognito",
     "usernameCaseSensitive": false,

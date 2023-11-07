@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom"
 import './Dashboard.css';
 import * as React from 'react';
-
+import { Auth } from 'aws-amplify';
 
 function Dashboard() {
     const navigate = useNavigate();
@@ -22,7 +22,6 @@ function Dashboard() {
         { name: "GE Aviation Digital Solutions", version: 25, status: "active", launchdate: "05/20/2015" },
         { name: "Lufthansa Technique Aviatar", version: 34, status: "active", launchdate: "09/21/2023" },
     ];
-
 
     const DropDownMenu = () => {
         const [open, setOpen] = React.useState(false);
