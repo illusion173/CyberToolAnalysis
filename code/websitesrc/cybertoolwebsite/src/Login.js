@@ -1,5 +1,7 @@
 
 import { useState } from "react";
+import Dashboard from "./Dashboard";
+import Signup from "./Signup";
 import { useNavigate } from "react-router-dom";
 import { Auth } from 'aws-amplify'; // Make sure to import Auth from AWS Amplify
 
@@ -8,9 +10,6 @@ import awsExports from "./aws-exports";
 import {Amplify} from 'aws-amplify'
 
 Amplify.configure(awsExports);
-import Dashboard from "./Dashboard";
-import Signup from "./Signup";
-import { useNavigate } from "react-router-dom"
 
 function Login() {
     const navigate = useNavigate();
@@ -31,14 +30,14 @@ function Login() {
         }
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        signIn(); // Call the signIn function here
-    };
     const handleSignupClick = (e) => {
         navigate("/signup")
     };
 
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        signIn(); // Call the signIn function here
+    };
 
   
     return (
