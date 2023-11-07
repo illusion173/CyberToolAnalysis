@@ -23,7 +23,6 @@ function Dashboard() {
         { name: "Lufthansa Technique Aviatar", version: 34, status: "active", launchdate: "09/21/2023" },
     ];
 
-
     const DropDownMenu = () => {
         const [open, setOpen] = React.useState(false);
 

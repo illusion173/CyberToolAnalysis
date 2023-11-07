@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Dashboard from "./Dashboard";
 import { useNavigate } from "react-router-dom"
-
+import Auth from "aws-amplify";
 function Login() {
     const navigate = useNavigate();
     const [username, setusername] = useState("");
