@@ -58,14 +58,7 @@
       ]
     }
   },
-  "storage": {
-    "ReportLocationTable": {
-      "service": "DynamoDB",
-      "serviceType": "imported",
-      "providerPlugin": "awscloudformation",
-      "dependsOn": []
-    }
-  },
+  "storage": {},
   "function": {},
   "api": {}
 }

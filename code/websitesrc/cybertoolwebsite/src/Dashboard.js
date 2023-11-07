@@ -101,7 +101,7 @@ function Dashboard() {
 
         <div>
             <p>Welcome to your Dashboard!</p>
-            <button onClick={handleReportListClick}>Report List</button>
+            <button onClick={handleReportListClick}>Report Menu</button>
             <table>
                 <tr>
                     <th>Tool Name</th>
