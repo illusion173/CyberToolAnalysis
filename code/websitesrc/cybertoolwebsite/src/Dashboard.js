@@ -8,6 +8,9 @@ function Dashboard() {
     const handleReportListClick = (e) => {
         navigate("/ReportList")
     }
+    const handleQuestionnaireClick = (e) => {
+        navigate("/Questionnaire")
+    }
 
     //example data array
     const data = [
@@ -102,6 +105,7 @@ function Dashboard() {
         <div>
             <p>Welcome to your Dashboard!</p>
             <button onClick={handleReportListClick}>Report Menu</button>
+            <button onClick={handleQuestionnaireClick}>Questionnaire</button>
             <table>
                 <tr>
                     <th>Tool Name</th>

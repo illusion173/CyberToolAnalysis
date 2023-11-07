@@ -9,6 +9,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Login from "./Login"
 import Dashboard from "./Dashboard"
 import Reportlist from "./ReportList"
+import Questionnaire from "./Questionnaire"
 
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
@@ -19,7 +20,8 @@ root.render(
         <Route index element={<App />} />
         <Route path="login" element={<Login />} />
         <Route path="dashboard" element={<Dashboard />} />
-        <Route path="reportlist" element={<Reportlist />} />    </Routes>
+        <Route path="reportlist" element={<Reportlist />} />
+        <Route path="questionnaire" element={<Questionnaire />} />    </Routes>
 
     </BrowserRouter>
   </React.StrictMode>
