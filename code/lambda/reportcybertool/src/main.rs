@@ -5,7 +5,6 @@ use flate2::read::GzDecoder;
 use genpdf::{elements, style, Element};
 use lambda_runtime::{run, service_fn, Error, LambdaEvent};
 use serde::{Deserialize, Serialize};
-use std::time::SystemTime;
 use std::{fs, fs::File, io::Write, path::Path};
 use tar::Archive;
 use tokio_stream::StreamExt;
@@ -19,7 +18,6 @@ const FONTZIPNAME: &str = "fonts.tar.gz";
 const FONTZIPKEY: &str = "fonts/fonts.tar.gz";
 const REPORTBUCKET: &str = "reportcybertool-cs490";
 const FILETABLENAME: &str = "ReportLocationTable";
-use chrono::prelude::{DateTime, Utc};
 
 #[derive(Deserialize, Debug)]
 struct Request {
