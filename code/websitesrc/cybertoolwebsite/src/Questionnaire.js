@@ -1,5 +1,5 @@
 import "./Questionnaire.css"
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { question_list } from "./questions";
 import { useNavigate } from "react-router-dom"
 
@@ -66,12 +66,6 @@ const Questionnaire = () => {
     </div>
   );
 
-
-  return (
-    <div>
-
-    </div>
-  )
 }
 
 export default Questionnaire;

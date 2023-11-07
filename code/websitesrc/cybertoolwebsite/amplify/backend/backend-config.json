@@ -1,64 +1,29 @@
 {
-  "auth": {},
-  "parameters": {
-    "AMPLIFY_storage_ReportLocationTable_arn": {
-      "usedBy": [
+  "api": {},
+  "auth": {
+    "userPoolGroups": {
+      "dependsOn": [
         {
-          "category": "storage",
-          "resourceName": "ReportLocationTable"
+          "attributes": [
+            "UserPoolId",
+            "AppClientIDWeb",
+            "AppClientID",
+            "IdentityPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "cybertoolwebsite1c5eb582"
         }
-      ]
-    },
-    "AMPLIFY_storage_ReportLocationTable_partitionKeyName": {
-      "usedBy": [
-        {
-          "category": "storage",
-          "resourceName": "ReportLocationTable"
-        }
-      ]
-    },
-    "AMPLIFY_storage_ReportLocationTable_partitionKeyType": {
-      "usedBy": [
-        {
-          "category": "storage",
-          "resourceName": "ReportLocationTable"
-        }
-      ]
-    },
-    "AMPLIFY_storage_ReportLocationTable_region": {
-      "usedBy": [
-        {
-          "category": "storage",
-          "resourceName": "ReportLocationTable"
-        }
-      ]
-    },
-    "AMPLIFY_storage_ReportLocationTable_sortKeyName": {
-      "usedBy": [
-        {
-          "category": "storage",
-          "resourceName": "ReportLocationTable"
-        }
-      ]
-    },
-    "AMPLIFY_storage_ReportLocationTable_sortKeyType": {
-      "usedBy": [
-        {
-          "category": "storage",
-          "resourceName": "ReportLocationTable"
-        }
-      ]
-    },
-    "AMPLIFY_storage_ReportLocationTable_tableName": {
-      "usedBy": [
-        {
-          "category": "storage",
-          "resourceName": "ReportLocationTable"
-        }
-      ]
+      ],
+      "service": "Cognito-UserPool-Groups"
     }
   },
-  "storage": {},
   "function": {},
-  "api": {}
+  "storage": {
+    "ReportLocationTable": {
+      "service": "DynamoDB",
+      "serviceType": "imported",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": []
+    }
+  }
 }

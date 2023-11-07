@@ -13,7 +13,20 @@
     },
     "categories": {
       "auth": {
-        "false": {}
+        "false": {},
+        "cybertoolwebsite1c5eb582": {},
+        "userPoolGroups": {}
+      },
+      "storage": {
+        "ReportLocationTable": {
+          "tableName": "ReportLocationTable",
+          "region": "us-east-1",
+          "arn": "arn:aws:dynamodb:us-east-1:417838760454:table/ReportLocationTable",
+          "partitionKeyName": "user_id",
+          "partitionKeyType": "S",
+          "sortKeyName": "report_id",
+          "sortKeyType": "S"
+        }
       }
     }
   }
