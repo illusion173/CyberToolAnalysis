@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom"
 import './Dashboard.css';
 import * as React from 'react';
-
+import { Auth } from 'aws-amplify';
 
 function Dashboard() {
     const navigate = useNavigate();
