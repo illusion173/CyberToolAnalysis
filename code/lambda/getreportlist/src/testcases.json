@@ -1,0 +1,9 @@
+
+Header: {
+  content-type:application/json
+}
+
+
+Body: {
+  "user_identifier": "IAMATEST"
+}

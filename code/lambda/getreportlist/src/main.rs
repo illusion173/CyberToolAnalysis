@@ -48,7 +48,7 @@ impl ReportRow {
 impl From<&HashMap<String, AttributeValue>> for ReportRow {
     fn from(value: &HashMap<String, AttributeValue>) -> Self {
         let report_row = ReportRow::new(
-            as_string(value.get("user_identifier"), &"".to_string()),
+            as_string(value.get("user_id"), &"".to_string()),
             as_string(value.get("report_id"), &"".to_string()),
             as_string(value.get("date_made"), &"".to_string()),
             as_string(value.get("file_name"), &"".to_string()),
@@ -66,7 +66,7 @@ async fn get_report_list(user_identifier: String) -> Result<Vec<ReportRow>, Erro
     let results = dynamo_client
         .query()
         .table_name(FILETABLENAME)
-        .key_condition_expression("#user_id = :val")
+        .key_condition_expression("user_id = :val")
         .expression_attribute_values(":val", partition_key_value_user_identifier)
         .send()
         .await?;
