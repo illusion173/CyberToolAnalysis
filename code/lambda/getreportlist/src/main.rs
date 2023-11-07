@@ -4,11 +4,14 @@ use lambda_http::{http::HeaderValue, run, service_fn, Body, Error, Request, Resp
 use serde::{Deserialize, Serialize};
 use serde_json;
 use std::collections::HashMap;
+
 const FILETABLENAME: &str = "ReportLocationTable";
+
 #[derive(Serialize, Deserialize, Debug)]
 struct UserData {
     user_identifier: String,
 }
+
 #[derive(Debug, Serialize, Deserialize, PartialEq, Eq)]
 pub struct ReportRow {
     user_identifier: String,
@@ -16,6 +19,7 @@ pub struct ReportRow {
     date_made: String,
     file_name: String,
 }
+
 fn as_string(val: Option<&AttributeValue>, default: &String) -> String {
     if let Some(v) = val {
         if let Ok(s) = v.as_s() {
@@ -40,6 +44,7 @@ impl ReportRow {
         }
     }
 }
+
 impl From<&HashMap<String, AttributeValue>> for ReportRow {
     fn from(value: &HashMap<String, AttributeValue>) -> Self {
         let report_row = ReportRow::new(
@@ -65,14 +70,16 @@ async fn get_report_list(user_identifier: String) -> Result<Vec<ReportRow>, Erro
         .expression_attribute_values(":val", partition_key_value_user_identifier)
         .send()
         .await?;
+
     if let Some(items) = results.items {
         let rows = items.iter().map(|v| v.into()).collect();
         Ok(rows)
     } else {
         // ERROR! No items found.
-        panic!("ERROR!");
+        Ok(vec![])
     }
 }
+
 async fn function_handler(event: Request) -> Result<Response<Body>, Error> {
     if event.headers().get("content-type").unwrap() != &HeaderValue::from_static("application/json")
     {
@@ -104,6 +111,13 @@ async fn function_handler(event: Request) -> Result<Response<Body>, Error> {
     };
 
     let report_vector = get_report_list(user_data_struct.user_identifier).await?;
+
+    if report_vector.is_empty() {
+        return Ok(Response::builder()
+            .status(400)
+            .body(Body::from("No Reports For User."))
+            .expect("Failed to build a response"));
+    }
 
     let serialized_report_list = serde_json::to_string(&report_vector)?;
 
