@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Dashboard from "./Dashboard";
+import Signup from "./Signup";
 import { useNavigate } from "react-router-dom"
 
 function Login() {
@@ -19,6 +20,10 @@ function Login() {
             alert('Incorrect username/password');
             console.log("");
         }
+    };
+
+    const handleSignupClick = (e) => {
+        navigate("/signup")
     };
 
 
@@ -44,10 +49,10 @@ function Login() {
                 />
                 <button className="margin-left-login-button" type="submit">Login</button>
                 <p>Don't have an account? </p>
-                <button className="margin-left-login-button" type="submit">SignUp</button>
+                <button onClick={handleSignupClick}>Sign Up</button>
             </form>
         </div>
     )
-};
+}
 
 export default Login;
