@@ -1,6 +1,33 @@
 
 import "./ReportList.css"
-const reportlist = () => {
+import React, { useState, useEffect } from 'react';
+//import API from 'aws-amplify';
+/*
+Amplify.configure({
+  API: {
+    endpoints: [
+
+    ]
+  }
+})
+*/
+
+const ReportList = () => {
+  /*
+  const [reportListArray, setReportListArray] = useState([]);
+  const apiName = 'MyApiName';
+  const path = '/path';
+  const myInit = {
+    headers: {} // OPTIONAL
+  };
+
+  API.get(apiName, path, myInit).then((response) => {
+    console.log(response);
+    //setReportListArray(response.data);
+  });
+  */
+
+
   return (
     <div>
       <h1>Report List</h1>
@@ -29,4 +56,4 @@ const reportlist = () => {
     </div>
   );
 };
-export default reportlist;
+export default ReportList;

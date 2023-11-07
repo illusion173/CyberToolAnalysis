@@ -19,12 +19,12 @@ function Login() {
             alert('Incorrect username/password');
             console.log("");
         }
-    }; 
+    };
 
 
     return (
         <div>
-            <p className = "margin-left-Welcome">Welcome Back</p>
+            <p className="margin-left-Welcome">Welcome Back</p>
             <p> Username:</p>
             <form onSubmit={handleSubmit}>
                 <input
@@ -34,9 +34,9 @@ function Login() {
                     value={username}
                     onChange={(e) => setusername(e.target.value)}
                 />
-            <p>Password:</p>
+                <p>Password:</p>
                 <input
-                    className = "input-field"
+                    className="input-field"
                     type="password"
                     id="password"
                     name="password"
@@ -44,7 +44,7 @@ function Login() {
                 />
                 <button className="margin-left-login-button" type="submit">Login</button>
                 <p>Don't have an account? </p>
-                <button className ="margin-left-login-button" type = "submit">SignUp</button>
+                <button className="margin-left-login-button" type="submit">SignUp</button>
             </form>
         </div>
     )

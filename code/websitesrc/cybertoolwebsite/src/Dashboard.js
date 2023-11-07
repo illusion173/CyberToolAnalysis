@@ -6,13 +6,8 @@ import * as React from 'react';
 function Dashboard() {
     const navigate = useNavigate();
     const handleReportListClick = (e) => {
-        navigate("/reportlist")
+        navigate("/ReportList")
     }
-    <div>
-        <p>Welcome to your Dashboard!</p>
-        <button onClick={handleReportListClick}>Report List</button>
-    </div >
-
 
     //example data array
     const data = [
@@ -26,8 +21,7 @@ function Dashboard() {
     ];
 
 
-
-    const Dashboard = () => {
+    const DropDownMenu = () => {
         const [open, setOpen] = React.useState(false);
 
         const handleOpen = () => {
@@ -59,7 +53,7 @@ function Dashboard() {
 
 
         return (
-            <Dropdown
+            <DropDownMenu
                 trigger={<button>Dropdown</button>}
                 menu={[
                     <button onClick={handleMenuOne}>Maturity</button>,
@@ -71,7 +65,7 @@ function Dashboard() {
                 ]}
             />
         );
-    };
+    }
 
     const Dropdown = ({ trigger, menu }) => {
         const [open, setOpen] = React.useState(false);
@@ -79,7 +73,6 @@ function Dashboard() {
         const handleOpen = () => {
             setOpen(!open);
         };
-
         return (
             <div className="dropdown">
                 {React.cloneElement(trigger, {
@@ -99,32 +92,36 @@ function Dashboard() {
                         ))}
                     </ul>
                 ) : null}
-                <p>Welcome to your Dashboard!</p>
-                <button onClick={handleReportListClick}>Report List</button>
-
-
-                <table>
-                    <tr>
-                        <th>Tool Name</th>
-                        <th>Version</th>
-                        <th>Status</th>
-                        <th>Launch Date</th>
-                    </tr>
-                    {data.map((val, key) => {
-                        return (
-                            <tr key={key}>
-                                <td>{val.name}</td>
-                                <td>{val.version}</td>
-                                <td>{val.status}</td>
-                                <td>{val.launchdate}</td>
-                            </tr>
-                        )
-                    })}
-                </table>
-
             </div>
         )
-        );
-}
-}
+    };
+
+
+    return (
+
+        <div>
+            <p>Welcome to your Dashboard!</p>
+            <button onClick={handleReportListClick}>Report List</button>
+            <table>
+                <tr>
+                    <th>Tool Name</th>
+                    <th>Version</th>
+                    <th>Status</th>
+                    <th>Launch Date</th>
+                </tr>
+                {data.map((val, key) => {
+                    return (
+                        <tr key={key}>
+                            <td>{val.name}</td>
+                            <td>{val.version}</td>
+                            <td>{val.status}</td>
+                            <td>{val.launchdate}</td>
+                        </tr>
+                    )
+                })}
+            </table>
+
+        </div >
+    )
+};
 export default Dashboard;

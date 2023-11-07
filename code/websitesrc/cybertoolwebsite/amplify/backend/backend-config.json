@@ -1,5 +1,63 @@
 {
   "auth": {},
+  "parameters": {
+    "AMPLIFY_storage_ReportLocationTable_arn": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "ReportLocationTable"
+        }
+      ]
+    },
+    "AMPLIFY_storage_ReportLocationTable_partitionKeyName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "ReportLocationTable"
+        }
+      ]
+    },
+    "AMPLIFY_storage_ReportLocationTable_partitionKeyType": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "ReportLocationTable"
+        }
+      ]
+    },
+    "AMPLIFY_storage_ReportLocationTable_region": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "ReportLocationTable"
+        }
+      ]
+    },
+    "AMPLIFY_storage_ReportLocationTable_sortKeyName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "ReportLocationTable"
+        }
+      ]
+    },
+    "AMPLIFY_storage_ReportLocationTable_sortKeyType": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "ReportLocationTable"
+        }
+      ]
+    },
+    "AMPLIFY_storage_ReportLocationTable_tableName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "ReportLocationTable"
+        }
+      ]
+    }
+  },
   "storage": {
     "ReportLocationTable": {
       "service": "DynamoDB",
