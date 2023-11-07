@@ -2,5 +2,9 @@
   {
     "groupName": "GuestUsers",
     "precedence": 1
+  },
+  {
+    "groupName": "authenticated",
+    "precedence": 2
   }
 ]

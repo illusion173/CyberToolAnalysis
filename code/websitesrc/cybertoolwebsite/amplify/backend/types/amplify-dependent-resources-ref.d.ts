@@ -10,7 +10,8 @@ export type AmplifyDependentResourcesAttributes = {
             "AppClientID": "string"
         },
         "userPoolGroups": {
-            "GuestUsersGroupRole": "string"
+            "GuestUsersGroupRole": "string",
+            "authenticatedGroupRole": "string"
         }
     }
 }
