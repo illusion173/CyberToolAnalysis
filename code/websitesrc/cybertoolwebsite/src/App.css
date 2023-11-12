@@ -58,15 +58,57 @@
   margin-top: 20px;
 }
 
-.margin-left-Welcome{
-  margin-left:35px
-}
-.margin-left-login-button{
-  margin-left:60px
-}
-
 .input-field{
   display: block;
   margin: 10px 0;
   width: 100%;
 }
+
+
+/* login.css - Make sure this follows the same pattern as your signup page styles */
+
+.login-form {
+  width: 300px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  text-align: center; /* Centering the text if it's not already centered */
+}
+
+.login-label {
+  margin-top: 10px;
+  display: block;
+  font-weight: bold;
+}
+
+.login-input {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 8px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.login-button, .signup-button { /* Combined style for both login and signup buttons */
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  display: block; /* Make the buttons block to fill width */
+  margin: 10px auto; /* Center buttons horizontally */
+}
+
+.login-button:hover, .signup-button:hover { /* Hover effect for both */
+  background-color: #45a049;
+}
+
+.login-message { /* If you have any messages to display, style them here */
+  margin-top: 10px;
+}
+
+/* You can add success and error classes if you have messages that use them */

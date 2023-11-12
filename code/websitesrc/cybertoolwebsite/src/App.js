@@ -29,13 +29,6 @@ export default function App() {
     <div className="center-container">
       <h1>CyberTools</h1>
       <Login />
-      <Checkbox
-        label="Do you agree with the Terms or whateva?"
-        value={checked}
-        onChange={handleChange}
-        className="margin-top"
-      />
-      <p>Is my value checked? {checked.toString()}</p>
     </div>
   );
 };

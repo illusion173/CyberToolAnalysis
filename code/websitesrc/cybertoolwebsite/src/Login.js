@@ -22,7 +22,7 @@ function Login() {
             const user = await Auth.signIn(username, password);
             console.log(user); // You can remove this after confirming it works
             // Set authenticated in localStorage or manage the state as needed
-            localStorage.setItem("authenticated", true);
+            // localStorage.setItem("authenticated", true); <- This not needed
             navigate("/dashboard"); // Navigate to the dashboard after successful sign in
         } catch (error) {
             console.log('error signing in', error);
@@ -41,32 +41,34 @@ function Login() {
 
   
     return (
-        <div>
-            <p className="margin-left-Welcome">Welcome Back</p>
-            <p> Username:</p>
-            <form onSubmit={handleSubmit}>
+        <div className = "login-form">
+            <h2 className = "login-message"> Welcome Back!</h2>
+            <form onSubmit = {handleSubmit}>
+                <label className = "login-label" htmlFor = "username"> Username: </label>
                 <input
+                    className = "login-input"
                     type="text"
                     id='username'
-                    name="username"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)} // Use setUsername here
+                    name= "username"
+                    value = {username}
+                    onChange={(e) => setUsername (e.target.value)}
+                 />
+                 <lable clasName = "login-label" htmlFor="password" >Password:</lable>
+                 <input
+                    className = "login-input"
+                    type = "password"
+                    id = "password"
+                    name = "password"
+                    value = {password}
+                    onChange = {(e) => setPassword(e.target.value)}
                 />
-                <p>Password:</p>
-                <input
-                    className="input-field"
-                    type="password"
-                    id="password"
-                    name="password"
-                    value={password} // Add value attribute to control the input
-                    onChange={(e) => setPassword(e.target.value)} // Use setPassword here
-                />
-                <button className="margin-left-login-button" type="submit">Login</button>
-                <p>Don't have an account? </p>
-                <button onClick={handleSignupClick}>Sign Up</button>
+                <button className = "login-button" type = "submit" >Login</button>
+                <p clasName = "login-message">Don't have an account?</p>
+                <button type = "button" className = "signup-button" onClick = {handleSignupClick} >Sign Up</button>
             </form>
         </div>
-    )
+    
+    );
 }
 
 export default Login;
