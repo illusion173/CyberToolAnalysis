@@ -36,12 +36,12 @@ function Dashboard() {
     ];
 
 
-    // Pagination state and handlers
+    //pagination 
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 6;
     const totalPages = Math.ceil(data.length / itemsPerPage);
 
-    // Handlers for pagination
+
     const goToNextPage = () => {
         setCurrentPage(currentPage + 1);
     };
@@ -50,7 +50,7 @@ function Dashboard() {
         setCurrentPage(currentPage - 1);
     };
 
-    // Slice the data array to get the items for the current page
+
     const currentData = data.slice(
         (currentPage - 1) * itemsPerPage,
         currentPage * itemsPerPage
@@ -175,7 +175,7 @@ function Dashboard() {
             </div>
 
 
-            {/* Your Dropdown Menu Here */}
+            {/* dropdown */}
         </div>
     );
 };
