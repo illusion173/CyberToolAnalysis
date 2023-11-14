@@ -18,6 +18,18 @@
 .env.test.local
 .env.production.local
 
+# pip and other python libraries
+/lib
+/Scripts
+pyvenv.cfg
+/venv/
+Pipfile
+Pipfile.lock
+/Pipfile.lock
+/Pipfile.lock.backup
+.env
+amplify/team-provider-info.json
+
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
