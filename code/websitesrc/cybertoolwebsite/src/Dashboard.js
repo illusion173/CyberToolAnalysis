@@ -1,6 +1,10 @@
-import { useNavigate } from "react-router-dom"
+import React, { useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
 import './Dashboard.css';
+//<<<<<<< HEAD
 import React, { useState } from "react";
+//=======
+//>>>>>>> dc69be5 (Authorizer maybe?)
 import { Auth } from 'aws-amplify';
 
 function Dashboard() {
@@ -14,7 +18,22 @@ function Dashboard() {
 
     }
 
-    //example data array
+    useEffect(() => {
+        checkAuthStatus();
+    }, []);
+
+    const checkAuthStatus = async () => {
+        try {
+            await Auth.currentAuthenticatedUser();
+            // User is authenticated
+        } catch (error) {
+            // User is not authenticated, redirect to login page or handle accordingly
+            navigate('/login');
+        }
+    };
+
+
+    // The specified data array
     const data = [
         { name: "Boeing AnalytX", version: 19, status: "active", launchdate: "10/21/2011" },
         { name: "Predikto", version: 25, status: "active", launchdate: "01/02/2001" },
@@ -35,84 +54,13 @@ function Dashboard() {
 
     ];
 
-
-    //pagination 
-    const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 6;
-    const totalPages = Math.ceil(data.length / itemsPerPage);
-
-
-    const goToNextPage = () => {
-        setCurrentPage(currentPage + 1);
-    };
-
-    const goToPreviousPage = () => {
-        setCurrentPage(currentPage - 1);
-    };
-
-
-    const currentData = data.slice(
-        (currentPage - 1) * itemsPerPage,
-        currentPage * itemsPerPage
-    );
-
-
-
-
-    
-
-    const DropDownMenu = () => {
-        const [open, setOpen] = React.useState(false);
-
-        const handleOpen = () => {
-            setOpen(!open);
-        };
-
-        const handleMenuOne = () => {
-            console.log('clicked one');
-        };
-
-        const handleMenuTwo = () => {
-            console.log('clicked two');
-        };
-
-        const handleMenuThree = () => {
-            console.log('clicked three');
-        };
-
-        const handleMenuFour = () => {
-            console.log('clicked four');
-        };
-
-        const handleMenuFive = () => {
-            console.log('clicked five');
-        };
-
-
-
-
-
-        return (
-            <DropDownMenu
-                trigger={<button>Dropdown</button>}
-                menu={[
-                    <button onClick={handleMenuOne}>Maturity</button>,
-                    <button onClick={handleMenuTwo}>Company</button>,
-                    <button onClick={handleMenuThree}>Commmercial</button>,
-                    <button onClick={handleMenuFour}>Personal</button>,
-                    <button onClick={handleMenuFive}>Coolness</button>,
-
-                ]}
-            />
-        );
-    }
-
     const Dropdown = ({ trigger, menu }) => {
         const [open, setOpen] = React.useState(false);
 
         const handleOpen = () => {
             setOpen(!open);
         };
+
         return (
             <div className="dropdown">
                 {React.cloneElement(trigger, {
@@ -133,50 +81,54 @@ function Dashboard() {
                     </ul>
                 ) : null}
             </div>
-        )
+        );
     };
 
+    const DropDownMenu = () => {
+        const handleMenuOne = () => console.log('clicked one');
+        const handleMenuTwo = () => console.log('clicked two');
+        const handleMenuThree = () => console.log('clicked three');
+        const handleMenuFour = () => console.log('clicked four');
+        const handleMenuFive = () => console.log('clicked five');
+
+        return (
+            <Dropdown
+                trigger={<button>Dropdown</button>}
+                menu={[
+                    <button onClick={handleMenuOne}>Maturity</button>,
+                    <button onClick={handleMenuTwo}>Company</button>,
+                    <button onClick={handleMenuThree}>Commercial</button>,
+                    <button onClick={handleMenuFour}>Personal</button>,
+                    <button onClick={handleMenuFive}>Coolness</button>,
+                ]}
+            />
+        );
+    };
 
     return (
-        <div className="App">
-            <p className="dashboard-welcome">Welcome to your Dashboard!</p>
-            <button className="dashboard-button" onClick={handleReportListClick}>Report Menu</button>
-            <button className="dashboard-button" onClick={handleQuestionnaireClick}>Questionnaire</button>
-            <table className="dashboard-table">
-                <thead>
-                    <tr>
-                        <th>Tool Name</th>
-                        <th>Version</th>
-                        <th>Status</th>
-                        <th>Launch Date</th>
+        <div>
+            <p>Welcome to your Dashboard!</p>
+            <button onClick={handleReportListClick}>Report Menu</button>
+            <button onClick={handleQuestionnaireClick}>Questionnaire</button>
+            <DropDownMenu />
+            <table>
+                <tr>
+                    <th>Tool Name</th>
+                    <th>Version</th>
+                    <th>Status</th>
+                    <th>Launch Date</th>
+                </tr>
+                {data.map((val, key) => (
+                    <tr key={key}>
+                        <td>{val.name}</td>
+                        <td>{val.version}</td>
+                        <td>{val.status}</td>
+                        <td>{val.launchdate}</td>
                     </tr>
-                </thead>
-                <tbody>
-                    {currentData.map((val, key) => (
-                        <tr key={key}>
-                            <td>{val.name}</td>
-                            <td>{val.version}</td>
-                            <td>{val.status}</td>
-                            <td>{val.launchdate}</td>
-                        </tr>
-                    ))}
-                </tbody>
+                ))}
             </table>
-            <div className = "pagination">
-                <button onClick= {goToPreviousPage} disabled = {currentPage ===1}>
-                    {"<"}
-                </button>
-                <span>
-                    Page {currentPage} of {totalPages}
-                </span>
-                <button onClick = {goToNextPage} disabled = {currentPage === totalPages}>
-                    {">"}
-                </button>
-            </div>
-
-
-            {/* dropdown */}
         </div>
     );
-};
+}
+
 export default Dashboard;

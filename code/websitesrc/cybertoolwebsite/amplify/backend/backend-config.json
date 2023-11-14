@@ -1,5 +1,20 @@
 {
-  "api": {},
+  "api": {
+    "apicc323caa": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "cybertoolwebsitef06de9f8"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
+    }
+  },
   "auth": {
     "cybertoolwebsite1c5eb582": {
       "dependsOn": [],
@@ -40,6 +55,12 @@
       "service": "Cognito-UserPool-Groups"
     }
   },
-  "function": {},
+  "function": {
+    "cybertoolwebsitef06de9f8": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    }
+  },
   "storage": {}
 }
