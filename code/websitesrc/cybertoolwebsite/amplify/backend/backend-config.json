@@ -62,5 +62,23 @@
       "service": "Lambda"
     }
   },
+  "parameters": {
+    "AMPLIFY_function_cybertoolwebsitef06de9f8_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "cybertoolwebsitef06de9f8"
+        }
+      ]
+    },
+    "AMPLIFY_function_cybertoolwebsitef06de9f8_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "cybertoolwebsitef06de9f8"
+        }
+      ]
+    }
+  },
   "storage": {}
 }

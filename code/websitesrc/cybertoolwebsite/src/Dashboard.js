@@ -1,39 +1,34 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import './Dashboard.css';
-//<<<<<<< HEAD
-import React, { useState } from "react";
-//=======
-//>>>>>>> dc69be5 (Authorizer maybe?)
 import { Auth } from 'aws-amplify';
 
 function Dashboard() {
     const navigate = useNavigate();
-    const handleReportListClick = (e) => {
-        navigate("/ReportList")
-    }
-    const handleQuestionnaireClick = (e) => {
-        navigate("/Questionnaire")
 
-
-    }
-
+    /*
     useEffect(() => {
+        const checkAuthStatus = async () => {
+            try {
+                await Auth.currentAuthenticatedUser();
+                // User is authenticated
+            } catch (error) {
+                // User is not authenticated, redirect to login page
+                navigate('/login');
+            }
+        };  // Removed the stray '3'
+    
         checkAuthStatus();
-    }, []);
-
-    const checkAuthStatus = async () => {
-        try {
-            await Auth.currentAuthenticatedUser();
-            // User is authenticated
-        } catch (error) {
-            // User is not authenticated, redirect to login page or handle accordingly
-            navigate('/login');
-        }
+    }, [navigate]);
+    */
+    const handleReportListClick = () => {
+        navigate("/ReportList");
     };
 
+    const handleQuestionnaireClick = () => {
+        navigate("/Questionnaire");
+    };
 
-    // The specified data array
     const data = [
         { name: "Boeing AnalytX", version: 19, status: "active", launchdate: "10/21/2011" },
         { name: "Predikto", version: 25, status: "active", launchdate: "01/02/2001" },
@@ -55,7 +50,7 @@ function Dashboard() {
     ];
 
     const Dropdown = ({ trigger, menu }) => {
-        const [open, setOpen] = React.useState(false);
+        const [open, setOpen] = useState(false);
 
         const handleOpen = () => {
             setOpen(!open);

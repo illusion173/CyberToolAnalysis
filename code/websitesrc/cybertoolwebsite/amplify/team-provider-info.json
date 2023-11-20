@@ -16,6 +16,12 @@
         "false": {},
         "userPoolGroups": {},
         "cybertoolwebsite1c5eb582": {}
+      },
+      "function": {
+        "cybertoolwebsitef06de9f8": {
+          "deploymentBucketName": "amplify-cybertoolwebsite-dev-232927-deployment",
+          "s3Key": "amplify-builds/cybertoolwebsitef06de9f8-717238654c4874627170-build.zip"
+        }
       }
     }
   }
