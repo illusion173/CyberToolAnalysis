@@ -1,33 +1,12 @@
-import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
 import './Dashboard.css';
 import { Auth } from 'aws-amplify';
 
 function Dashboard() {
     const navigate = useNavigate();
 
-    /*
-    useEffect(() => {
-        const checkAuthStatus = async () => {
-            try {
-                await Auth.currentAuthenticatedUser();
-                // User is authenticated
-            } catch (error) {
-                // User is not authenticated, redirect to login page
-                navigate('/login');
-            }
-        };  // Removed the stray '3'
-    
-        checkAuthStatus();
-    }, [navigate]);
-    */
-    const handleReportListClick = () => {
-        navigate("/ReportList");
-    };
 
-    const handleQuestionnaireClick = () => {
-        navigate("/Questionnaire");
-    };
 
     const data = [
         { name: "Boeing AnalytX", version: 19, status: "active", launchdate: "10/21/2011" },
@@ -48,6 +27,37 @@ function Dashboard() {
 
 
     ];
+
+    // Pagination state and handlers
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 6;
+    const totalPages = Math.ceil(data.length / itemsPerPage);
+
+    const handleQuestionnaireClick = (e) => {
+        navigate("/Questionnaire")
+
+
+    }
+
+    const handleReportListClick = (e) => {
+        navigate("/ReportList")
+    }
+
+    // Handlers for pagination
+    const goToNextPage = () => {
+        setCurrentPage(currentPage + 1);
+    };
+
+    const goToPreviousPage = () => {
+        setCurrentPage(currentPage - 1);
+    };
+
+    // Slice the data array to get the items for the current page
+    const currentData = data.slice(
+        (currentPage - 1) * itemsPerPage,
+        currentPage * itemsPerPage
+    );
+
 
     const Dropdown = ({ trigger, menu }) => {
         const [open, setOpen] = useState(false);
@@ -79,51 +89,45 @@ function Dashboard() {
         );
     };
 
-    const DropDownMenu = () => {
-        const handleMenuOne = () => console.log('clicked one');
-        const handleMenuTwo = () => console.log('clicked two');
-        const handleMenuThree = () => console.log('clicked three');
-        const handleMenuFour = () => console.log('clicked four');
-        const handleMenuFive = () => console.log('clicked five');
-
-        return (
-            <Dropdown
-                trigger={<button>Dropdown</button>}
-                menu={[
-                    <button onClick={handleMenuOne}>Maturity</button>,
-                    <button onClick={handleMenuTwo}>Company</button>,
-                    <button onClick={handleMenuThree}>Commercial</button>,
-                    <button onClick={handleMenuFour}>Personal</button>,
-                    <button onClick={handleMenuFive}>Coolness</button>,
-                ]}
-            />
-        );
-    };
 
     return (
-        <div>
-            <p>Welcome to your Dashboard!</p>
-            <button onClick={handleReportListClick}>Report Menu</button>
-            <button onClick={handleQuestionnaireClick}>Questionnaire</button>
-            <DropDownMenu />
-            <table>
-                <tr>
-                    <th>Tool Name</th>
-                    <th>Version</th>
-                    <th>Status</th>
-                    <th>Launch Date</th>
-                </tr>
-                {data.map((val, key) => (
-                    <tr key={key}>
-                        <td>{val.name}</td>
-                        <td>{val.version}</td>
-                        <td>{val.status}</td>
-                        <td>{val.launchdate}</td>
+        <div className="App">
+            <p className="dashboard-welcome">Welcome to your Dashboard!</p>
+            <button className="dashboard-button" onClick={handleReportListClick}>Report Menu</button>
+            <button className="dashboard-button" onClick={handleQuestionnaireClick}>Questionnaire</button>
+            <table className="dashboard-table">
+                <thead>
+                    <tr>
+                        <th>Tool Name</th>
+                        <th>Version</th>
+                        <th>Status</th>
+                        <th>Launch Date</th>
                     </tr>
-                ))}
+                </thead>
+                <tbody>
+                    {currentData.map((val, key) => (
+                        <tr key={key}>
+                            <td>{val.name}</td>
+                            <td>{val.version}</td>
+                            <td>{val.status}</td>
+                            <td>{val.launchdate}</td>
+                        </tr>
+                    ))}
+                </tbody>
             </table>
+            <div className = "pagination">
+                <button onClick= {goToPreviousPage} disabled = {currentPage ===1}>
+                    {"<"}
+                </button>
+                <span>
+                    Page {currentPage} of {totalPages}
+                </span>
+                <button onClick = {goToNextPage} disabled = {currentPage === totalPages}>
+                    {">"}
+                </button>
+            </div>
         </div>
     );
-}
+};
 
 export default Dashboard;
