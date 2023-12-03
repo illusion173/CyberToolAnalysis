@@ -5,8 +5,8 @@
  **************************************************************************/
 
 /* eslint-disable */
-import * as React from "react";
-import { getOverrideProps } from "./utils";
+import React from "react";
+import { getOverrideProps } from "@aws-amplify/ui-react/internal";
 import { Icon, Text, View } from "@aws-amplify/ui-react";
 export default function Logo(props) {
   const { overrides, ...rest } = props;
@@ -20,8 +20,8 @@ export default function Logo(props) {
       justifyContent="unset"
       position="relative"
       padding="0px 0px 0px 0px"
-      {...getOverrideProps(overrides, "Logo")}
       {...rest}
+      {...getOverrideProps(overrides, "Logo")}
     >
       <Icon
         width="774px"

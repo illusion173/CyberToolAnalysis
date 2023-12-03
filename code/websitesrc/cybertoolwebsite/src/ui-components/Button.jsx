@@ -5,8 +5,8 @@
  **************************************************************************/
 
 /* eslint-disable */
-import * as React from "react";
-import { getOverrideProps } from "./utils";
+import React from "react";
+import { getOverrideProps } from "@aws-amplify/ui-react/internal";
 import { Text, View } from "@aws-amplify/ui-react";
 export default function Button(props) {
   const { overrides, ...rest } = props;
@@ -21,8 +21,8 @@ export default function Button(props) {
       position="relative"
       padding="0px 0px 0px 0px"
       backgroundColor="rgba(217,217,217,1)"
-      {...getOverrideProps(overrides, "Button")}
       {...rest}
+      {...getOverrideProps(overrides, "Button")}
     >
       <View
         width="655px"
