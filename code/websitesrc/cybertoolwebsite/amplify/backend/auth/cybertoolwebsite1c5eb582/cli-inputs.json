@@ -41,10 +41,7 @@
       "email"
     ],
     "triggers": {},
-    "userPoolGroupList": [
-      "GuestUsers",
-      "authenticated"
-    ],
+    "userPoolGroupList": [],
     "serviceName": "Cognito",
     "usernameCaseSensitive": false,
     "useEnabledMfas": true,
@@ -67,4 +64,4 @@
     },
     "permissions": []
   }
-} 
+}

@@ -38,21 +38,6 @@
           "EMAIL"
         ]
       }
-    },
-    "userPoolGroups": {
-      "dependsOn": [
-        {
-          "attributes": [
-            "UserPoolId",
-            "AppClientIDWeb",
-            "AppClientID",
-            "IdentityPoolId"
-          ],
-          "category": "auth",
-          "resourceName": "cybertoolwebsite1c5eb582"
-        }
-      ],
-      "service": "Cognito-UserPool-Groups"
     }
   },
   "function": {
