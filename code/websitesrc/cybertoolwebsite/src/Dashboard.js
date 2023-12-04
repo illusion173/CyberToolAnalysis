@@ -2,11 +2,28 @@ import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 import './Dashboard.css';
 import { Auth } from 'aws-amplify';
+import { API } from 'aws-amplify';
 
 function Dashboard() {
     const navigate = useNavigate();
+    let CyberTool = getCyberTools();
+    async function getCyberTools() {
 
+        const apiName = 'apicc323caa';
 
+        const path = '/tools/getAll';
+
+        const myInit = {
+            headers: {
+                Authorization: `Bearer ${(await Auth.currentSession())
+                    .getIdToken()
+                    .getJwtToken()}`
+            }
+        };
+        return await API.get(apiName, path, myInit);
+    }
+
+    console.log(CyberTool);
 
     const data = [
         { name: "Boeing AnalytX", version: 19, status: "active", launchdate: "10/21/2011" },
@@ -35,8 +52,6 @@ function Dashboard() {
 
     const handleQuestionnaireClick = (e) => {
         navigate("/Questionnaire")
-
-
     }
 
     const handleReportListClick = (e) => {
@@ -88,7 +103,9 @@ function Dashboard() {
             </div>
         );
     };
+    (async () => {
 
+    })();
 
     return (
         <div className="App">
@@ -115,14 +132,14 @@ function Dashboard() {
                     ))}
                 </tbody>
             </table>
-            <div className = "pagination">
-                <button onClick= {goToPreviousPage} disabled = {currentPage ===1}>
+            <div className="pagination">
+                <button onClick={goToPreviousPage} disabled={currentPage === 1}>
                     {"<"}
                 </button>
                 <span>
                     Page {currentPage} of {totalPages}
                 </span>
-                <button onClick = {goToNextPage} disabled = {currentPage === totalPages}>
+                <button onClick={goToNextPage} disabled={currentPage === totalPages}>
                     {">"}
                 </button>
             </div>
