@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { question_list } from "./questions";
 import { useNavigate } from "react-router-dom";
 import { Auth } from 'aws-amplify';
-
 //const user = await Auth.currentAuthenticatedUser();
 //const { attributes } = user;
 
@@ -58,14 +57,14 @@ const Questionnaire = () => {
   });
 
   return (
-    <div>
-      <h1>Comparative Report Questionnaire</h1>
-      <button onClick={handleDashboardClick}>Dashboard</button>
-      <button onClick={handleReportClick}>Report Menu</button>
+    <div className="Questionnaire">
+      <h1 className="questionnaire-header">Comparative Report Questionnaire</h1>
+      <button className="questionnaire-button" onClick={handleDashboardClick}>Dashboard</button>
+      <button className="questionnaire-button" onClick={handleReportClick}>Report Menu</button>
 
       <form className="form-padding-style" onSubmit={handleSubmit}>
         {questionElements}
-        <button type="submit">Submit</button>
+        <button className="submit-button" type="submit">Submit</button>
       </form>
     </div>
   );
