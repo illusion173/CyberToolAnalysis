@@ -6,7 +6,16 @@ import { API } from 'aws-amplify';
 
 function Dashboard() {
     const navigate = useNavigate();
-    let CyberTool = getCyberTools();
+    const CyberTool = getCyberTools();
+    async function getToken() {
+        Auth.currentSession().then(res => {
+            let accessToken = res.getAccessToken()
+            let jwt = accessToken.getJwtToken()
+            //You can print them to see the full objects
+            console.log(`myAccessToken: ${JSON.stringify(accessToken)}`)
+            console.log(`myJwt: ${jwt}`)
+        })
+    }
     async function getCyberTools() {
 
         const apiName = 'apicc323caa';
