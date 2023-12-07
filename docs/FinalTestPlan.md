@@ -1,1 +1,1 @@
-To get to the Final Test Plan click [here](https://myerauedu-my.sharepoint.com/:b:/r/personal/webbj31_my_erau_edu/Documents/CS490Docs%20-%20CyberTools/CS490-TestPlan-Final.pdf?csf=1&web=1&e=qelhYY)
+To get to the Final Test Plan click [here](https://myerauedu-my.sharepoint.com/:b:/g/personal/webbj31_my_erau_edu/EWyL6PXvch5Bid1jfY8ASnoBstw1tsReb4QA_RN5h2_OXQ?e=HieXDf)
