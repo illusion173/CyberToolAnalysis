@@ -1,0 +1,1 @@
+Click the following link for the 3 minute video [here](https://myerauedu-my.sharepoint.com/:v:/g/personal/webbj31_my_erau_edu/ERBIxYJSUlpJul8avOq8wKsBoc-oWdfsuBvur8PJsoKH_w?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=z8HQqK)
