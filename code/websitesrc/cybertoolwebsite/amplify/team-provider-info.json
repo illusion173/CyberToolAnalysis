@@ -1,27 +1,15 @@
 {
-  "dev": {
+  "main": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-cybertoolwebsite-dev-232927-authRole",
-      "UnauthRoleArn": "arn:aws:iam::417838760454:role/amplify-cybertoolwebsite-dev-232927-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::417838760454:role/amplify-cybertoolwebsite-dev-232927-authRole",
+      "AuthRoleName": "amplify-cybertoolwebsite-main-232123-authRole",
+      "UnauthRoleArn": "arn:aws:iam::417838760454:role/amplify-cybertoolwebsite-main-232123-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::417838760454:role/amplify-cybertoolwebsite-main-232123-authRole",
       "Region": "us-east-1",
-      "DeploymentBucketName": "amplify-cybertoolwebsite-dev-232927-deployment",
-      "UnauthRoleName": "amplify-cybertoolwebsite-dev-232927-unauthRole",
-      "StackName": "amplify-cybertoolwebsite-dev-232927",
-      "StackId": "arn:aws:cloudformation:us-east-1:417838760454:stack/amplify-cybertoolwebsite-dev-232927/b8098e10-6978-11ee-955d-0e55a1b5a5b7",
-      "AmplifyAppId": "d288rvqsz1wfp5"
-    },
-    "categories": {
-      "auth": {
-        "false": {},
-        "cybertoolwebsite90a2f0f3": {}
-      },
-      "function": {
-        "cybertoolwebsitef06de9f8": {
-          "deploymentBucketName": "amplify-cybertoolwebsite-dev-232927-deployment",
-          "s3Key": "amplify-builds/cybertoolwebsitef06de9f8-2f31376c476541306150-build.zip"
-        }
-      }
+      "DeploymentBucketName": "amplify-cybertoolwebsite-main-232123-deployment",
+      "UnauthRoleName": "amplify-cybertoolwebsite-main-232123-unauthRole",
+      "StackName": "amplify-cybertoolwebsite-main-232123",
+      "StackId": "arn:aws:cloudformation:us-east-1:417838760454:stack/amplify-cybertoolwebsite-main-232123/aae4c5d0-96e9-11ee-a804-0e90e0175553",
+      "AmplifyAppId": "dqijt2r7sg70n"
     }
   }
 }

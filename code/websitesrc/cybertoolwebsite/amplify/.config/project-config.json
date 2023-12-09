@@ -2,7 +2,7 @@
   "providers": [
     "awscloudformation"
   ],
-  "projectName": "cybertoolwebsite",
+  "projectName": "CyberToolWebsite",
   "version": "3.1",
   "frontend": "javascript",
   "javascript": {
