@@ -10,6 +10,11 @@
       "StackName": "amplify-cybertoolwebsite-main-232123",
       "StackId": "arn:aws:cloudformation:us-east-1:417838760454:stack/amplify-cybertoolwebsite-main-232123/aae4c5d0-96e9-11ee-a804-0e90e0175553",
       "AmplifyAppId": "dqijt2r7sg70n"
+    },
+    "categories": {
+      "auth": {
+        "cybertoolwebsite82b62747": {}
+      }
     }
   }
 }
