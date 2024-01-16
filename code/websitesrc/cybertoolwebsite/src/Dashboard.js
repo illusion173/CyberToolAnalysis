@@ -1,33 +1,35 @@
 import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
-import './Dashboard.css';
-import { Auth } from 'aws-amplify';
-import { API } from 'aws-amplify';
+import "./Dashboard.css";
+import { Auth } from "aws-amplify";
+import { API } from "aws-amplify";
 
 function Dashboard() {
     const navigate = useNavigate();
+
     const CyberTool = getCyberTools();
+
     async function getToken() {
-        Auth.currentSession().then(res => {
-            let accessToken = res.getAccessToken()
-            let jwt = accessToken.getJwtToken()
+        Auth.currentSession().then((res) => {
+            let accessToken = res.getAccessToken();
+            let jwt = accessToken.getJwtToken();
             //You can print them to see the full objects
-            console.log(`myAccessToken: ${JSON.stringify(accessToken)}`)
-            console.log(`myJwt: ${jwt}`)
-        })
+            console.log(`myAccessToken: ${JSON.stringify(accessToken)}`);
+            console.log(`myJwt: ${jwt}`);
+        });
     }
+
     async function getCyberTools() {
+        const apiName = "apifdfc7a6f";
 
-        const apiName = 'apicc323caa';
-
-        const path = '/tools/getAll';
+        const path = "/tools/getAll";
 
         const myInit = {
             headers: {
                 Authorization: `Bearer ${(await Auth.currentSession())
                     .getIdToken()
-                    .getJwtToken()}`
-            }
+                    .getJwtToken()}`,
+            },
         };
         return await API.get(apiName, path, myInit);
     }
@@ -35,23 +37,71 @@ function Dashboard() {
     console.log(CyberTool);
 
     const data = [
-        { name: "Boeing AnalytX", version: 19, status: "active", launchdate: "10/21/2011" },
-        { name: "Predikto", version: 25, status: "active", launchdate: "01/02/2001" },
-        { name: "Fleet Complete Aviation", version: 34, status: "active", launchdate: "05/02/1884" },
-        { name: "Honeywell Forge", version: 19, status: "active", launchdate: "04/45/2014" },
-        { name: "IFS Maintenix", version: 19, status: "active", launchdate: "03/45/2003" },
-        { name: "GE Aviation Digital Solutions", version: 25, status: "active", launchdate: "05/20/2015" },
-        { name: "Lufthansa Technique Aviatar", version: 34, status: "active", launchdate: "09/21/2023" },
-        { name: "Palo Alto Networks Firewall", version: 67, status: "active", launchdate: "None" },
-        { name: "Symantec Endpoint Protection", version: 3, status: "active", launchdate: "None" },
+        {
+            name: "Boeing AnalytX",
+            version: 19,
+            status: "active",
+            launchdate: "10/21/2011",
+        },
+        {
+            name: "Predikto",
+            version: 25,
+            status: "active",
+            launchdate: "01/02/2001",
+        },
+        {
+            name: "Fleet Complete Aviation",
+            version: 34,
+            status: "active",
+            launchdate: "05/02/1884",
+        },
+        {
+            name: "Honeywell Forge",
+            version: 19,
+            status: "active",
+            launchdate: "04/45/2014",
+        },
+        {
+            name: "IFS Maintenix",
+            version: 19,
+            status: "active",
+            launchdate: "03/45/2003",
+        },
+        {
+            name: "GE Aviation Digital Solutions",
+            version: 25,
+            status: "active",
+            launchdate: "05/20/2015",
+        },
+        {
+            name: "Lufthansa Technique Aviatar",
+            version: 34,
+            status: "active",
+            launchdate: "09/21/2023",
+        },
+        {
+            name: "Palo Alto Networks Firewall",
+            version: 67,
+            status: "active",
+            launchdate: "None",
+        },
+        {
+            name: "Symantec Endpoint Protection",
+            version: 3,
+            status: "active",
+            launchdate: "None",
+        },
         { name: "OpenVPN", version: 9, status: "active", launchdate: "None" },
         { name: "Cisco ASA", version: 3, status: "active", launchdate: "None" },
-        { name: "Fortinet FortiClient", version: 5, status: "active", launchdate: "None" },
+        {
+            name: "Fortinet FortiClient",
+            version: 5,
+            status: "active",
+            launchdate: "None",
+        },
         { name: "Okta", version: 2, status: "active", launchdate: "None" },
         { name: "Idegy", version: 12, status: "active", launchdate: "None" },
         { name: "Dragos", version: 14, status: "active", launchdate: "None" },
-
-
     ];
 
     // Pagination state and handlers
@@ -60,12 +110,12 @@ function Dashboard() {
     const totalPages = Math.ceil(data.length / itemsPerPage);
 
     const handleQuestionnaireClick = (e) => {
-        navigate("/Questionnaire")
-    }
+        navigate("/Questionnaire");
+    };
 
     const handleReportListClick = (e) => {
-        navigate("/ReportList")
-    }
+        navigate("/ReportList");
+    };
 
     // Handlers for pagination
     const goToNextPage = () => {
@@ -79,9 +129,8 @@ function Dashboard() {
     // Slice the data array to get the items for the current page
     const currentData = data.slice(
         (currentPage - 1) * itemsPerPage,
-        currentPage * itemsPerPage
+        currentPage * itemsPerPage,
     );
-
 
     const Dropdown = ({ trigger, menu }) => {
         const [open, setOpen] = useState(false);
@@ -112,15 +161,17 @@ function Dashboard() {
             </div>
         );
     };
-    (async () => {
-
-    })();
+    (async () => { })();
 
     return (
         <div className="App">
             <p className="dashboard-welcome">Welcome to your Dashboard!</p>
-            <button className="dashboard-button" onClick={handleReportListClick}>Report Menu</button>
-            <button className="dashboard-button" onClick={handleQuestionnaireClick}>Questionnaire</button>
+            <button className="dashboard-button" onClick={handleReportListClick}>
+                Report Menu
+            </button>
+            <button className="dashboard-button" onClick={handleQuestionnaireClick}>
+                Questionnaire
+            </button>
             <table className="dashboard-table">
                 <thead>
                     <tr>
@@ -154,6 +205,6 @@ function Dashboard() {
             </div>
         </div>
     );
-};
+}
 
 export default Dashboard;

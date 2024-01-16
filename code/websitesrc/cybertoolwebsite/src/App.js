@@ -1,10 +1,7 @@
-import '@aws-amplify/ui-react/styles.css';
-import * as React from 'react';
-import ReactDOM from 'react-dom/client';
-import './App.css';
+import "@aws-amplify/ui-react/styles.css";
+import * as React from "react";
+import "./App.css";
 import Login from "./Login";
-import { CheckboxField } from '@aws-amplify/ui-react';
-
 
 const Checkbox = ({ label, value, onChange, className }) => {
   return (
@@ -15,8 +12,6 @@ const Checkbox = ({ label, value, onChange, className }) => {
   );
 };
 
-
-
 export default function App() {
   const [checked, setChecked] = React.useState(false);
 
@@ -24,13 +19,10 @@ export default function App() {
     setChecked(!checked);
   };
 
-
   return (
     <div className="center-container">
       <h1>CyberTools</h1>
       <Login />
     </div>
   );
-};
-
-
+}
