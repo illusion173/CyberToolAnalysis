@@ -17,3 +17,11 @@ cargo lambda deploy -a LatestVersion
 cd /home/illusion/CS490Project/CyberToolAnalysis/code/lambda/getreportlist
 cargo lambda build --release
 cargo lambda deploy -a LatestVersion
+
+cd /home/illusion/CS490Project/CyberToolAnalysis/code/lambda/getAllTools
+cargo lambda build --release
+cargo lambda deploy -a LatestVersion
+
+cd /home/illusion/CS490Project/CyberToolAnalysis/code/lambda/getsingulartooldata
+cargo lambda build --release
+cargo lambda deploy -a LatestVersion
