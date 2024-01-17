@@ -1,6 +1,6 @@
 import "./ReportList.css";
 import React, { useState, useEffect } from "react";
-import API from "aws-amplify";
+import { API, Auth } from "aws-amplify";
 import { useNavigate } from "react-router-dom";
 
 const ReportList = () => {
@@ -26,8 +26,8 @@ const ReportList = () => {
         },
       };
 
-      report_array = await API.get(apiName, path, myInit);
-      setReportListArray(report_array);
+      //report_array = await API.get(apiName, path, myInit);
+      //setReportListArray(report_array);
     } catch (error) {
       alert("Unable to retrieve report list");
     }
@@ -47,9 +47,10 @@ const ReportList = () => {
           report_id: report_id,
         },
       };
-      presigned_url_data = await API.get(apiName, path, myInit);
-      console.log(presigned_url_data);
-      return presigned_url_data;
+
+      //presigned_url_data = await API.get(apiName, path, myInit);
+      //console.log(presigned_url_data);
+      //return presigned_url_data;
     } catch (error) {
       alert("Unable to retrieve presigned url");
     }
