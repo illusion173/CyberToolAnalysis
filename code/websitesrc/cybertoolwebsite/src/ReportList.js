@@ -18,38 +18,24 @@ const ReportList = () => {
     return jwt;
   };
 
-  const fetchAccessToken = async () => {
-    let res = await Auth.currentSession();
-    let accessToken = res.getAccessToken();
-    return accessToken;
-  };
-
   const fetchIdToken = async () => {
     let res = await Auth.currentUserInfo();
     let user_id = res["id"];
-    console.log(user_id);
-    //console.log(res);
-    //return IdToken;
+    return user_id;
   };
 
   const fetchReportList = async () => {
     try {
       const apiName = "apifdfc7a6f";
-
-      const path = "/getReportList";
-      const jwt = fetchJwt();
-      const IdToken = fetchIdToken();
-      const user_identifier = "";
+      const path = "/tools/getAll";
+      const jwt = await fetchJwt();
+      console.log(jwt);
       const myInit = {
-        headers: {
-          user_identifier: `${user_identifier}`,
-          //Authorization: `Bearer ${jwt}`,
-        },
+        headers: {},
       };
 
-      //let report_array = [];
-      //report_array = await API.get(apiName, path, myInit);
-      //console.log(report_array);
+      let report_array = await API.get(apiName, path, myInit);
+      console.log(report_array);
       //setReportListArray(report_array);
     } catch (error) {
       alert("Unable to retrieve report list");
