@@ -1,18 +1,18 @@
 {
   "api": {
     "apifdfc7a6f": {
-      "service": "API Gateway",
-      "providerPlugin": "awscloudformation",
       "dependsOn": [
         {
-          "category": "function",
-          "resourceName": "cybertoolwebsite430c7922",
           "attributes": [
             "Name",
             "Arn"
-          ]
+          ],
+          "category": "function",
+          "resourceName": "cybertoolwebsite430c7922"
         }
-      ]
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
     }
   },
   "auth": {
@@ -48,6 +48,160 @@
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_function_cybertoolwebsite430c7922_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "cybertoolwebsite430c7922"
+        }
+      ]
+    },
+    "AMPLIFY_function_cybertoolwebsite430c7922_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "cybertoolwebsite430c7922"
+        }
+      ]
+    },
+    "AMPLIFY_storage_CyberTools_arn": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "CyberTools"
+        }
+      ]
+    },
+    "AMPLIFY_storage_CyberTools_partitionKeyName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "CyberTools"
+        }
+      ]
+    },
+    "AMPLIFY_storage_CyberTools_partitionKeyType": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "CyberTools"
+        }
+      ]
+    },
+    "AMPLIFY_storage_CyberTools_region": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "CyberTools"
+        }
+      ]
+    },
+    "AMPLIFY_storage_CyberTools_sortKeyName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "CyberTools"
+        }
+      ]
+    },
+    "AMPLIFY_storage_CyberTools_sortKeyType": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "CyberTools"
+        }
+      ]
+    },
+    "AMPLIFY_storage_CyberTools_streamArn": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "CyberTools"
+        }
+      ]
+    },
+    "AMPLIFY_storage_CyberTools_tableName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "CyberTools"
+        }
+      ]
+    },
+    "AMPLIFY_storage_ReportLocationTable_arn": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "ReportLocationTable"
+        }
+      ]
+    },
+    "AMPLIFY_storage_ReportLocationTable_partitionKeyName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "ReportLocationTable"
+        }
+      ]
+    },
+    "AMPLIFY_storage_ReportLocationTable_partitionKeyType": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "ReportLocationTable"
+        }
+      ]
+    },
+    "AMPLIFY_storage_ReportLocationTable_region": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "ReportLocationTable"
+        }
+      ]
+    },
+    "AMPLIFY_storage_ReportLocationTable_sortKeyName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "ReportLocationTable"
+        }
+      ]
+    },
+    "AMPLIFY_storage_ReportLocationTable_sortKeyType": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "ReportLocationTable"
+        }
+      ]
+    },
+    "AMPLIFY_storage_ReportLocationTable_tableName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "ReportLocationTable"
+        }
+      ]
+    },
+    "AMPLIFY_storage_cybertoolwebsite67c1ea5d_bucketName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "cybertoolwebsite67c1ea5d"
+        }
+      ]
+    },
+    "AMPLIFY_storage_cybertoolwebsite67c1ea5d_region": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "cybertoolwebsite67c1ea5d"
+        }
+      ]
     }
   },
   "storage": {

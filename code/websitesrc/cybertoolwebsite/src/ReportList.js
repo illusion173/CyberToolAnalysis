@@ -25,7 +25,10 @@ const ReportList = () => {
   };
 
   const fetchIdToken = async () => {
-    let res = Auth.currentUserInfo;
+    let res = await Auth.currentUserInfo();
+    let user_id = res["id"];
+    console.log(user_id);
+    //console.log(res);
     //return IdToken;
   };
 
@@ -35,7 +38,7 @@ const ReportList = () => {
 
       const path = "/getReportList";
       const jwt = fetchJwt();
-      const IdToken = 
+      const IdToken = fetchIdToken();
       const user_identifier = "";
       const myInit = {
         headers: {
