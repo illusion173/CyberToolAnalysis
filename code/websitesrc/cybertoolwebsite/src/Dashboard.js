@@ -7,7 +7,7 @@ import { API } from "aws-amplify";
 function Dashboard() {
     const navigate = useNavigate();
 
-    const CyberTool = getCyberTools();
+    //const CyberTool = getCyberTools();
 
     async function getToken() {
         Auth.currentSession().then((res) => {
@@ -34,7 +34,7 @@ function Dashboard() {
         return await API.get(apiName, path, myInit);
     }
 
-    console.log(CyberTool);
+    //console.log(CyberTool);
 
     const data = [
         {

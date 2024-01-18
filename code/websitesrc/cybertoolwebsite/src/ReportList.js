@@ -12,21 +12,41 @@ const ReportList = () => {
     navigate("/Dashboard");
   };
 
+  const fetchJwt = async () => {
+    let res = await Auth.currentSession();
+    let jwt = res.getAccessToken().getJwtToken();
+    return jwt;
+  };
+
+  const fetchAccessToken = async () => {
+    let res = await Auth.currentSession();
+    let accessToken = res.getAccessToken();
+    return accessToken;
+  };
+
+  const fetchIdToken = async () => {
+    let res = Auth.currentUserInfo;
+    //return IdToken;
+  };
+
   const fetchReportList = async () => {
     try {
       const apiName = "apifdfc7a6f";
 
       const path = "/getReportList";
-
+      const jwt = fetchJwt();
+      const IdToken = 
+      const user_identifier = "";
       const myInit = {
         headers: {
-          Authorization: `Bearer ${(await Auth.currentSession())
-            .getIdToken()
-            .getJwtToken()}`,
+          user_identifier: `${user_identifier}`,
+          //Authorization: `Bearer ${jwt}`,
         },
       };
 
+      //let report_array = [];
       //report_array = await API.get(apiName, path, myInit);
+      //console.log(report_array);
       //setReportListArray(report_array);
     } catch (error) {
       alert("Unable to retrieve report list");
