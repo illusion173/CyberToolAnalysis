@@ -26,12 +26,10 @@ const ReportList = () => {
 
   const fetchReportList = async () => {
     try {
-      const apiName = "api90791e93";
+      const apiName = "api98246a6a";
       const path = "/getAll";
-      const jwt = await fetchJwt();
-      console.log(jwt);
       const myInit = {
-        headers: { Authorization: `Bearer ${jwt}` },
+        headers: {},
       };
 
       let report_array = await API.get(apiName, path, myInit);
