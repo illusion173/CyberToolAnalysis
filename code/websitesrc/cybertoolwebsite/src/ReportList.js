@@ -26,19 +26,19 @@ const ReportList = () => {
 
   const fetchReportList = async () => {
     try {
-      const apiName = "apifdfc7a6f";
-      const path = "/tools/getAll";
+      const apiName = "api90791e93";
+      const path = "/getAll";
       const jwt = await fetchJwt();
       console.log(jwt);
       const myInit = {
-        headers: {},
+        headers: { Authorization: `Bearer ${jwt}` },
       };
 
       let report_array = await API.get(apiName, path, myInit);
       console.log(report_array);
       //setReportListArray(report_array);
     } catch (error) {
-      alert("Unable to retrieve report list");
+      //alert("Unable to retrieve report list");
     }
   };
 
