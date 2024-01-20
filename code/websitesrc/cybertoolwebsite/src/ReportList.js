@@ -12,24 +12,25 @@ const ReportList = () => {
     navigate("/Dashboard");
   };
 
-  const fetchJwt = async () => {
-    let res = await Auth.currentSession();
-    let jwt = res.getAccessToken().getJwtToken();
-    return jwt;
-  };
-
-  const fetchIdToken = async () => {
-    let res = await Auth.currentUserInfo();
-    let user_id = res["id"];
-    return user_id;
-  };
+  async function fetchJwt() {
+    try {
+      const session = await Auth.currentSession();
+      const accessToken = session.getAccessToken().getJwtToken();
+      console.log("JWT Token:", accessToken);
+      return accessToken;
+    } catch (error) {
+      console.error("Error getting JWT Token:", error);
+      throw error;
+    }
+  }
 
   const fetchReportList = async () => {
+    const jwt = await fetchJwt();
     try {
-      const apiName = "api98246a6a";
+      const apiName = "apiab9b8614";
       const path = "/getAll";
       const myInit = {
-        headers: {},
+        Authorization: `Bearer ${jwt}`,
       };
 
       let report_array = await API.get(apiName, path, myInit);

@@ -1,6 +1,6 @@
 export type AmplifyDependentResourcesAttributes = {
     "api": {
-        "api90791e93": {
+        "apiab9b8614": {
             "RootUrl": "string",
             "ApiName": "string",
             "ApiId": "string"
