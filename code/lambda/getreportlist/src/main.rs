@@ -81,14 +81,6 @@ async fn get_report_list(user_identifier: String) -> Result<Vec<ReportRow>, Erro
 }
 
 async fn function_handler(event: Request) -> Result<Response<Body>, Error> {
-    if event.headers().get("content-type").unwrap() != &HeaderValue::from_static("application/json")
-    {
-        return Ok(Response::builder()
-            .status(400)
-            .body(Body::from("Invalid Content-Type"))
-            .expect("Failed to build a response"));
-    }
-
     let body_str = match std::str::from_utf8(event.body().as_ref()) {
         Ok(body_str) => body_str,
         Err(_error) => {
