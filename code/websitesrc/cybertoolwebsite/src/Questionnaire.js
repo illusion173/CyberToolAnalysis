@@ -1,4 +1,4 @@
-import "./Questionnaire.css"
+import "./questionnaire.css"
 import React, { useState } from 'react';
 import { question_list } from "./questions";
 import { useNavigate } from "react-router-dom";

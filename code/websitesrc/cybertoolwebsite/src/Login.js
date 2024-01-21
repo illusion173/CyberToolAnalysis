@@ -27,6 +27,9 @@ function Login() {
         navigate("/signup");
     };
 
+    const handleForgotClick = () => {
+        navigate("/forgotpass");
+    }
     const handleSubmit = (e) => {
         e.preventDefault();
         handleSignIn(); // Call the handleSignIn function here
@@ -54,6 +57,7 @@ function Login() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                 />
+                <button className="login-message" type="button" onClick={handleForgotClick}>Forgot password?</button>
                 <button className="login-button" type="submit">Login</button>
                 <p className="login-message">Don't have an account?</p>
                 <button type="button" className="signup-button" onClick={handleSignupClick}>Sign Up</button>
