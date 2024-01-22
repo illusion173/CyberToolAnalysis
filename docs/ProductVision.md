@@ -1,1 +1,2 @@
-For the new Product Vision for Cybertool please click [here](https://myerauedu-my.sharepoint.com/:w:/g/personal/webbj31_my_erau_edu/EWXvLOI8eytPirL6ioJagcUBeX521fnXc7R600hVOuxlOA?e=K5K8B3)
+# Product Statement
+The product will be a public website where users can sign up & log in and view a variety of cybersecurity tools based on filters of the user (commercial, personal, etc.). All information regarding the cybersecurity tools will be stored in a NoSQL database accessible only from the CyberTools Website. Logged in users of the website will be able to complete a questionnaire and get recommendations from the website in the form of a pdf comparison report of cybersecurity tools. Upon user request, users will be able to share and download their reports and share them. 
