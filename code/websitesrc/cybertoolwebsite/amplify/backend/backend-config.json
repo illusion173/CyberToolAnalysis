@@ -1,18 +1,18 @@
 {
   "api": {
     "apiab9b8614": {
-      "service": "API Gateway",
-      "providerPlugin": "awscloudformation",
       "dependsOn": [
         {
-          "category": "function",
-          "resourceName": "cybertoolwebsite430c7922",
           "attributes": [
             "Name",
             "Arn"
-          ]
+          ],
+          "category": "function",
+          "resourceName": "cybertoolwebsite430c7922"
         }
-      ]
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
     }
   },
   "auth": {
@@ -206,22 +206,22 @@
   },
   "storage": {
     "CyberTools": {
-      "service": "DynamoDB",
-      "serviceType": "imported",
+      "dependsOn": [],
       "providerPlugin": "awscloudformation",
-      "dependsOn": []
+      "service": "DynamoDB",
+      "serviceType": "imported"
     },
     "ReportLocationTable": {
-      "service": "DynamoDB",
-      "serviceType": "imported",
+      "dependsOn": [],
       "providerPlugin": "awscloudformation",
-      "dependsOn": []
+      "service": "DynamoDB",
+      "serviceType": "imported"
     },
     "cybertoolwebsite67c1ea5d": {
-      "service": "S3",
-      "serviceType": "imported",
+      "dependsOn": [],
       "providerPlugin": "awscloudformation",
-      "dependsOn": []
+      "service": "S3",
+      "serviceType": "imported"
     }
   }
 }
