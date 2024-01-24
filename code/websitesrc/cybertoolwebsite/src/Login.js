@@ -28,7 +28,7 @@ function Login() {
     };
 
     const handleForgotClick = () => {
-        navigate("/forgotpass");
+        navigate("/forgotpassword");
     }
     const handleSubmit = (e) => {
         e.preventDefault();
