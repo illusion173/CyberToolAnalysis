@@ -25,7 +25,7 @@ function ForgotPassword() {
     const handleSubmit = (e) => {
         e.preventDefault();
         handleForgotPassword();
-    }
+    };
 
     return(
         <div className="center-container">
