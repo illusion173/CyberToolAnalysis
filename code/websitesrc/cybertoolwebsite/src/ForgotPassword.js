@@ -29,9 +29,10 @@ function ForgotPassword() {
 
     return(
         <div className="center-container">
-            <h1>CyberTools</h1>
-            <div classname=".login-form">
-                <h2 className="login-message">Forgot Password?</h2>
+            <div className="login-form">
+                <div>
+                    <h2 className="login-message">Forgot Password?</h2>
+                </div>
                 <form onSubmit={handleSubmit}>
                     <label classname="login-label" htmlFor="email">Email:</label>
                     <input
@@ -45,7 +46,7 @@ function ForgotPassword() {
                     <button className="login-button" type="submit">Send Code</button>
                 </form>
             </div>
-        </div> 
+        </div>
     );
 }
 

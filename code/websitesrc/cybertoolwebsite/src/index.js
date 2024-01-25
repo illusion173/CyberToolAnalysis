@@ -11,6 +11,7 @@ import Dashboard from "./Dashboard"
 import Reportlist from "./ReportList"
 import Questionnaire from "./Questionnaire"
 import Signup from "./Signup"
+import ForgotPassword from "./ForgotPassword"
 
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
@@ -23,8 +24,10 @@ root.render(
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="reportlist" element={<Reportlist />} />
         <Route path="questionnaire" element={<Questionnaire />} />
-        <Route path="signup" element={<Signup />} />    </Routes>
-
+        <Route path="signup" element={<Signup />} />   
+        <Route path="forgotpassword" element={<ForgotPassword />} /> 
+      </Routes>
+         
     </BrowserRouter>
   </React.StrictMode>
 );

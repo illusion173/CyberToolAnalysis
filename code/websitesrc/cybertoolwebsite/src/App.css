@@ -71,9 +71,10 @@
   width: 300px;
   margin: 0 auto;
   padding: 20px;
-  border: 1px solid #ccc;
+  border: 1px solid #141313;
   border-radius: 5px;
   text-align: center; /* Centering the text if it's not already centered */
+  align-items: center;
 }
 
 .login-label {
@@ -109,6 +110,7 @@
 
 .login-message { /* If you have any messages to display, style them here */
   margin-top: 10px;
+  text-align: center;
 }
 
 /* You can add success and error classes if you have messages that use them */

@@ -29,7 +29,7 @@ function Login() {
 
     const handleForgotClick = () => {
         navigate("/forgotpassword");
-    }
+    };
     const handleSubmit = (e) => {
         e.preventDefault();
         handleSignIn(); // Call the handleSignIn function here
