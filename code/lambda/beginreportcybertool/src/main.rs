@@ -1,20 +1,32 @@
 use aws_sdk_sfn as sfn;
-use lambda_http::{http::HeaderValue, run, service_fn, Body, Error, Request, Response};
+use lambda_http::{run, service_fn, Body, Error, Request, Response};
 use serde::{Deserialize, Serialize};
 #[derive(Serialize, Deserialize, Debug)]
 struct FileData {
     file_name: String,
     user_identifier: String,
+    responses: QuestionnaireData,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+struct QuestionnaireData {
+    question_1: String,
+    question_2: String,
+    question_3: String,
+    question_4: String,
+    question_5: String,
+    question_6: String,
+    question_7: String,
+    question_8: String,
+    question_9: String,
+    question_10: String,
+    question_11: String,
+    question_12: String,
+    question_13: String,
+    question_14: String,
+    question_15: String,
 }
 async fn function_handler(event: Request) -> Result<Response<Body>, Error> {
-    if event.headers().get("content-type").unwrap() != &HeaderValue::from_static("application/json")
-    {
-        return Ok(Response::builder()
-            .status(400)
-            .body(Body::from("Invalid Content-Type"))
-            .expect("Failed to build a response"));
-    }
-
     let body_str = match std::str::from_utf8(event.body().as_ref()) {
         Ok(body_str) => body_str,
         Err(_error) => {

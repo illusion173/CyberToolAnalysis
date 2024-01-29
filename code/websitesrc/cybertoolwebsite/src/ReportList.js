@@ -2,8 +2,11 @@ import "./ReportList.css";
 import React, { useState, useEffect } from "react";
 import { API } from "aws-amplify";
 import { useNavigate } from "react-router-dom";
-import { fetchJwt, getUserId } from "./fetchJwt.js";
+import { fetchJwt, getUserId } from "./helperFunctionsForUserAPI.js";
 const ReportList = () => {
+  useEffect(() => {
+    fetchReportList();
+  }, []);
   const navigate = useNavigate();
 
   const [reportListArray, setReportListArray] = useState([]);
@@ -21,11 +24,11 @@ const ReportList = () => {
 
       const headers = {
         Authorization: `Bearer ${jwt}`,
-      }
+      };
 
       const requestBody = {
         user_identifier: `${username}`,
-      }
+      };
 
       const myInit = {
         headers,
@@ -36,7 +39,7 @@ const ReportList = () => {
       console.log(report_array);
       //setReportListArray(report_array);
     } catch (error) {
-      //alert("Unable to retrieve report list");
+      alert("Unable to retrieve report list");
     }
   };
 
@@ -45,16 +48,23 @@ const ReportList = () => {
     try {
       const apiName = "apiab9b8614";
       const path = "/requestpresignedurl";
+
+      const headers = {
+        Authorization: `Bearer ${jwt}`,
+      };
+
+      const requestBody = {
+        report_id: report_id,
+      };
+
       const myInit = {
-        headers: {
-          Authorization: `Bearer ${jwt}`,
-          report_id: report_id,
-        },
+        headers,
+        body: requestBody,
       };
 
       let presigned_url_data = await API.get(apiName, path, myInit);
       console.log(presigned_url_data);
-      return presigned_url_data;
+      //return presigned_url_data;
     } catch (error) {
       alert("Unable to retrieve presigned url");
     }

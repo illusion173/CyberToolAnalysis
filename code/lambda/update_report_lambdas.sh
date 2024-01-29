@@ -2,26 +2,26 @@
 #
 #
 #
-cd /home/illusion/CS490Project/CyberToolAnalysis/code/lambda/reportcybertool
+cd /home/illusion/Desktop/school/CyberToolAnalysis/code/lambda/reportcybertool
 cargo lambda build --release
 cargo lambda deploy -a LatestVersion
 
-cd /home/illusion/CS490Project/CyberToolAnalysis/code/lambda/reportcreatepresignedurl
+cd /home/illusion/Desktop/school/CyberToolAnalysis/code/lambda/reportcreatepresignedurl
 cargo lambda build --release
 cargo lambda deploy -a LatestVersion
 
-cd /home/illusion/CS490Project/CyberToolAnalysis/code/lambda/beginreportcybertool
+cd /home/illusion/Desktop/school/CyberToolAnalysis/code/lambda/beginreportcybertool
 cargo lambda build --release
 cargo lambda deploy -a LatestVersion
 
-cd /home/illusion/CS490Project/CyberToolAnalysis/code/lambda/getreportlist
+cd /home/illusion/Desktop/school/CyberToolAnalysis/code/lambda/getreportlist
 cargo lambda build --release
 cargo lambda deploy -a LatestVersion
 
-cd /home/illusion/CS490Project/CyberToolAnalysis/code/lambda/getAllTools
+cd /home/illusion/Desktop/school/CyberToolAnalysis/code/lambda/getAllTools
 cargo lambda build --release
 cargo lambda deploy -a LatestVersion
 
-cd /home/illusion/CS490Project/CyberToolAnalysis/code/lambda/getsingulartooldata
+cd /home/illusion/Desktop/school/CyberToolAnalysis/code/lambda/getsingulartooldata
 cargo lambda build --release
 cargo lambda deploy -a LatestVersion
