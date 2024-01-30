@@ -5,6 +5,8 @@ import { Auth } from 'aws-amplify'; // Import Auth from AWS Amplify
 import awsExports from "./aws-exports";
 import { Amplify } from 'aws-amplify';
 
+// Grabbing from App.css... i dont know why but it works
+
 Amplify.configure(awsExports);
 
 function Login() {
@@ -16,7 +18,7 @@ function Login() {
         try {
             const user = await Auth.signIn(username, password);
           //  console.log(user); // You can remove this after confirming it works
-            navigate("/dashboard"); // Navigate to the dashboard after successful sign in
+            navigate("/Questionnaire"); // Navigate to the dashboard after successful sign in
         } catch (error) {
             console.log('error signing in', error);
             alert('Incorrect username/password'); // Display an error message
@@ -26,6 +28,10 @@ function Login() {
     const handleSignupClick = () => {
         navigate("/signup");
     };
+
+    const handleGuestClick = () => {
+        navigate ("/Dashboard")
+    }
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -57,6 +63,8 @@ function Login() {
                 <button className="login-button" type="submit">Login</button>
                 <p className="login-message">Don't have an account?</p>
                 <button type="button" className="signup-button" onClick={handleSignupClick}>Sign Up</button>
+                <p className = "login-message"> or</p>
+                <button type="button" className="guest-button" onClick = {handleGuestClick}>Continue as Guest</button>
             </form>
         </div>
     );

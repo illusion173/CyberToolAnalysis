@@ -9,6 +9,29 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+.filter-dropdown {
+  margin: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.filter-dropdown {
+  margin: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.filter-dropdown label {
+  margin-right: 10px;
+  font-weight: bold;
+}
+
+.filter-dropdown select {
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
 .dashboard-welcome {
   margin: 20px 0;
   font-size: 24px;
@@ -114,4 +137,28 @@
 
 .pagination span {
   margin: 0 10px;
+}
+
+header {
+  position: sticky;
+  top: -54px;
+  z-index: 2;
+}
+.search-bar {
+  display: flex;
+  justify-content: center;
+  padding: 24px;
+}
+.search-bar input {
+  width: 50%;
+  min-width: 300px;
+  padding: 12px 24px;
+  border-radius: 100px;
+  font-size: 16px;
+  border: 0px;
+  outline: none;
+}
+.search-bar [list]::-webkit-list-button,
+.search-bar [list]::-webkit-calendar-picker-indicator {
+  display: none !important;
 }

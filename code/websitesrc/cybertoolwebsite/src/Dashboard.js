@@ -34,6 +34,8 @@ function Dashboard() {
         return await API.get(apiName, path, myInit);
     }
 
+
+
     //console.log(CyberTool);
 
     const data = [
@@ -104,7 +106,7 @@ function Dashboard() {
         { name: "Dragos", version: 14, status: "active", launchdate: "None" },
     ];
 
-    // Pagination state and handlers
+    //Pagination
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 6;
     const totalPages = Math.ceil(data.length / itemsPerPage);
@@ -117,7 +119,11 @@ function Dashboard() {
         navigate("/ReportList");
     };
 
-    // Handlers for pagination
+    const handleAccountInfo = (e) => {
+        navigate("/Account");
+    };
+
+    //Handlers for pagnation
     const goToNextPage = () => {
         setCurrentPage(currentPage + 1);
     };
@@ -126,11 +132,21 @@ function Dashboard() {
         setCurrentPage(currentPage - 1);
     };
 
-    // Slice the data array to get the items for the current page
+
+    //Slice data array
     const currentData = data.slice(
         (currentPage - 1) * itemsPerPage,
         currentPage * itemsPerPage,
     );
+
+    //Filtering 
+    const [filter,setFilter] = useState('all');
+
+    const options = ['all', 'date released','price'];
+
+    const handleFilterChange = (e) => {
+        setFilter(e.target.value);
+    }
 
     const Dropdown = ({ trigger, menu }) => {
         const [open, setOpen] = useState(false);
@@ -166,12 +182,37 @@ function Dashboard() {
     return (
         <div className="App">
             <p className="dashboard-welcome">Welcome to your Dashboard!</p>
+
+            <header>
+                    <input id = "search" type = "search" placeholder = "&#x1F50D; Start typing to search..." />
+            </header>
+
+
+
+
             <button className="dashboard-button" onClick={handleReportListClick}>
                 Report Menu
             </button>
             <button className="dashboard-button" onClick={handleQuestionnaireClick}>
                 Questionnaire
             </button>
+
+            <button className="dashboard-button" onClick={handleAccountInfo}>
+                Account Information
+            </button>
+
+
+
+            <div className = "filter-dropdown">
+                <label htmlFor = "status-filter"> Filter by Status</label>
+                <select id = "status-filter" onChange = {handleFilterChange}>
+                    {options.map ((option,index) => (
+                        <option key={index} value = {option}>{option}</option>
+                    ))}
+                </select>
+            </div>
+
+
             <table className="dashboard-table">
                 <thead>
                     <tr>
