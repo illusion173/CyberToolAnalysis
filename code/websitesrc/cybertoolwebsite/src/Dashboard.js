@@ -1,33 +1,77 @@
 import { useNavigate } from "react-router-dom";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Dashboard.css";
 import { API } from "aws-amplify";
 import { fetchJwt } from "./helperFunctionsForUserAPI.js";
 
 function Dashboard() {
+    useEffect(() => {
+        // If this is bothering theuncaught runtime error thing "no current user on localhost"
+        // Comment the line below me!
+        fetchToolDashboardList(true);
+    }, []);
     const navigate = useNavigate();
+    const itemsPerPage = 10;
 
     // Pagination state and handlers
     const [currentPage, setCurrentPage] = useState(1);
     const [toolData, setToolData] = useState([]);
-    const [totalPages, setTotalPages] = useState(0);
+    const [lastEvaluatedKey, setLastEvaluatedKey] = useState({});
+    const [filterInput, setFilterInput] = useState({});
+    const [itemsToDisplay, setItemstoDisplay] = useState([]);
 
-    const fetchToolDashboardList = async () => {
+    // On update of filter
+    const updateFilterRequery = async (filter_from_frontend) => {
+        setFilterInput(filter_from_frontend);
+        fetchToolDashboardList(true);
+    };
+
+    const formatString = (value) => {
+        return typeof value === "string" ? value.replace(/_/g, " ") : value;
+    };
+
+    const fetchToolDashboardList = async (wipe) => {
+        if (wipe) {
+            setToolData([]);
+            setLastEvaluatedKey({});
+            setCurrentPage(0);
+            ItemstoDisplay([]);
+        }
+
         const jwt = await fetchJwt();
         try {
             const apiName = "apiab9b8614";
-            const path = "/getDefaultDashboard";
+            const path = "/fetchDashboard";
 
             const headers = {
                 Authorization: `Bearer ${jwt}`,
             };
 
+            const requestBody = {
+                filter_input: filterInput,
+                last_evaluated_key: lastEvaluatedKey,
+            };
+
             const myInit = {
                 headers,
+                body: requestBody,
             };
 
             let response = await API.post(apiName, path, myInit);
-            console.log(response);
+            // Process and format response data before setting state
+            const formattedData = response["tool_list"].map((tool) => ({
+                ...tool,
+                Tool_Name: formatString(tool.Tool_Name),
+                Tool_Function: formatString(tool.Tool_Function),
+                Company: formatString(tool.Company),
+                // Apply formatString to other fields if necessary
+            }));
+
+            // Append new data to existing toolData state
+
+            setToolData((prevToolData) => [...prevToolData, ...formattedData]);
+            ItemstoDisplay();
+            setLastEvaluatedKey(response["last_evaluated_key"]);
         } catch (error) {
             alert("Unable to retrieve tool list");
         }
@@ -68,21 +112,78 @@ function Dashboard() {
         navigate("/ReportList");
     };
 
-    // Handlers for pagination
-    const goToNextPage = () => {
-        setCurrentPage(currentPage + 1);
+    /*
+                                                                                  const exampleToolData = [
+                                                                                      {
+                                                                                          Maturity_Level: 3, // Assuming conversion to a simple number
+                                                                                          Tool_ID: "LA_00",
+                                                                                          ToolBox: true,
+                                                                                          Aviation_Specific: true,
+                                                                                          Tool_Function: "Log_Analysis",
+                                                                                          "AI/ML_Use": false,
+                                                                                          Company: "Airbus",
+                                                                                          Customers: [
+                                                                                              "EasyJet",
+                                                                                              "LATAM",
+                                                                                              "WOW_Air",
+                                                                                              "Peach_Aviation",
+                                                                                              "Emirates",
+                                                                                              "Bangkok_Airlines",
+                                                                                              "AirAsia",
+                                                                                              "Asian_Airlines",
+                                                                                              "Ethihad_Airlines",
+                                                                                          ], // Assuming conversion to an array
+                                                                                          Tool_Name: "Skywise",
+                                                                                      },
+                                                                                  ];
+                                                                              
+                                                                                  */
+
+    const ItemstoDisplay = (e) => {
+        // Calculate start and end indices for slicing the toolData array
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        const listOfItemsToDisplay = toolData.slice(startIndex, endIndex - 1);
+        setItemstoDisplay(listOfItemsToDisplay);
     };
 
-    const goToPreviousPage = () => {
-        setCurrentPage(currentPage - 1);
+    const handleNextPageClick = (e) => {
+        const currentPageIndex = (currentPage - 1) * itemsPerPage;
+
+        // Check if we're at the end of the current items and if there's a next page key available
+        if (
+            toolData.length <= currentPageIndex + itemsPerPage &&
+            Object.keys(lastEvaluatedKey).length !== 0
+        ) {
+            fetchToolDashboardList(false); // Pass false to not wipe data, fetching and appending new items instead
+        }
+
+        // Update currentPage only if there are more items to display
+        // This can be adjusted based on how you want to handle the UI when no more items are available
+        if (
+            toolData.length > currentPageIndex + itemsPerPage ||
+            Object.keys(lastEvaluatedKey).length !== 0
+        ) {
+            setCurrentPage(currentPage + 1);
+            setItemstoDisplay();
+        } else {
+            // Optionally, handle the scenario when no more data is available
+            alert("No more items to display.");
+        }
     };
-    /*
-                // Slice the data array to get the items for the current page
-                const currentData = data.slice(
-                    (currentPage - 1) * itemsPerPage,
-                    currentPage * itemsPerPage,
-                );
-                */
+
+    const handlePreviousPageClick = (e) => {
+        // Ensure currentPage does not go below 1
+        if (currentPage > 1) {
+            setCurrentPage(currentPage - 1);
+        }
+
+        ItemstoDisplay();
+    };
+    const handleRowClick = (tool_id) => {
+        //NAVIGATE TO SINGULAR TOOL PAGE HERE!
+        //fetchSingularToolData(tool_id);
+    };
     return (
         <div className="App">
             <p className="dashboard-welcome">Welcome to your Dashboard!</p>
@@ -92,6 +193,47 @@ function Dashboard() {
             <button className="dashboard-button" onClick={handleQuestionnaireClick}>
                 Questionnaire
             </button>
+
+            {/* Render the tool data in a table */}
+            <div>
+                <table className="dashboard-table">
+                    <thead>
+                        <tr>
+                            <th>Tool Name</th>
+                            <th>Tool Function</th>
+                            <th>Company</th>
+                            <th>Aviation Specific</th>
+                            <th>Maturity Level</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {itemsToDisplay.map((tool) => (
+                            <tr
+                                key={tool.Tool_ID}
+                                onClick={() => handleRowClick(tool.Tool_ID)}
+                                className="dashboard-table-row"
+                            >
+                                <td>{tool.Tool_Name}</td>
+                                <td>{tool.Tool_Function}</td>
+                                <td>{tool.Company}</td>
+                                <td>{tool.Aviation_Specific ? "Yes" : "No"}</td>
+                                <td>{tool.Maturity_Level}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+
+            <div>
+                <span className="pagination">
+                    <button className="pagination" onClick={handlePreviousPageClick}>
+                        &lt;
+                    </button>
+                    <button className="pagination" onClick={handleNextPageClick}>
+                        &gt;
+                    </button>
+                </span>
+            </div>
         </div>
     );
 }
