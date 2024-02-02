@@ -2,7 +2,6 @@ import json
 import boto3
 from boto3.dynamodb.conditions import Attr
 
-
 class LambdaResponse:
     def __init__(self, toolList: list, last_evaluated_key: dict):
 
@@ -24,16 +23,15 @@ def prepare_scan_input(request_body: dict) -> dict:
                 filter_expression = condition
             else:
                 filter_expression &= condition
+
     # Create formal input
     prepared_input = {
             "Limit": 10,
             "ExclusiveStartKey": last_evaluated_key_json,
             "FilterExpression": filter_expression,
             }
-    
 
     return prepared_input
-
 
 def getDashboardToolData(scan_input: dict) -> LambdaResponse:
 
@@ -52,9 +50,11 @@ def getDashboardToolData(scan_input: dict) -> LambdaResponse:
     else:
         response = table.scan(Limit=scan_input['Limit'], ExclusiveStartKey=scan_input.get('ExclusiveStartKey', None),FilterExpression=scan_input.get('FilterExpression', None))
     # Extract items from the response
-    items = response['Items']
     
-    # Retrieve the last evaluated key
+    # Items can have nothing insied of it 
+    items = response.get('Items', None)
+    
+    # Retrieve the last evaluated key, can be none
     last_evaluated_key_json = response.get('LastEvaluatedKey', None)
     
     newLambdaResponse = LambdaResponse(toolList=items, last_evaluated_key=last_evaluated_key_json)
@@ -82,10 +82,6 @@ def lambda_handler(event, context):
 
             lambda_response = getDashboardToolData(scan_input)
 
-        print(lambda_response.toolList)
-        print(lambda_response.last_evaluated_key)
-            
-
         response['statusCode'] = 200
         response['headers'] = {"Content-Type": "application/json"}
         response['body'] = {
@@ -98,17 +94,3 @@ def lambda_handler(event, context):
         response['body'] = json.dumps({"error": "Method Not Allowed"})
 
     return response
-
-event = {}
-event['httpMethod'] = "POST"
-event['body'] = {
-        'filter_input' : {
-    "Tool_Function": "Log_Analysis",
-    "AI/ML_Use":  False,
-    "Aviation_Specific":  True,
-            }
-
-}
-test_event = {}
-test_event['httpMethod'] = "POST"
-lambda_handler(event, [])
