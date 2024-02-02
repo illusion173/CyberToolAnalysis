@@ -1,6 +1,10 @@
 {
   "api": {
+<<<<<<< Updated upstream
     "apifdfc7a6f": {
+=======
+    "apiab9b8614": {
+>>>>>>> Stashed changes
       "dependsOn": [
         {
           "attributes": [
@@ -206,22 +210,22 @@
   },
   "storage": {
     "CyberTools": {
-      "service": "DynamoDB",
-      "serviceType": "imported",
+      "dependsOn": [],
       "providerPlugin": "awscloudformation",
-      "dependsOn": []
+      "service": "DynamoDB",
+      "serviceType": "imported"
     },
     "ReportLocationTable": {
-      "service": "DynamoDB",
-      "serviceType": "imported",
+      "dependsOn": [],
       "providerPlugin": "awscloudformation",
-      "dependsOn": []
+      "service": "DynamoDB",
+      "serviceType": "imported"
     },
     "cybertoolwebsite67c1ea5d": {
-      "service": "S3",
-      "serviceType": "imported",
+      "dependsOn": [],
       "providerPlugin": "awscloudformation",
-      "dependsOn": []
+      "service": "S3",
+      "serviceType": "imported"
     }
   }
 }

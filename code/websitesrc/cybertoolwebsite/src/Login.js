@@ -3,9 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { Auth } from 'aws-amplify'; // Import Auth from AWS Amplify
 
 import awsExports from "./aws-exports";
-import { Amplify } from 'aws-amplify';
 
-// Grabbing from App.css... i dont know why but it works
+import { Amplify } from "aws-amplify";
+import "./Login.css";
 
 Amplify.configure(awsExports);
 

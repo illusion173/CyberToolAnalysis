@@ -6,13 +6,12 @@ import reportWebVitals from './reportWebVitals';
 import { Amplify } from 'aws-amplify';
 import awsExports from './aws-exports';
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Login from "./Login"
-import Account from "./Account"
-import Dashboard from "./Dashboard"
-import Reportlist from "./ReportList"
-import Questionnaire from "./Questionnaire"
-import Signup from "./Signup"
-
+import Login from "./Login";
+import Dashboard from "./Dashboard";
+import Reportlist from "./ReportList";
+import Questionnaire from "./Questionnaire";
+import Signup from "./Signup";
+import Account from "./Account";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -24,9 +23,9 @@ root.render(
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="reportlist" element={<Reportlist />} />
         <Route path="questionnaire" element={<Questionnaire />} />
-        <Route path="signup" element={<Signup />} />
-        <Route path="account" element={<Account/>} />    </Routes>
-
+        <Route path="signup" element={<Signup />} />{" "}
+        <Route path="account" element={<Account />} />
+      </Routes>
     </BrowserRouter>
   </React.StrictMode>
 );

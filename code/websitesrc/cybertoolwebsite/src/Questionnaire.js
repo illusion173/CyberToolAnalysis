@@ -1,5 +1,6 @@
-import "./Questionnaire.css"
-import React, { useState } from 'react';
+import "./Questionnaire.css";
+import React, { useState } from "react";
+
 import { question_list } from "./questions";
 import { useNavigate } from "react-router-dom";
 import { Auth } from 'aws-amplify';
