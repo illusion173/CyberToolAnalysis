@@ -1,15 +1,15 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import './Signup.css';
-import { Auth } from 'aws-amplify';
+import "./Signup.css";
+import { Auth } from "aws-amplify";
 
 function Signup() {
     const navigate = useNavigate();
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [retypePassword, setRetypePassword] = useState('');
-    const [confirmationCode, setConfirmationCode] = useState('');
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [retypePassword, setRetypePassword] = useState("");
+    const [confirmationCode, setConfirmationCode] = useState("");
 
     const [submitted, setSubmitted] = useState(false);
     const [error, setError] = useState(false);
@@ -47,7 +47,12 @@ function Signup() {
     // Handling the form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (name === '' || email === '' || password === '' || retypePassword === '') {
+        if (
+            name === "" ||
+            email === "" ||
+            password === "" ||
+            retypePassword === ""
+        ) {
             setError(true);
         } else {
             try {
@@ -57,13 +62,13 @@ function Signup() {
                     attributes: {
                         email: email,
                         // other attributes can be added here
-                    }
+                    },
                 });
                 setIsConfirming(true);
                 setSubmitted(true);
                 setError(false);
             } catch (error) {
-                console.error('Error during sign up:', error);
+                console.error("Error during sign up:", error);
                 setError(true);
             }
         }
@@ -75,7 +80,7 @@ function Signup() {
             await Auth.confirmSignUp(email, confirmationCode);
             navigate("/dashboard");
         } catch (error) {
-            console.error('Error confirming sign up', error);
+            console.error("Error confirming sign up", error);
         }
     }
 
@@ -85,8 +90,9 @@ function Signup() {
             <div
                 className="success"
                 style={{
-                    display: submitted ? '' : 'none',
-                }}>
+                    display: submitted ? "" : "none",
+                }}
+            >
                 <h1>User {name} successfully registered!!</h1>
             </div>
         );
@@ -98,8 +104,9 @@ function Signup() {
             <div
                 className="error"
                 style={{
-                    display: error ? '' : 'none',
-                }}>
+                    display: error ? "" : "none",
+                }}
+            >
                 <h1>Please enter all the fields</h1>
             </div>
         );
@@ -120,23 +127,38 @@ function Signup() {
             <form>
                 {/* Labels and inputs for form data */}
                 <label className="label">Name</label>
-                <input onChange={handleName} className="input"
-                    value={name} type="text" />
+                <input
+                    onChange={handleName}
+                    className="input"
+                    value={name}
+                    type="text"
+                />
 
                 <label className="label">Email</label>
-                <input onChange={handleEmail} className="input"
-                    value={email} type="email" />
+                <input
+                    onChange={handleEmail}
+                    className="input"
+                    value={email}
+                    type="email"
+                />
 
                 <label className="label">Password</label>
-                <input onChange={handlePassword} className="input"
-                    value={password} type="password" />
+                <input
+                    onChange={handlePassword}
+                    className="input"
+                    value={password}
+                    type="password"
+                />
 
                 <label className="label">Retype Password</label>
-                <input onChange={handleRetypePassword} className="input"
-                    value={retypePassword} type="password" />
+                <input
+                    onChange={handleRetypePassword}
+                    className="input"
+                    value={retypePassword}
+                    type="password"
+                />
 
-                <button onClick={handleSubmit} className="btn"
-                        type="submit">
+                <button onClick={handleSubmit} className="btn" type="submit">
                     Submit
                 </button>
             </form>
@@ -144,9 +166,15 @@ function Signup() {
             {isConfirming && (
                 <div>
                     <label className="label">Confirmation Code</label>
-                    <input onChange={handleConfirmationCode} className="input"
-                        value={confirmationCode} type="text" />
-                    <button onClick={confirmSignUp} className="btn">Confirm Sign Up</button>
+                    <input
+                        onChange={handleConfirmationCode}
+                        className="input"
+                        value={confirmationCode}
+                        type="text"
+                    />
+                    <button onClick={confirmSignUp} className="btn">
+                        Confirm Sign Up
+                    </button>
                 </div>
             )}
         </div>

@@ -1,6 +1,6 @@
 use aws_sdk_s3::presigning::PresigningConfig;
 use aws_sdk_s3::Client as S3Client;
-use lambda_http::{http::HeaderValue, run, service_fn, Body, Error, Request, Response};
+use lambda_http::{run, service_fn, Body, Error, Request, Response};
 use serde::{Deserialize, Serialize};
 use std::time::Duration;
 
@@ -38,15 +38,6 @@ async fn get_presigned_request(client_opts: RequestReport) -> Result<String, Err
 }
 
 async fn function_handler(event: Request) -> Result<Response<Body>, Error> {
-    // Ensure that anything coming in is Json via Header call
-    if event.headers().get("content-type").unwrap() != &HeaderValue::from_static("application/json")
-    {
-        return Ok(Response::builder()
-            .status(400)
-            .body(Body::from("Invalid Content-Type"))
-            .expect("Failed to build a response"));
-    }
-
     // Extract body string from event
     let body_str = match std::str::from_utf8(event.body().as_ref()) {
         Ok(body_str) => body_str,

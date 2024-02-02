@@ -1,14 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 import "./Dashboard.css";
-import { Auth } from "aws-amplify";
 import { API } from "aws-amplify";
+import { fetchJwt } from "./helperFunctionsForUserAPI.js";
 
 
 function Dashboard() {
     const navigate = useNavigate();
-
-
 
     async function getToken() {
         Auth.currentSession().then((res) => {
@@ -36,8 +34,58 @@ function Dashboard() {
     }
 
 
+    // Pagination state and handlers
+    const [currentPage, setCurrentPage] = useState(1);
+    const [toolData, setToolData] = useState([]);
+    const [totalPages, setTotalPages] = useState(0);
 
+    const fetchToolDashboardList = async () => {
+        const jwt = await fetchJwt();
+        try {
+            const apiName = "apiab9b8614";
+            const path = "/getDefaultDashboard";
 
+            const headers = {
+                Authorization: `Bearer ${jwt}`,
+            };
+
+            const myInit = {
+                headers,
+            };
+
+            let response = await API.post(apiName, path, myInit);
+            console.log(response);
+        } catch (error) {
+            alert("Unable to retrieve tool list");
+        }
+    };
+
+    const fetchSingularToolData = async (tool_id) => {
+        const jwt = await fetchJwt();
+
+        try {
+            const apiName = "apiab9b8614";
+            const path = "/getDefaultDashboard";
+
+            const headers = {
+                Authorization: `Bearer ${jwt}`,
+            };
+
+            const requestBody = {
+                tool_id: `${tool_id}`,
+            };
+
+            const myInit = {
+                headers,
+                body: requestBody,
+            };
+
+            let response = await API.post(apiName, path, myInit);
+            console.log(response);
+        } catch (error) {
+            alert("Unable to retrieve tool data for " + tool_id);
+        }
+    };
 
     const handleQuestionnaireClick = (e) => {
         navigate("/Questionnaire");
@@ -50,6 +98,7 @@ function Dashboard() {
     const handleAccountInfo = (e) => {
         navigate("/Account");
     };
+
 
 
 
@@ -113,6 +162,7 @@ function Dashboard() {
                 Questionnaire
             </button>
 
+
             <button className="dashboard-button" onClick={handleAccountInfo}>
                 Account Information
             </button>
@@ -125,9 +175,6 @@ function Dashboard() {
                     ))}
                 </select>
             </div>
-
-
-
         </div>
     );
 }

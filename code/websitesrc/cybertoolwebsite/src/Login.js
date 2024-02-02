@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Auth } from 'aws-amplify'; // Import Auth from AWS Amplify
-
+import { Auth } from "aws-amplify"; // Import Auth from AWS Amplify
 import awsExports from "./aws-exports";
 
 import { Amplify } from "aws-amplify";
@@ -20,8 +19,8 @@ function Login() {
           //  console.log(user); // You can remove this after confirming it works
             navigate("/Questionnaire"); // Navigate to the dashboard after successful sign in
         } catch (error) {
-            console.log('error signing in', error);
-            alert('Incorrect username/password'); // Display an error message
+            console.log("error signing in", error);
+            alert("Incorrect username/password"); // Display an error message
         }
     };
 
@@ -42,16 +41,20 @@ function Login() {
         <div className="login-form">
             <h2 className="login-message">Welcome Back!</h2>
             <form onSubmit={handleSubmit}>
-                <label className="login-label" htmlFor="username">Username:</label>
+                <label className="login-label" htmlFor="username">
+                    Username:
+                </label>
                 <input
                     className="login-input"
                     type="text"
-                    id='username'
+                    id="username"
                     name="username"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                 />
-                <label className="login-label" htmlFor="password">Password:</label>
+                <label className="login-label" htmlFor="password">
+                    Password:
+                </label>
                 <input
                     className="login-input"
                     type="password"
@@ -60,7 +63,9 @@ function Login() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                 />
-                <button className="login-button" type="submit">Login</button>
+                <button className="login-button" type="submit">
+                    Login
+                </button>
                 <p className="login-message">Don't have an account?</p>
                 <button type="button" className="signup-button" onClick={handleSignupClick}>Sign Up</button>
                 <p className = "login-message"> or</p>

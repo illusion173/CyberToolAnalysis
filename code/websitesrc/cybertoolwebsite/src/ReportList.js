@@ -1,9 +1,12 @@
 import "./ReportList.css";
 import React, { useState, useEffect } from "react";
-import { API, Auth } from "aws-amplify";
+import { API } from "aws-amplify";
 import { useNavigate } from "react-router-dom";
-
+import { fetchJwt, getUserId } from "./helperFunctionsForUserAPI.js";
 const ReportList = () => {
+  useEffect(() => {
+    fetchReportList();
+  }, []);
   const navigate = useNavigate();
 
   const [reportListArray, setReportListArray] = useState([]);
@@ -12,44 +15,28 @@ const ReportList = () => {
     navigate("/Dashboard");
   };
 
-  const fetchJwt = async () => {
-    let res = await Auth.currentSession();
-    let jwt = res.getAccessToken().getJwtToken();
-    return jwt;
-  };
-
-  const fetchAccessToken = async () => {
-    let res = await Auth.currentSession();
-    let accessToken = res.getAccessToken();
-    return accessToken;
-  };
-
-  const fetchIdToken = async () => {
-    let res = await Auth.currentUserInfo();
-    let user_id = res["id"];
-    console.log(user_id);
-    //console.log(res);
-    //return IdToken;
-  };
-
   const fetchReportList = async () => {
+    const jwt = await fetchJwt();
+    const username = await getUserId();
     try {
-      const apiName = "apifdfc7a6f";
+      const apiName = "apiab9b8614";
+      const path = "/getReportListForUser";
 
-      const path = "/getReportList";
-      const jwt = fetchJwt();
-      const IdToken = fetchIdToken();
-      const user_identifier = "";
-      const myInit = {
-        headers: {
-          user_identifier: `${user_identifier}`,
-          //Authorization: `Bearer ${jwt}`,
-        },
+      const headers = {
+        Authorization: `Bearer ${jwt}`,
       };
 
-      //let report_array = [];
-      //report_array = await API.get(apiName, path, myInit);
-      //console.log(report_array);
+      const requestBody = {
+        user_identifier: `${username}`,
+      };
+
+      const myInit = {
+        headers,
+        body: requestBody,
+      };
+
+      let report_array = await API.post(apiName, path, myInit);
+      console.log(report_array);
       //setReportListArray(report_array);
     } catch (error) {
       alert("Unable to retrieve report list");
@@ -57,22 +44,26 @@ const ReportList = () => {
   };
 
   const fetchPreSignedUrl = async (report_id) => {
+    const jwt = await fetchJwt();
     try {
-      const apiName = "apifdfc7a6f";
-
+      const apiName = "apiab9b8614";
       const path = "/requestpresignedurl";
 
-      const myInit = {
-        headers: {
-          Authorization: `Bearer ${(await Auth.currentSession())
-            .getIdToken()
-            .getJwtToken()}`,
-          report_id: report_id,
-        },
+      const headers = {
+        Authorization: `Bearer ${jwt}`,
       };
 
-      //presigned_url_data = await API.get(apiName, path, myInit);
-      //console.log(presigned_url_data);
+      const requestBody = {
+        report_id: report_id,
+      };
+
+      const myInit = {
+        headers,
+        body: requestBody,
+      };
+
+      let presigned_url_data = await API.get(apiName, path, myInit);
+      console.log(presigned_url_data);
       //return presigned_url_data;
     } catch (error) {
       alert("Unable to retrieve presigned url");
