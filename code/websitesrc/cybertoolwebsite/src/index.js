@@ -10,6 +10,8 @@ import Reportlist from "./ReportList";
 import Questionnaire from "./Questionnaire";
 import Signup from "./Signup";
 
+import Account from "./Account";
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
@@ -21,6 +23,8 @@ root.render(
         <Route path="reportlist" element={<Reportlist />} />
         <Route path="questionnaire" element={<Questionnaire />} />
         <Route path="signup" element={<Signup />} />{" "}
+        <Route path="account" element={<Account />} />
+
       </Routes>
     </BrowserRouter>
   </React.StrictMode>,

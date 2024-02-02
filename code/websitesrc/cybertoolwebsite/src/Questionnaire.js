@@ -1,5 +1,6 @@
 import "./Questionnaire.css";
 import React, { useState } from "react";
+
 import { question_list } from "./questions";
 import { useNavigate } from "react-router-dom";
 import { fetchJwt, getUserId } from "./helperFunctionsForUserAPI.js";
@@ -73,6 +74,10 @@ const Questionnaire = () => {
     navigate("/ReportList");
   };
 
+  const handleSubmitButton = (e) => {
+    navigate("/Dashboard")
+  }
+
   const questionElements = question_list.map((question, index) => {
     const questionKey = `question_${index + 1}`;
     return (
@@ -115,9 +120,7 @@ const Questionnaire = () => {
 
       <form className="form-padding-style" onSubmit={handleSubmit}>
         {questionElements}
-        <button className="submit-button" type="submit">
-          Submit
-        </button>
+        <button className="submit-button" onClick={handleSubmitButton}>Submit</button>
       </form>
     </div>
   );

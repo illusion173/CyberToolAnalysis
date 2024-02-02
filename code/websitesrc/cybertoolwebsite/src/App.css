@@ -91,7 +91,7 @@
   border-radius: 5px;
 }
 
-.login-button, .signup-button { /* Combined style for both login and signup buttons */
+.login-button, .signup-button, .guest-button{ /* Combined style for both login and signup buttons */
   background-color: #4caf50;
   color: white;
   padding: 10px 20px;
@@ -104,6 +104,10 @@
 }
 
 .login-button:hover, .signup-button:hover { /* Hover effect for both */
+  background-color: #45a049;
+}
+
+.guest-button:hover{
   background-color: #45a049;
 }
 
