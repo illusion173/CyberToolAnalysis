@@ -1,27 +1,37 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
-#
-#
-cd /home/illusion/Desktop/school/CyberToolAnalysis/code/lambda/reportcybertool
-cargo lambda build --release
-cargo lambda deploy -a LatestVersion
 
-cd /home/illusion/Desktop/school/CyberToolAnalysis/code/lambda/reportcreatepresignedurl
-cargo lambda build --release
-cargo lambda deploy -a LatestVersion
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+pushd $SCRIPT_DIR
 
-cd /home/illusion/Desktop/school/CyberToolAnalysis/code/lambda/beginreportcybertool
+pushd ./reportcybertool
 cargo lambda build --release
 cargo lambda deploy -a LatestVersion
+popd
 
-cd /home/illusion/Desktop/school/CyberToolAnalysis/code/lambda/getreportlist
+pushd ./reportcreatepresignedurl
 cargo lambda build --release
 cargo lambda deploy -a LatestVersion
+popd
 
-cd /home/illusion/Desktop/school/CyberToolAnalysis/code/lambda/getAllTools
+pushd ./beginreportcybertool
 cargo lambda build --release
 cargo lambda deploy -a LatestVersion
+popd
 
-cd /home/illusion/Desktop/school/CyberToolAnalysis/code/lambda/getsingulartooldata
+pushd ./getreportlist
 cargo lambda build --release
 cargo lambda deploy -a LatestVersion
+popd
+
+pushd ./getAllTools
+cargo lambda build --release
+cargo lambda deploy -a LatestVersion
+popd
+
+pushd ./getsingulartooldata
+cargo lambda build --release
+cargo lambda deploy -a LatestVersion
+popd
+
+popd

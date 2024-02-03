@@ -25,7 +25,7 @@ async fn get_presigned_request(client_opts: RequestReport) -> Result<String, Err
     let expires_in = Duration::from_secs(604800);
     // Generate request & send, await feedback
     //
-    let full_report_key = format!("{}{}{}", "reports", "/", &client_opts.report_id);
+    let full_report_key = format!("reports/{}", &client_opts.report_id);
     let presigned_request = client
         .get_object()
         .bucket(REPORTBUCKET)
