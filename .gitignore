@@ -1,4 +1,3 @@
-code/lambda/reportcybertool/target
-code/lambda/bgnreportstepfunction/target
-.DS_Store
+code/lambda/target/
+**/.DS_Store
 .vscode

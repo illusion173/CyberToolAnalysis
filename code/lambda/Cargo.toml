@@ -1,0 +1,18 @@
+[workspace]
+
+members = [
+    "beginreportcybertool",
+
+    # TODO(JWebb): re-add. Currently does not compile
+    # "getAllTools",
+    "getreportlist",
+
+    # TODO(JWebb): re-add. Currently does not compile
+    # "getsingulartooldata",
+    "reportcreatepresignedurl",
+
+    # TODO(JWebb): re-add. Currently does not compile
+    #"reportcybertool",
+]
+
+resolver = "2"
