@@ -6,7 +6,7 @@
   flex-direction: column;
   align-items: center;
   background: #f5f5f5;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .filter-dropdown {
@@ -57,17 +57,24 @@
 
 .dashboard-table {
   border-collapse: collapse;
-  width: 80%;
   margin-top: 20px;
-  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 }
 
-.dashboard-table th, .dashboard-table td {
+.dashboard-table th,
+.dashboard-table td {
   text-align: left;
   padding: 12px;
   border-bottom: 1px solid #ddd;
 }
+.dashboard-table-row {
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
 
+.dashboard-table-row:hover {
+  background-color: #ddd; /* Lighter shade for hover effect */
+}
 .dashboard-table th {
   background-color: #4caf50;
   color: white;
@@ -87,7 +94,7 @@
   position: absolute;
   background-color: #f9f9f9;
   min-width: 160px;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   padding: 12px 16px;
   z-index: 1;
 }
@@ -111,7 +118,6 @@
   background-color: #f1f1f1;
 }
 
-
 .pagination {
   display: flex;
   justify-content: center;
@@ -122,7 +128,7 @@
 .pagination button {
   margin: 0 10px;
   padding: 5px 10px;
-  background-color: #4CAF50;
+  background-color: #4caf50;
   color: white;
   border: none;
   border-radius: 5px;
