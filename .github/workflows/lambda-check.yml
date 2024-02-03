@@ -33,7 +33,7 @@ jobs:
         with:
           components: rustfmt
       - name: cargo fmt --check
-        run: cargo --manifest-path code/lambda/Cargo.toml fmt --check
+        run: cargo fmt --check --manifest-path code/lambda/Cargo.toml
   clippy:
     runs-on: ubuntu-latest
     name: ${{ matrix.toolchain }} / clippy
@@ -73,6 +73,6 @@ jobs:
       - name: Install nightly
         uses: dtolnay/rust-toolchain@nightly
       - name: cargo doc
-        run: cargo --manifest-path code/lambda/Cargo.toml doc --no-deps --all-features
+        run: cargo doc --no-deps --all-features --manifest-path code/lambda/Cargo.toml
         env:
           RUSTDOCFLAGS: --cfg docsrs
