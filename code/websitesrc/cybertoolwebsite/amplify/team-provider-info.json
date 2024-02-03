@@ -14,8 +14,13 @@
     },
     "categories": {
       "auth": {
-        "cybertoolwebsite82b62747": {},
-        "true": {}
+        "cybertoolwebsite82b62747": {}
+      },
+      "function": {
+        "cybertoolwebsite430c7922": {
+          "deploymentBucketName": "amplify-cybertoolwebsite-main-232123-deployment",
+          "s3Key": "amplify-builds/cybertoolwebsite430c7922-745a674c7868732f6474-build.zip"
+        }
       },
       "storage": {
         "CyberTools": {
@@ -40,12 +45,6 @@
         "cybertoolwebsite67c1ea5d": {
           "bucketName": "reportcybertool-cs490",
           "region": "us-east-1"
-        }
-      },
-      "function": {
-        "cybertoolwebsite430c7922": {
-          "deploymentBucketName": "amplify-cybertoolwebsite-main-232123-deployment",
-          "s3Key": "amplify-builds/cybertoolwebsite430c7922-745a674c7868732f6474-build.zip"
         }
       }
     }

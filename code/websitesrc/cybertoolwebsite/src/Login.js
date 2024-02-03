@@ -2,7 +2,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Auth } from "aws-amplify"; // Import Auth from AWS Amplify
 import awsExports from "./aws-exports";
+
 import { Amplify } from "aws-amplify";
+import "./Login.css";
 
 Amplify.configure(awsExports);
 
@@ -14,7 +16,8 @@ function Login() {
     const handleSignIn = async () => {
         try {
             const user = await Auth.signIn(username, password);
-            navigate("/Dashboard"); // Navigate to the Login Page
+          //  console.log(user); // You can remove this after confirming it works
+            navigate("/Questionnaire"); // Navigate to the dashboard after successful sign in
         } catch (error) {
             console.log("error signing in", error);
             alert("Incorrect username/password"); // Display an error message
@@ -24,6 +27,10 @@ function Login() {
     const handleSignupClick = () => {
         navigate("/signup");
     };
+
+    const handleGuestClick = () => {
+        navigate ("/Dashboard")
+    }
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -60,13 +67,9 @@ function Login() {
                     Login
                 </button>
                 <p className="login-message">Don't have an account?</p>
-                <button
-                    type="button"
-                    className="signup-button"
-                    onClick={handleSignupClick}
-                >
-                    Sign Up
-                </button>
+                <button type="button" className="signup-button" onClick={handleSignupClick}>Sign Up</button>
+                <p className = "login-message"> or</p>
+                <button type="button" className="guest-button" onClick = {handleGuestClick}>Continue as Guest</button>
             </form>
         </div>
     );

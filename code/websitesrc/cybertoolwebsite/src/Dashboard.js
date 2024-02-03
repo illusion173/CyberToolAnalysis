@@ -4,6 +4,7 @@ import "./Dashboard.css";
 import { API } from "aws-amplify";
 import { fetchJwt } from "./helperFunctionsForUserAPI.js";
 
+
 function Dashboard() {
     useEffect(() => {
         // If this is bothering theuncaught runtime error thing "no current user on localhost"
@@ -12,6 +13,32 @@ function Dashboard() {
     }, []);
     const navigate = useNavigate();
     const itemsPerPage = 10;
+
+    async function getToken() {
+        Auth.currentSession().then((res) => {
+            let accessToken = res.getAccessToken();
+            let jwt = accessToken.getJwtToken();
+            //You can print them to see the full objects
+            console.log(`myAccessToken: ${JSON.stringify(accessToken)}`);
+            console.log(`myJwt: ${jwt}`);
+        });
+    }
+
+    async function getCyberTools() {
+        const apiName = "apifdfc7a6f";
+
+        const path = "/tools/getAll";
+
+        const myInit = {
+            headers: {
+                Authorization: `Bearer ${(await Auth.currentSession())
+                    .getIdToken()
+                    .getJwtToken()}`,
+            },
+        };
+        return await API.get(apiName, path, myInit);
+    }
+
 
     // Pagination state and handlers
     const [currentPage, setCurrentPage] = useState(1);
@@ -184,9 +211,55 @@ function Dashboard() {
         //NAVIGATE TO SINGULAR TOOL PAGE HERE!
         //fetchSingularToolData(tool_id);
     };
+    const handleAccountInfo = (e) => {
+        navigate("/Account");
+    };
+
+
+    const options = ['all', 'date released','price'];
+
+    const handleFilterChange = (e) => {
+        setFilter(e.target.value);
+    }
+
+    const Dropdown = ({ trigger, menu }) => {
+        const [open, setOpen] = useState(false);
+
+        const handleOpen = () => {
+            setOpen(!open);
+        };
+
+        return (
+            <div className="dropdown">
+                {React.cloneElement(trigger, {
+                    onClick: handleOpen,
+                })}
+                {open ? (
+                    <ul className="menu">
+                        {menu.map((menuItem, index) => (
+                            <li key={index} className="menu-item">
+                                {React.cloneElement(menuItem, {
+                                    onClick: () => {
+                                        menuItem.props.onClick();
+                                        setOpen(false);
+                                    },
+                                })}
+                            </li>
+                        ))}
+                    </ul>
+                ) : null}
+            </div>
+        );
+    };
     return (
         <div className="App">
             <p className="dashboard-welcome">Welcome to your Dashboard!</p>
+
+            <header>
+                    <input id = "search" type = "search" placeholder = "&#x1F50D; Start typing to search..." />
+            </header>
+
+
             <button className="dashboard-button" onClick={handleReportListClick}>
                 Report Menu
             </button>
@@ -233,6 +306,18 @@ function Dashboard() {
                         &gt;
                     </button>
                 </span>
+
+            <button className="dashboard-button" onClick={handleAccountInfo}>
+                Account Information
+            </button>
+
+            <div className = "filter-dropdown">
+                <label htmlFor = "status-filter"> Filter by Status</label>
+                <select id = "status-filter" onChange = {handleFilterChange}>
+                    {options.map ((option,index) => (
+                        <option key={index} value = {option}>{option}</option>
+                    ))}
+                </select>
             </div>
         </div>
     );
