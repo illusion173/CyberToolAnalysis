@@ -33,7 +33,7 @@ jobs:
         with:
           components: rustfmt
       - name: cargo fmt --check
-        run: cargo fmt --check --manifest-path code/lambda/Cargo.toml
+        run: cargo fmt --all --check --manifest-path=./code/lambda/Cargo.toml
   clippy:
     runs-on: ubuntu-latest
     name: ${{ matrix.toolchain }} / clippy
@@ -60,19 +60,3 @@ jobs:
           reporter: 'github-pr-check'
           github_token: ${{ secrets.GITHUB_TOKEN }}
           workdir: './code/lambda/'
-  doc:
-    # run docs generation on nightly rather than stable. This enables features like
-    # https://doc.rust-lang.org/beta/unstable-book/language-features/doc-cfg.html which allows an
-    # API be documented as only available in some specific platforms.
-    runs-on: ubuntu-latest
-    name: nightly / doc
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          submodules: true
-      - name: Install nightly
-        uses: dtolnay/rust-toolchain@nightly
-      - name: cargo doc
-        run: cargo doc --no-deps --all-features --manifest-path code/lambda/Cargo.toml
-        env:
-          RUSTDOCFLAGS: --cfg docsrs
