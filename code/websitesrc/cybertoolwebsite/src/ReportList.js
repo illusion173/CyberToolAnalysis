@@ -73,10 +73,14 @@ const ReportList = () => {
   return (
     <div>
       <div></div>
-      <h1>Report Dashboard</h1>
-      <button onClick={handleDashboardClick}>Dashboard</button>
+      <h1>Report Menu</h1>
+      <button onClick={handleDashboardClick} className="report-button-tools">
+        Dashboard
+      </button>
 
-      <button onClick={fetchReportList}>Refresh</button>
+      <button onClick={fetchReportList} className="report-button-tools">
+        Refresh
+      </button>
       <table className="styled-table">
         <thead>
           <tr>
