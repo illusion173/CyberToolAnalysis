@@ -1,9 +1,8 @@
 use aws_sdk_dynamodb::types::AttributeValue;
 use aws_sdk_dynamodb::Client as DynamoClient;
-use lambda_http::{run, service_fn, Body, Error, Request, RequestExt, Response};
+use lambda_http::{run, service_fn, Body, Error, Request, Response};
 use serde::{Deserialize, Serialize};
 use serde_json;
-use std::collections::HashMap;
 const TOOLTABLENAME: &str = "Cyber_Tools";
 
 #[derive(Debug, Serialize, Deserialize, PartialEq, Eq)]
@@ -12,7 +11,7 @@ pub struct ToolRequest {
     tool_id: String,
 }
 
-async fn get_tool_data(tool_request_struct: ToolRequest) -> (Result<String, Error>) {
+async fn get_tool_data(tool_request_struct: ToolRequest) -> Result<String, Error> {
     let config = aws_config::load_from_env().await;
 
     let dynamo_client = DynamoClient::new(&config);
