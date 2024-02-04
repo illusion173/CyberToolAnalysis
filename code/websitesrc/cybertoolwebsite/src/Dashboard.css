@@ -39,7 +39,7 @@
   color: #333;
 }
 
-.dashboard-button {
+.dashboard-button-tools {
   background-color: #4caf50;
   color: white;
   border: none;
@@ -51,36 +51,36 @@
   transition: background-color 0.3s;
 }
 
-.dashboard-button:hover {
+.dashboard-button-tools:hover {
   background-color: #45a049;
 }
 
-.dashboard-table {
+.dashboard-table-tools {
   border-collapse: collapse;
   margin-top: 20px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 }
 
-.dashboard-table th,
-.dashboard-table td {
+.dashboard-table-tools th,
+.dashboard-table-tools td {
   text-align: left;
   padding: 12px;
   border-bottom: 1px solid #ddd;
 }
-.dashboard-table-row {
+.dashboard-table-row-tools {
   cursor: pointer;
   transition: background-color 0.3s;
 }
 
-.dashboard-table-row:hover {
+.dashboard-table-row-tools:hover {
   background-color: #ddd; /* Lighter shade for hover effect */
 }
-.dashboard-table th {
+.dashboard-table-tools th {
   background-color: #4caf50;
   color: white;
 }
 
-.dashboard-table tr:nth-child(even) {
+.dashboard-table-tools tr:nth-child(even) {
   background-color: #f2f2f2;
 }
 

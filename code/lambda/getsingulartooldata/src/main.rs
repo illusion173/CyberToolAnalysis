@@ -1,96 +1,81 @@
+/*
+ * Code currently does not run due to errors with get_tool_data function.
+ * Currently, using the DynamoClient to query() requires an expression value with strict string
+ * requirements. On top of this, there is a specific requirement for json formatting, see what
+ * AttributeValue is.
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ */
+
 use aws_sdk_dynamodb::types::AttributeValue;
-use aws_sdk_dynamodb::{Client as DynamoClient, Error};
-use lambda_http::{run, service_fn, Body, Error, Request, RequestExt, Response};
+use aws_sdk_dynamodb::Client as DynamoClient;
+use lambda_http::{run, service_fn, Body, Error, Request, Response};
 use serde::{Deserialize, Serialize};
-use serde_json;
-use std::collections::HashMap;
 
-#[derive(Serialize, Deserialize, Debug)]
-struct LastKey {
-    last_exclusive_key: String,
-}
+const TOOLTABLENAME: &str = "Cyber_Tools";
+
 #[derive(Debug, Serialize, Deserialize, PartialEq, Eq)]
-pub struct ToolRow {
-    Tool_Function: String,
-    Tool_ID: String,
-    Tool_Name: String,
+pub struct ToolRequest {
+    tool_function: String,
+    tool_id: String,
 }
 
-impl ToolRow {
-    pub fn new(Tool_Function: String, Tool_ID: String, Tool_Name: String) -> Self {
-        ToolRow {
-            Tool_Function,
-            Tool_ID,
-            Tool_Name,
-        }
-    }
-}
-
-#[derive(Debug)]
-pub struct ToolResponse {
-    tools: Vec<ToolRow>,
-    last_evaluated_key: HashMap<std::string::String, AttributeValue>,
-}
-
-fn as_string(val: Option<&AttributeValue>, default: &String) -> String {
-    if let Some(v) = val {
-        if let Ok(s) = v.as_s() {
-            return s.to_owned();
-        }
-    }
-    default.to_owned()
-}
-
-impl From<&HashMap<String, AttributeValue>> for ToolRow {
-    fn from(value: &HashMap<String, AttributeValue>) -> Self {
-        let tool_row = ToolRow::new(
-            as_string(value.get("Tool_Function"), &"".to_string()),
-            as_string(value.get("Tool_ID"), &"".to_string()),
-            as_string(value.get("Tool_Name"), &"".to_string()),
-        );
-        tool_row
-    }
-}
-
-async fn get_next_page_tools(
-    last_evaluated_key: HashMap<std::string::String, AttributeValue>,
-) -> (Result<ToolResponse, Error>) {
+async fn get_tool_data(tool_request_struct: ToolRequest) -> Result<String, Error> {
     let config = aws_config::load_from_env().await;
 
     let dynamo_client = DynamoClient::new(&config);
-
-    let page_size = 10;
-
-    let scan_output_response = dynamo_client
-        .scan()
+    // Perform the query
+    let response = dynamo_client
+        .query()
         .table_name(TOOLTABLENAME)
-        .set_exclusive_start_key(exclusive_start_key)
-        .limit(page_size)
+        .key_condition_expression("#tf = :Tool_Function AND #tid = :Tool_ID")
+        .expression_attribute_names("#tf", "Tool_Function")
+        .expression_attribute_names("#tid", "Tool_ID")
+        .expression_attribute_values(
+            ":Tool_Function",
+            AttributeValue::S(tool_request_struct.tool_function.clone()),
+        )
+        .expression_attribute_values(
+            ":Tool_ID",
+            AttributeValue::S(tool_request_struct.tool_id.clone()),
+        )
         .send()
         .await?;
 
-    if let Some(items) = scan_output_response.items.clone() {
-        let rows = items.iter().map(|v| v.into()).collect();
+    // GAH! Give up for now
 
-        let last_evaluated_key_item = scan_output_response.last_evaluated_key().unwrap();
+    // Extract items from the response
+    let items = match response.items {
+        Some(items) => {
+            let mut item_strings = Vec::new();
+            for item in items {
+                let mut item_string = String::new();
+                for (key, value) in item.iter() {
+                    let key_str = key.clone(); // Clone the key to get a String
+                    let value_str = match value {
+                        AttributeValue::S(s) => s.clone(), // Clone the String attribute value
+                        AttributeValue::N(n) => n.clone(), // Clone the Numeric attribute value
+                        _ => String::from("Unknown type"), // Handle other types if needed
+                    };
+                    item_string.push_str(&format!("Key: {}, Value: {}\n", key_str, value_str));
+                }
+                item_strings.push(item_string);
+            }
+            item_strings.join(", ")
+        }
+        None => "No items found".to_string(),
+    };
 
-        let response = ToolResponse {
-            tools: rows,
-            last_evaluated_key: last_evaluated_key_item.clone(),
-        };
-        Ok(response)
-    } else {
-        // ERROR! No items found.
-        panic!("Error while getting Tool rows from DynamoDB");
-    }
-
-    Ok(())
+    Ok(items)
 }
 
 async fn function_handler(event: Request) -> Result<Response<Body>, Error> {
     // Receive all data
-    //
-    //
     //
     // Get Initial Body string from request
     let body_str = match std::str::from_utf8(event.body().as_ref()) {
@@ -104,26 +89,26 @@ async fn function_handler(event: Request) -> Result<Response<Body>, Error> {
     };
 
     // Cast it to a struct
-    let last_key_struct: LastKey = match serde_json::from_str(body_str) {
-        Ok(LastKey_struct) => LastKey_struct,
+    let tool_request_struct: ToolRequest = match serde_json::from_str(body_str) {
+        Ok(tool_request_struct) => tool_request_struct,
         Err(_error) => {
             return Ok(Response::builder()
                 .status(400)
                 .body(Body::from(
-                    "Invalid Request Body, missing last_exclusive_key input",
+                    "Invalid Request Body, missing tool_function or tool_id input",
                 ))
                 .expect("Failed to build a response, check lambda?."))
         }
     };
 
-    let list_items_result_struct = get_next_page_tools(last_key_struct.last_exclusive_key).await?;
+    let list_items_result_struct = get_tool_data(tool_request_struct).await?;
     // Poorly format the data LOL
     let tool_string = format!("{:?}", list_items_result_struct);
 
     let resp = Response::builder()
         .status(200)
         .header("content-type", "text/html")
-        .body(message.into())
+        .body(tool_string.into())
         .map_err(Box::new)?;
     Ok(resp)
 }

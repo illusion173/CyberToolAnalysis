@@ -4,48 +4,21 @@ import "./Dashboard.css";
 import { API } from "aws-amplify";
 import { fetchJwt } from "./helperFunctionsForUserAPI.js";
 
-
 function Dashboard() {
-    useEffect(() => {
-        // If this is bothering theuncaught runtime error thing "no current user on localhost"
-        // Comment the line below me!
-        fetchToolDashboardList(true);
-    }, []);
-    const navigate = useNavigate();
-    const itemsPerPage = 10;
-
-    async function getToken() {
-        Auth.currentSession().then((res) => {
-            let accessToken = res.getAccessToken();
-            let jwt = accessToken.getJwtToken();
-            //You can print them to see the full objects
-            console.log(`myAccessToken: ${JSON.stringify(accessToken)}`);
-            console.log(`myJwt: ${jwt}`);
-        });
-    }
-
-    async function getCyberTools() {
-        const apiName = "apifdfc7a6f";
-
-        const path = "/tools/getAll";
-
-        const myInit = {
-            headers: {
-                Authorization: `Bearer ${(await Auth.currentSession())
-                    .getIdToken()
-                    .getJwtToken()}`,
-            },
-        };
-        return await API.get(apiName, path, myInit);
-    }
-
-
     // Pagination state and handlers
     const [currentPage, setCurrentPage] = useState(1);
     const [toolData, setToolData] = useState([]);
     const [lastEvaluatedKey, setLastEvaluatedKey] = useState({});
     const [filterInput, setFilterInput] = useState({});
     const [itemsToDisplay, setItemstoDisplay] = useState([]);
+    const navigate = useNavigate();
+    const itemsPerPage = 10;
+
+    useEffect(() => {
+        // If this is bothering theuncaught runtime error thing "no current user on localhost"
+        // Comment the line below me!
+        fetchToolDashboardList(true);
+    }, []);
 
     // On update of filter
     const updateFilterRequery = async (filter_from_frontend) => {
@@ -56,6 +29,8 @@ function Dashboard() {
     const formatString = (value) => {
         return typeof value === "string" ? value.replace(/_/g, " ") : value;
     };
+
+    // Main handler for all API requests to obtain tool data.
 
     const fetchToolDashboardList = async (wipe) => {
         if (wipe) {
@@ -104,33 +79,38 @@ function Dashboard() {
         }
     };
 
-    const fetchSingularToolData = async (tool_id) => {
-        const jwt = await fetchJwt();
+    /*
+                        
+                            const fetchSingularToolData = async (tool_id) => {
+                                const jwt = await fetchJwt();
+                        
+                                try {
+                                    const apiName = "apiab9b8614";
+                                    const path = "/getDefaultDashboard";
+                        
+                                    const headers = {
+                                        Authorization: `Bearer ${jwt}`,
+                                    };
+                        
+                                    const requestBody = {
+                                        tool_id: `${tool_id}`,
+                                    };
+                        
+                                    const myInit = {
+                                        headers,
+                                        body: requestBody,
+                                    };
+                        
+                                    let response = await API.post(apiName, path, myInit);
+                                    console.log(response);
+                                } catch (error) {
+                                    alert("Unable to retrieve tool data for " + tool_id);
+                                }
+                            };
+                        
+                            */
 
-        try {
-            const apiName = "apiab9b8614";
-            const path = "/getDefaultDashboard";
-
-            const headers = {
-                Authorization: `Bearer ${jwt}`,
-            };
-
-            const requestBody = {
-                tool_id: `${tool_id}`,
-            };
-
-            const myInit = {
-                headers,
-                body: requestBody,
-            };
-
-            let response = await API.post(apiName, path, myInit);
-            console.log(response);
-        } catch (error) {
-            alert("Unable to retrieve tool data for " + tool_id);
-        }
-    };
-
+    // NAVIGATION TO DIFFERENT PAGES
     const handleQuestionnaireClick = (e) => {
         navigate("/Questionnaire");
     };
@@ -139,32 +119,40 @@ function Dashboard() {
         navigate("/ReportList");
     };
 
+    const handleRowClick = (tool_id) => {
+        //NAVIGATE TO SINGULAR TOOL PAGE HERE!
+        //fetchSingularToolData(tool_id);
+    };
+    const handleAccountInfo = (e) => {
+        navigate("/Account");
+    };
+
     /*
-                                                                                  const exampleToolData = [
-                                                                                      {
-                                                                                          Maturity_Level: 3, // Assuming conversion to a simple number
-                                                                                          Tool_ID: "LA_00",
-                                                                                          ToolBox: true,
-                                                                                          Aviation_Specific: true,
-                                                                                          Tool_Function: "Log_Analysis",
-                                                                                          "AI/ML_Use": false,
-                                                                                          Company: "Airbus",
-                                                                                          Customers: [
-                                                                                              "EasyJet",
-                                                                                              "LATAM",
-                                                                                              "WOW_Air",
-                                                                                              "Peach_Aviation",
-                                                                                              "Emirates",
-                                                                                              "Bangkok_Airlines",
-                                                                                              "AirAsia",
-                                                                                              "Asian_Airlines",
-                                                                                              "Ethihad_Airlines",
-                                                                                          ], // Assuming conversion to an array
-                                                                                          Tool_Name: "Skywise",
-                                                                                      },
-                                                                                  ];
-                                                                              
-                                                                                  */
+                                                                                                                          const exampleToolData = [
+                                                                                                                              {
+                                                                                                                                  Maturity_Level: 3, // Assuming conversion to a simple number
+                                                                                                                                  Tool_ID: "LA_00",
+                                                                                                                                  ToolBox: true,
+                                                                                                                                  Aviation_Specific: true,
+                                                                                                                                  Tool_Function: "Log_Analysis",
+                                                                                                                                  "AI/ML_Use": false,
+                                                                                                                                  Company: "Airbus",
+                                                                                                                                  Customers: [
+                                                                                                                                      "EasyJet",
+                                                                                                                                      "LATAM",
+                                                                                                                                      "WOW_Air",
+                                                                                                                                      "Peach_Aviation",
+                                                                                                                                      "Emirates",
+                                                                                                                                      "Bangkok_Airlines",
+                                                                                                                                      "AirAsia",
+                                                                                                                                      "Asian_Airlines",
+                                                                                                                                      "Ethihad_Airlines",
+                                                                                                                                  ], // Assuming conversion to an array
+                                                                                                                                  Tool_Name: "Skywise",
+                                                                                                                              },
+                                                                                                                          ];
+                                                                                                                      
+                                                                                                                          */
 
     const ItemstoDisplay = (e) => {
         // Calculate start and end indices for slicing the toolData array
@@ -177,11 +165,18 @@ function Dashboard() {
     const handleNextPageClick = (e) => {
         const currentPageIndex = (currentPage - 1) * itemsPerPage;
 
+        // ex page 1 -> page 2
+        //
+        // current page index would be 0
+
+        //Default length would be 10, so 10 <= 0 + 10, true && last_evaluated_key will always be true on default load.
+        // In this case, we increase page num, and requery for 10 new tools and reupdate what we show.
         // Check if we're at the end of the current items and if there's a next page key available
         if (
             toolData.length <= currentPageIndex + itemsPerPage &&
             Object.keys(lastEvaluatedKey).length !== 0
         ) {
+            setCurrentPage(currentPage + 1);
             fetchToolDashboardList(false); // Pass false to not wipe data, fetching and appending new items instead
         }
 
@@ -207,20 +202,12 @@ function Dashboard() {
 
         ItemstoDisplay();
     };
-    const handleRowClick = (tool_id) => {
-        //NAVIGATE TO SINGULAR TOOL PAGE HERE!
-        //fetchSingularToolData(tool_id);
-    };
-    const handleAccountInfo = (e) => {
-        navigate("/Account");
-    };
 
-
-    const options = ['all', 'date released','price'];
+    const options = ["all", "date released", "price"];
 
     const handleFilterChange = (e) => {
-        setFilter(e.target.value);
-    }
+        updateFilterRequery(e.target.value);
+    };
 
     const Dropdown = ({ trigger, menu }) => {
         const [open, setOpen] = useState(false);
@@ -256,20 +243,29 @@ function Dashboard() {
             <p className="dashboard-welcome">Welcome to your Dashboard!</p>
 
             <header>
-                    <input id = "search" type = "search" placeholder = "&#x1F50D; Start typing to search..." />
+                <input
+                    id="search"
+                    type="search"
+                    placeholder="&#x1F50D; Start typing to search..."
+                />
             </header>
 
-
-            <button className="dashboard-button" onClick={handleReportListClick}>
+            <button
+                className="dashboard-button-tools"
+                onClick={handleReportListClick}
+            >
                 Report Menu
             </button>
-            <button className="dashboard-button" onClick={handleQuestionnaireClick}>
+            <button
+                className="dashboard-button-tools"
+                onClick={handleQuestionnaireClick}
+            >
                 Questionnaire
             </button>
 
             {/* Render the tool data in a table */}
             <div>
-                <table className="dashboard-table">
+                <table className="dashboard-table-tools">
                     <thead>
                         <tr>
                             <th>Tool Name</th>
@@ -284,7 +280,7 @@ function Dashboard() {
                             <tr
                                 key={tool.Tool_ID}
                                 onClick={() => handleRowClick(tool.Tool_ID)}
-                                className="dashboard-table-row"
+                                className="dashboard-table-row-tools"
                             >
                                 <td>{tool.Tool_Name}</td>
                                 <td>{tool.Tool_Function}</td>
@@ -307,17 +303,20 @@ function Dashboard() {
                     </button>
                 </span>
 
-            <button className="dashboard-button" onClick={handleAccountInfo}>
-                Account Information
-            </button>
+                <button className="dashboard-button-tools" onClick={handleAccountInfo}>
+                    Account Information
+                </button>
 
-            <div className = "filter-dropdown">
-                <label htmlFor = "status-filter"> Filter by Status</label>
-                <select id = "status-filter" onChange = {handleFilterChange}>
-                    {options.map ((option,index) => (
-                        <option key={index} value = {option}>{option}</option>
-                    ))}
-                </select>
+                <div className="filter-dropdown">
+                    <label htmlFor="status-filter"> Filter by Status</label>
+                    <select id="status-filter" onChange={handleFilterChange}>
+                        {options.map((option, index) => (
+                            <option key={index} value={option}>
+                                {option}
+                            </option>
+                        ))}
+                    </select>
+                </div>
             </div>
         </div>
     );
