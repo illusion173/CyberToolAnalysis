@@ -1,12 +1,14 @@
 import "./Questionnaire.css";
 import React, { useState } from "react";
-
-import { question_list } from "./questions";
+import { question_list } from "./questions.js";
 import { useNavigate } from "react-router-dom";
 import { fetchJwt, getUserId } from "./helperFunctionsForUserAPI.js";
 import { API } from "aws-amplify";
-
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 const Questionnaire = () => {
+  const navigate = useNavigate();
+
   // Define the state to store user responses
   const [responses, setResponses] = useState({});
   const handleResponseChange = (questionKey, response) => {
@@ -15,13 +17,17 @@ const Questionnaire = () => {
 
   const getFileNameFromUser = async () => {
     // Display a prompt window asking for a filename
-    const fileName = window.prompt("Enter a filename:", "default");
+    const fileName = window.prompt(
+      "Enter a file name for report:",
+      "(NotGivenFileName)",
+    );
 
     // Handle the user input (you can perform further actions here)
     if (fileName) {
       alert(`You entered: ${fileName}`);
     } else {
       alert("No filename entered, using default.");
+      return "default";
     }
 
     return fileName;
@@ -52,20 +58,54 @@ const Questionnaire = () => {
 
       let status = await API.post(apiName, path, myInit);
       console.log(status);
+      navigate("/Dashboard");
     } catch (error) {
       alert(
         "Error while submitting request for report creation. Try again later.",
       );
+      navigate("/Dashboard");
     }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    //Save Responses
+    getAnswers();
     // Request to create report here
     createReportForUser();
   };
 
-  const navigate = useNavigate();
+  const getAnswers = () => {
+    const doc = new jsPDF();
+
+    let tableData = [];
+
+    for (const key in responses) {
+      const questionObj = question_list.find((question) =>
+        key in question ? question : null,
+      );
+
+      if (questionObj) {
+        const questionText = questionObj[key].Question;
+        const answerChoices = questionObj[key]["Answer choices"];
+        const selectedAnswer = answerChoices.find(
+          (choice) => Object.keys(choice)[0] === responses[key],
+        );
+
+        if (selectedAnswer) {
+          tableData.push([questionText, Object.values(selectedAnswer)[0]]);
+        }
+      }
+    }
+
+    doc.autoTable({
+      head: [["Question", "Response"]],
+      body: tableData,
+    });
+
+    doc.save("user_responses.pdf");
+  };
+
   const handleDashboardClick = (e) => {
     navigate("/Dashboard");
   };
@@ -73,10 +113,6 @@ const Questionnaire = () => {
   const handleReportClick = (e) => {
     navigate("/ReportList");
   };
-
-  const handleSubmitButton = (e) => {
-    navigate("/Dashboard")
-  }
 
   const questionElements = question_list.map((question, index) => {
     const questionKey = `question_${index + 1}`;
@@ -111,16 +147,22 @@ const Questionnaire = () => {
   return (
     <div className="Questionnaire">
       <h1 className="questionnaire-header">Comparative Report Questionnaire</h1>
-      <button className="questionnaire-button" onClick={handleDashboardClick}>
-        Dashboard
-      </button>
-      <button className="questionnaire-button" onClick={handleReportClick}>
-        Report Menu
-      </button>
+      <span className="pagination">
+        <button className="questionnaire-button" onClick={handleDashboardClick}>
+          Dashboard
+        </button>
+        <button className="questionnaire-button" onClick={handleReportClick}>
+          Report Menu
+        </button>
+      </span>
 
       <form className="form-padding-style" onSubmit={handleSubmit}>
         {questionElements}
-        <button className="submit-button" onClick={handleSubmitButton}>Submit</button>
+        <span className="pagination">
+          <button className="submit-button" onClick={null}>
+            Submit Answers
+          </button>
+        </span>
       </form>
     </div>
   );
