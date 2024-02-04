@@ -3,15 +3,10 @@
 members = [
     "beginreportcybertool",
 
-    # TODO(JWebb): re-add. Currently does not compile
-    # "getAllTools",
-    "getreportlist",
-
-    # TODO(JWebb): re-add. Currently does not compile
+    #"getAllTools",
+    #"getreportlist",
     "getsingulartooldata",
     "reportcreatepresignedurl",
-
-    # TODO(JWebb): re-add. Currently does not compile
     #"reportcybertool",
 ]
 

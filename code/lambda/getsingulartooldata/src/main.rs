@@ -1,3 +1,17 @@
+/*
+ * Code currently does not run due to errors with get_tool_data function.
+ * Currently, using the DynamoClient to query() requires an expression value with strict string
+ * requirements. On top of this, there is a specific requirement for json formatting, see what
+ * AttributeValue is.
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ */
+
 use aws_sdk_dynamodb::types::AttributeValue;
 use aws_sdk_dynamodb::Client as DynamoClient;
 use lambda_http::{run, service_fn, Body, Error, Request, Response};
