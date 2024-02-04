@@ -1,38 +1,9 @@
 export type AmplifyDependentResourcesAttributes = {
-<<<<<<< Updated upstream
-    "api": {
-        "apiab9b8614": {
-            "RootUrl": "string",
-            "ApiName": "string",
-            "ApiId": "string"
-        }
-    },
-    "auth": {
-        "cybertoolwebsite82b62747": {
-            "IdentityPoolId": "string",
-            "IdentityPoolName": "string",
-            "UserPoolId": "string",
-            "UserPoolArn": "string",
-            "UserPoolName": "string",
-            "AppClientIDWeb": "string",
-            "AppClientID": "string"
-        }
-    },
-    "function": {
-        "cybertoolwebsite430c7922": {
-            "Name": "string",
-            "Arn": "string",
-            "Region": "string",
-            "LambdaExecutionRole": "string",
-            "LambdaExecutionRoleArn": "string"
-        }
-=======
   "api": {
     "apiab9b8614": {
       "ApiId": "string",
       "ApiName": "string",
       "RootUrl": "string"
->>>>>>> Stashed changes
     }
   },
   "auth": {
