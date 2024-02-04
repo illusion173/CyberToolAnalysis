@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Setup args so amplify can run headlessly in ci
+# Setup json args so amplify can run headlessly in ci
 
 REACTCONFIG="{\
 \"SourceDir\":\"src\",\
@@ -33,12 +33,13 @@ PROVIDERS="{\
 
 echo "Running amplify pull"
 # Grab raw exit code and output
-pull_output=$(bash -c "amplify pull --amplify $AMPLIFY --frontend $FRONTEND --providers $PROVIDERS --yes)" 2>&1)
+pull_output=$(bash -c "amplify pull --amplify $AMPLIFY --frontend $FRONTEND --providers $PROVIDERS --yes" 2>&1)
 pull_exit=$?
 
 # Sometimes amplify pull fails with `The previously configured DynamoDB Table: 'undefined' cannot be found`,
 # if this the case pretend like we succeeded since we dont care about DynamoDB when checking if the frontend builds
-output_ok=$(echo "$pull_output" | grep -q "The previously configured DynamoDB Table: 'undefined' cannot be found")
+echo "$pull_output" | grep -q "The previously configured DynamoDB Table: 'undefined' cannot be found"
+output_ok=$?
 echo "output_ok" $output_ok
 echo "pull_output" $pull_output
 echo "pull_exit" $pull_exit
