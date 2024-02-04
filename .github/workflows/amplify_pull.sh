@@ -33,7 +33,7 @@ PROVIDERS="{\
 }"
 
 # Grab raw exit code and output
-pull_output=$(bash -c '(amplify pull --amplify $AMPLIFY --frontend $FRONTEND --providers $PROVIDERS --yes); exit $?' 2>&1)
+pull_output=$(bash -c "(amplify pull --amplify $AMPLIFY --frontend $FRONTEND --providers $PROVIDERS --yes); exit $?" 2>&1)
 pull_exit=$?
 
 # Sometimes amplify pull fails with `The previously configured DynamoDB Table: 'undefined' cannot be found`,
