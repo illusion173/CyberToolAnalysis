@@ -21,7 +21,8 @@ jobs:
       working-directory: ./code/websitesrc/cybertoolwebsite/
       run: |
         npm install -g @aws-amplify/cli --force
-        ./.github/workflows/amplify_pull.sh
+        # Reverse working dir path to root
+        ../../../.github/workflows/amplify_pull.sh
         npm install --force # TODO(troy): remove --force
         npm run build
         npm run test
