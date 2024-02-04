@@ -1,5 +1,4 @@
 #!/bin/bash
-set -e
 IFS='|'
 
 # Setup args so amplify can run headlessly in ci
@@ -32,7 +31,6 @@ FRONTEND="{\
 PROVIDERS="{\
 \"awscloudformation\":$AWSCLOUDFORMATIONCONFIG\
 }"
-
 
 # Grab raw exit code and output
 pull_output=$(bash -c '(amplify pull --amplify $AMPLIFY --frontend $FRONTEND --providers $PROVIDERS --yes); exit $?' 2>&1)
