@@ -32,12 +32,16 @@ def getSingularToolData(prepared_input: dict):
                     items_dict[key] = list(value)
             return items_dict  # Return the modified items_dict if it exists
         else:
-            return {}  # Return an empty dictionary if items is empty
+            return {"errorMsg":"No data for this item?", "statusCode":500} # Return an empty dictionary if items is empty
 
     except Exception as e:
         # Handle any errors
         print(f"Error: {e}")
-        return {}
+
+        return {
+                "errorMsg" : e,
+                "statusCode" : 500
+                }
 
 
 def lambda_handler(event, context):
@@ -49,8 +53,10 @@ def lambda_handler(event, context):
 
     if request_body:
         singular_tool_data = getSingularToolData(request_body)
+        response['statusCode'] = 200
     else:
         singular_tool_data = "No Tool Data Request Inputted!"
+        response['statusCode'] = 400
 
     response['body'] = singular_tool_data
 
