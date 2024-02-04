@@ -1,5 +1,4 @@
 #!/bin/bash
-IFS='|'
 
 # Setup args so amplify can run headlessly in ci
 
@@ -32,8 +31,9 @@ PROVIDERS="{\
 \"awscloudformation\":$AWSCLOUDFORMATIONCONFIG\
 }"
 
+echo "Running amplify pull"
 # Grab raw exit code and output
-pull_output=$(bash -c "(amplify pull --amplify $AMPLIFY --frontend $FRONTEND --providers $PROVIDERS --yes); exit $?" 2>&1)
+pull_output=$(bash -c "amplify pull --amplify $AMPLIFY --frontend $FRONTEND --providers $PROVIDERS --yes)" 2>&1)
 pull_exit=$?
 
 # Sometimes amplify pull fails with `The previously configured DynamoDB Table: 'undefined' cannot be found`,
