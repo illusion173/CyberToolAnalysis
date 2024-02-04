@@ -6430,13 +6430,13 @@ let
         sha512 = "b0P0sZPKtyu8HkeRAfCq0IfURZK+SuwMjY1UXGBU27wpAiTwQAIlq56IbIO+ytk/JjS1fMR14ee5WBBfKi5J6A==";
       };
     };
-    "array-buffer-byte-length-1.0.0" = {
+    "array-buffer-byte-length-1.0.1" = {
       name = "array-buffer-byte-length";
       packageName = "array-buffer-byte-length";
-      version = "1.0.0";
+      version = "1.0.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/array-buffer-byte-length/-/array-buffer-byte-length-1.0.0.tgz";
-        sha512 = "LPuwb2P+NrQw3XhxGc36+XSvuBPopovXYTR9Ew++Du9Yb/bx5AzBfrIsBoj0EZUifjQU+sHL21sseZ3jerWO/A==";
+        url = "https://registry.npmjs.org/array-buffer-byte-length/-/array-buffer-byte-length-1.0.1.tgz";
+        sha512 = "ahC5W1xgou+KTXix4sAO8Ki12Q+jf4i0+tmk3sC+zgcynshkHxzpXdImBehiUYKKKDwvfFiJl1tZt6ewscS1Mg==";
       };
     };
     "array-flatten-1.1.1" = {
@@ -19176,14 +19176,15 @@ let
       sources."@aws-amplify/analytics-5.2.31"
       sources."@aws-amplify/api-4.0.64"
       sources."@aws-amplify/api-graphql-2.3.28"
-      (sources."@aws-amplify/api-rest-2.0.64" // {
-        dependencies = [
-          sources."axios-0.26.0"
-        ];
-      })
+      sources."@aws-amplify/api-rest-2.0.64"
       sources."@aws-amplify/auth-4.6.17"
       sources."@aws-amplify/cache-4.0.66"
-      sources."@aws-amplify/cli-12.10.1"
+      (sources."@aws-amplify/cli-12.10.1" // {
+        dependencies = [
+          sources."axios-1.6.7"
+          sources."rimraf-3.0.2"
+        ];
+      })
       (sources."@aws-amplify/core-4.7.15" // {
         dependencies = [
           (sources."@aws-crypto/sha256-js-1.0.0-alpha.0" // {
@@ -19212,11 +19213,7 @@ let
       sources."@aws-amplify/predictions-4.0.64"
       sources."@aws-amplify/pubsub-4.5.14"
       sources."@aws-amplify/rtn-push-notification-1.1.11"
-      (sources."@aws-amplify/storage-4.5.17" // {
-        dependencies = [
-          sources."axios-0.26.0"
-        ];
-      })
+      sources."@aws-amplify/storage-4.5.17"
       (sources."@aws-amplify/ui-4.1.1" // {
         dependencies = [
           sources."@aws-amplify/ui-2.0.7"
@@ -20373,6 +20370,7 @@ let
           sources."jest-validate-27.5.1"
           sources."pretty-format-27.5.1"
           sources."react-is-17.0.2"
+          sources."rimraf-3.0.2"
           sources."strip-ansi-6.0.1"
         ];
       })
@@ -20464,6 +20462,7 @@ let
               sources."semver-6.3.1"
             ];
           })
+          sources."rimraf-3.0.2"
         ];
       })
       sources."@mapbox/point-geometry-0.1.0"
@@ -20488,6 +20487,7 @@ let
       (sources."@npmcli/move-file-1.1.2" // {
         dependencies = [
           sources."mkdirp-1.0.4"
+          sources."rimraf-3.0.2"
         ];
       })
       (sources."@pmmmwh/react-refresh-webpack-plugin-0.5.11" // {
@@ -21002,7 +21002,7 @@ let
       sources."argparse-1.0.10"
       sources."aria-hidden-1.2.3"
       sources."aria-query-5.3.0"
-      sources."array-buffer-byte-length-1.0.0"
+      sources."array-buffer-byte-length-1.0.1"
       sources."array-flatten-1.1.1"
       sources."array-includes-3.1.7"
       sources."array-union-2.1.0"
@@ -21173,6 +21173,7 @@ let
           sources."@aws-sdk/util-utf8-browser-3.186.0"
           sources."@aws-sdk/util-utf8-node-3.186.0"
           sources."amazon-cognito-identity-js-6.3.10"
+          sources."axios-1.6.7"
           sources."buffer-4.9.2"
           sources."fast-xml-parser-4.2.5"
           sources."punycode-1.3.2"
@@ -21183,13 +21184,14 @@ let
       (sources."aws-crt-1.21.0" // {
         dependencies = [
           sources."@aws-sdk/util-utf8-browser-3.259.0"
+          sources."axios-1.6.7"
           sources."buffer-6.0.3"
         ];
       })
       sources."aws-sign2-0.7.0"
       sources."aws4-1.12.0"
       sources."axe-core-4.7.0"
-      sources."axios-1.6.7"
+      sources."axios-0.26.0"
       sources."axobject-query-3.2.1"
       sources."babel-core-7.0.0-bridge.0"
       (sources."babel-jest-27.5.1" // {
@@ -21266,6 +21268,7 @@ let
         dependencies = [
           sources."minipass-3.3.6"
           sources."mkdirp-1.0.4"
+          sources."rimraf-3.0.2"
         ];
       })
       sources."cache-content-type-1.0.1"
@@ -21301,6 +21304,7 @@ let
           sources."escape-string-regexp-4.0.0"
           sources."is-wsl-2.2.0"
           sources."mkdirp-1.0.4"
+          sources."rimraf-3.0.2"
         ];
       })
       sources."ci-info-2.0.0"
@@ -21707,7 +21711,11 @@ let
           sources."p-locate-4.1.0"
         ];
       })
-      sources."flat-cache-3.2.0"
+      (sources."flat-cache-3.2.0" // {
+        dependencies = [
+          sources."rimraf-3.0.2"
+        ];
+      })
       sources."flatted-3.2.9"
       sources."flow-enums-runtime-0.0.6"
       sources."flow-parser-0.206.0"
@@ -22429,6 +22437,7 @@ let
           sources."metro-runtime-0.79.1"
           sources."metro-source-map-0.79.1"
           sources."react-refresh-0.4.3"
+          sources."rimraf-3.0.2"
           sources."source-map-0.5.7"
           sources."strip-ansi-6.0.1"
           sources."ws-7.5.9"
@@ -22440,7 +22449,11 @@ let
           sources."hermes-parser-0.15.0"
         ];
       })
-      sources."metro-cache-0.79.1"
+      (sources."metro-cache-0.79.1" // {
+        dependencies = [
+          sources."rimraf-3.0.2"
+        ];
+      })
       sources."metro-cache-key-0.79.1"
       (sources."metro-config-0.79.1" // {
         dependencies = [
@@ -22563,6 +22576,7 @@ let
           sources."are-we-there-yet-3.0.1"
           sources."gauge-4.0.4"
           sources."npmlog-6.0.2"
+          sources."rimraf-3.0.2"
           sources."strip-ansi-6.0.1"
         ];
       })
@@ -22994,7 +23008,7 @@ let
       })
       sources."rework-visit-1.0.0"
       sources."rfdc-1.3.1"
-      sources."rimraf-3.0.2"
+      sources."rimraf-2.6.3"
       sources."rollup-2.79.1"
       (sources."rollup-plugin-terser-7.0.2" // {
         dependencies = [
@@ -23224,11 +23238,7 @@ let
         ];
       })
       sources."tar-stream-2.2.0"
-      (sources."temp-0.8.4" // {
-        dependencies = [
-          sources."rimraf-2.6.3"
-        ];
-      })
+      sources."temp-0.8.4"
       sources."temp-dir-2.0.0"
       (sources."tempy-0.6.0" // {
         dependencies = [
@@ -23393,6 +23403,7 @@ let
           sources."is-wsl-2.2.0"
           sources."json-schema-traverse-1.0.0"
           sources."open-8.4.2"
+          sources."rimraf-3.0.2"
           sources."schema-utils-4.2.0"
           sources."ws-8.16.0"
         ];
@@ -23419,6 +23430,7 @@ let
         dependencies = [
           sources."is-wsl-2.2.0"
           sources."open-7.4.2"
+          sources."rimraf-3.0.2"
           sources."strip-ansi-6.0.1"
           sources."ws-7.5.9"
         ];
