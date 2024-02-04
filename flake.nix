@@ -14,12 +14,16 @@
         in {
           devShells.default = pkgs.mkShell {
             buildInputs = with pkgs; [
+              # Frontend
               nodejs
               nodePackages.npm
               awscli2
               nodePackages.typescript
               nodePackages.typescript-language-server
               stdenv.cc.cc.lib
+              # Lambda
+              rustup
+              rust-analyzer
             ];
           };
         }
