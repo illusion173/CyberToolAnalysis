@@ -25,7 +25,7 @@ jobs:
         ../../../.github/workflows/amplify_pull.sh
         npm install --force # TODO(troy): remove --force
         npm run build
-        npm run test
+        # npm run test # TODO: re-enable when we actually have tests, until then I will be judging you very hard!
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -33,3 +33,4 @@ jobs:
         # If set to true (default by actions) warnings are treated as errors and we have too many of these to fix rn
         # TODO(troy): force the frontend team to use ES Lint and fix all warnings
         CI: false
+

@@ -33,7 +33,10 @@ PROVIDERS="{\
 
 amplify pull --amplify $AMPLIFY --frontend $FRONTEND --providers $PROVIDERS --yes || true
 
-# TODO(troy): remove || true hack above by checking output for expected DynamoDB failure string
+# TODO(troy): remove ` amplify pull ... || true` hack above by checking output for expected DynamoDB failure string.
+# This code is close to what I want, but doesn't work, I think because the newlines must be there between json objects,
+# but getting this right while double deep in bash is hard.
+#
 # echo "Running amplify pull"
 # # Grab raw exit code and output
 # pull_output=$(bash -c "amplify pull --amplify $AMPLIFY --frontend $FRONTEND --providers $PROVIDERS --yes" 2>&1)
