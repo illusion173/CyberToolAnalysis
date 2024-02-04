@@ -1,4 +1,16 @@
-# Getting Started with Create React App
+# CyberTools Frontend
+
+## Getting started
+1. Install `node` and `npm`
+2. Run `npm install` to install dependencies listed in `package.json`
+3. Run `npm install -g @aws-amplify/cli` to access the amplify cli tool
+4. Run `amplify configure` and follow the instructions [here](https://docs.amplify.aws/javascript/tools/cli/start/set-up-cli/) to authenticate your local machine
+5. Run `amplify pull` to bring in auto-generated amplify code
+6. Run `npm run start` to launch the frontend!
+
+You can use the `npm` commands listed below to run the build only, or run tests.
+
+# React info
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
