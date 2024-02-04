@@ -20,9 +20,9 @@ jobs:
     - name: configure and build
       working-directory: ./code/websitesrc/cybertoolwebsite/
       run: |
-        npm install -g @aws-amplify/cli
         amplify configure --yes # Use default options since amplify cant receive input in CI
-        npm install
+        npm install -g @aws-amplify/cli --force
+        npm install --force # TODO(troy): remove --force
         npm run build
         npm run test
       env:
