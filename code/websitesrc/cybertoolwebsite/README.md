@@ -1,4 +1,3 @@
-<<<<<<< Updated upstream
 # CyberTools Frontend
 
 ## Getting started
@@ -12,9 +11,6 @@
 You can use the `npm` commands listed below to run the build only, or run tests.
 
 # React info
-=======
-## Getting Started with Create React App
->>>>>>> Stashed changes
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
