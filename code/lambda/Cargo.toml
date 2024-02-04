@@ -8,7 +8,7 @@ members = [
     "getreportlist",
 
     # TODO(JWebb): re-add. Currently does not compile
-    # "getsingulartooldata",
+    "getsingulartooldata",
     "reportcreatepresignedurl",
 
     # TODO(JWebb): re-add. Currently does not compile
