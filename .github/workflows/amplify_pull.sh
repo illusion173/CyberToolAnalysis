@@ -33,6 +33,7 @@ PROVIDERS="{\
 
 amplify pull --amplify $AMPLIFY --frontend $FRONTEND --providers $PROVIDERS --yes || true
 
+# TODO(troy): remove || true hack above by checking output for expected DynamoDB failure string
 # echo "Running amplify pull"
 # # Grab raw exit code and output
 # pull_output=$(bash -c "amplify pull --amplify $AMPLIFY --frontend $FRONTEND --providers $PROVIDERS --yes" 2>&1)
