@@ -1,16 +1,18 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import "./index.css";
-import App from "./App";
-import reportWebVitals from "./reportWebVitals";
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css';
+import App from './App';
+import reportWebVitals from './reportWebVitals';
+import { Amplify } from 'aws-amplify';
+import awsExports from './aws-exports';
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Login from "./Login";
-import Dashboard from "./Dashboard";
-import Reportlist from "./ReportList";
-import Questionnaire from "./Questionnaire";
-import Signup from "./Signup";
+import Login from "./Login"
+import Dashboard from "./Dashboard"
+import Reportlist from "./ReportList"
+import Questionnaire from "./Questionnaire"
+import Signup from "./Signup"
+import ForgotPassword from "./ForgotPassword"
 
-import Account from "./Account";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -22,13 +24,18 @@ root.render(
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="reportlist" element={<Reportlist />} />
         <Route path="questionnaire" element={<Questionnaire />} />
-        <Route path="signup" element={<Signup />} />{" "}
-        <Route path="account" element={<Account />} />
-
+        <Route path="signup" element={<Signup />} />   
+        <Route path="forgotpassword" element={<ForgotPassword />} /> 
       </Routes>
+         
     </BrowserRouter>
-  </React.StrictMode>,
+  </React.StrictMode>
 );
+
+
+
+
+
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
