@@ -33,7 +33,7 @@ jobs:
         with:
           components: rustfmt
       - name: cargo fmt --check
-        run: cargo fmt --all --check --manifest-path=./code/lambda/Cargo.toml
+        run: cargo fmt --all --check --manifest-path=./lambda/Cargo.toml
   clippy:
     runs-on: ubuntu-latest
     name: ${{ matrix.toolchain }} / clippy
@@ -59,4 +59,4 @@ jobs:
         with:
           reporter: 'github-pr-check'
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          workdir: './code/lambda/'
+          workdir: './lambda/'
