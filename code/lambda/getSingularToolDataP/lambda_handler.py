@@ -1,5 +1,7 @@
 import boto3
 from boto3.dynamodb.conditions import Key
+
+import json
 def getSingularToolData(prepared_input: dict):
 
     # Create DynamoDB client
@@ -10,10 +12,14 @@ def getSingularToolData(prepared_input: dict):
 
     table_data = dynamodb_resource.Table(table_name)
 
+    primary_key = prepared_input.get("tool_function", None)
+    secondary_key = prepared_input.get("tool_id", None)
 
-    primary_key = prepared_input["tool_function"]
-    secondary_key = prepared_input["tool_id"]
-
+    if primary_key is None or secondary_key is None:
+        return {
+                "errorMsg" : "Missing primary key input, secondary key input.",
+                "statusCode" : 400
+                }
     try:
         # Perform the query
         response = table_data.query(
@@ -46,13 +52,14 @@ def getSingularToolData(prepared_input: dict):
 
 def lambda_handler(event, context):
     # Extracting data from the HTTP request
-    request_body = event.get('body', None)
+    request_body_str = event.get('body', None)
+    request_body_json = json.loads(request_body_str)
 
     # Placeholder response
     response = {}
 
-    if request_body:
-        singular_tool_data = getSingularToolData(request_body)
+    if request_body_json:
+        singular_tool_data = getSingularToolData(request_body_json)
         response['statusCode'] = 200
     else:
         singular_tool_data = "No Tool Data Request Inputted!"

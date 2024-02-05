@@ -1,20 +1,28 @@
 import json
 import boto3
 from boto3.dynamodb.conditions import Attr
+from decimal import Decimal
 
-class LambdaResponse:
-    def __init__(self, toolList: list, last_evaluated_key: dict):
+PAGELIMIT = 10
 
-        self.toolList = toolList
-        self.last_evaluated_key = last_evaluated_key
-
+def convert_decimal_to_int(item):
+    """
+    Recursively converts Decimal instances to int in a dictionary.
+    """
+    if isinstance(item, Decimal):
+        return int(item)
+    elif isinstance(item, dict):
+        return {key: convert_decimal_to_int(value) for key, value in item.items()}
+    elif isinstance(item, list):
+        return [convert_decimal_to_int(element) for element in item]
+    else:
+        return item
 
 def prepare_scan_input(request_body: dict) -> dict:
 
     last_evaluated_key_json = request_body.get('last_evaluated_key', None)
     filter_input = request_body.get('filter_input', None)
-
-
+    
     filter_expression = None
     if filter_input:
         for key, value in filter_input.items():
@@ -24,16 +32,21 @@ def prepare_scan_input(request_body: dict) -> dict:
             else:
                 filter_expression &= condition
 
+
+    if not last_evaluated_key_json:
+        last_evaluated_key = None
+    else:
+        last_evaluated_key = last_evaluated_key_json
+
     # Create formal input
     prepared_input = {
-            "Limit": 10,
-            "ExclusiveStartKey": last_evaluated_key_json,
+            "ExclusiveStartKey": last_evaluated_key,
             "FilterExpression": filter_expression,
             }
 
     return prepared_input
 
-def getDashboardToolData(scan_input: dict) -> LambdaResponse:
+def getDashboardToolData(scan_input: dict):
 
     # Create DynamoDB client
     dynamodb = boto3.resource('dynamodb')
@@ -44,53 +57,63 @@ def getDashboardToolData(scan_input: dict) -> LambdaResponse:
     # Reference the table
     table = dynamodb.Table(table_name)
 
-    if scan_input.get('ExclusiveStartKey') is None:
-    # Perform the scan operation
-        response = table.scan(Limit=scan_input['Limit'],FilterExpression=scan_input.get('FilterExpression', None))
-    else:
-        response = table.scan(Limit=scan_input['Limit'], ExclusiveStartKey=scan_input.get('ExclusiveStartKey', None),FilterExpression=scan_input.get('FilterExpression', None))
-    # Extract items from the response
-    
-    # Items can have nothing insied of it 
+    exclusive_start_key = scan_input['ExclusiveStartKey']
+
+    filter_expression =  scan_input['FilterExpression']
+
+    response = {}
+    if exclusive_start_key is None and filter_expression is None:
+        response = table.scan(Limit=PAGELIMIT)
+
+    if exclusive_start_key is None and filter_expression:
+        response = table.scan(Limit=PAGELIMIT,FilterExpression=filter_expression)
+
+    if filter_expression is None and exclusive_start_key:
+        response = table.scan(Limit=PAGELIMIT,ExclusiveStartKey=exclusive_start_key)
+
+    if exclusive_start_key and filter_expression:
+        response = table.scan(Limit=PAGELIMIT,ExclusiveStartKey=exclusive_start_key,FilterExpression=filter_expression)
+
+
     items = response.get('Items', None)
-    
-    # Retrieve the last evaluated key, can be none
+    tool_list = []
+    for item in items:
+        if 'Customers' in item:
+            item['Customers'] = list(item['Customers'])
+        item = convert_decimal_to_int(item)
+        tool_list.append(item)
+
     last_evaluated_key_json = response.get('LastEvaluatedKey', None)
-    
-    newLambdaResponse = LambdaResponse(toolList=items, last_evaluated_key=last_evaluated_key_json)
-
-    return newLambdaResponse
-
+    return tool_list, last_evaluated_key_json
 
 def lambda_handler(event, context):
     # Extracting data from the HTTP request
-    http_method = event['httpMethod']
-    request_body = event.get('body', None)
+    request_body_str = event.get('body', None)
+
+    request_body_json = json.loads(request_body_str)
 
     # Placeholder response
     response = {}
+    last_evaluated_key = {}
 
-    # Handling different HTTP methods
-    if http_method == 'POST':
-        print("POST")
-
-        if request_body is None:
-            lambda_response = getDashboardToolData({})
-        else:
-            #Prepare scan_input
-            scan_input = prepare_scan_input(request_body)
-
-            lambda_response = getDashboardToolData(scan_input)
-
-        response['statusCode'] = 200
+    if request_body_json is None:
+        response['statusCode'] = 400
         response['headers'] = {"Content-Type": "application/json"}
-        response['body'] = {
-            "tool_list": lambda_response.toolList,
-            "last_evaluated_key": lambda_response.last_evaluated_key
-            }
-    else:
-        # Return an error for unsupported HTTP methods
-        response['statusCode'] = 405
-        response['body'] = json.dumps({"error": "Method Not Allowed"})
+        response['body'] = json.dumps({
+            "errorMsg": "No request_body_json!",
+            })
+        return response   
+    #Prepare scan_input
+    scan_input = prepare_scan_input(request_body_json)
 
+    tool_list, last_evaluated_key = getDashboardToolData(scan_input)
+
+    response['statusCode'] = 200
+    response['headers'] = {"Content-Type": "application/json"}
+    response['body'] = json.dumps({
+        "tool_list": tool_list,
+        "last_evaluated_key": last_evaluated_key
+        })
+
+    #print(response)
     return response
