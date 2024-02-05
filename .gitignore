@@ -1,4 +1,4 @@
-code/lambda/target/
-code/websitesrc/cybertoolwebsite/amplify/
+lambda/target/
+frontend/amplify/
 **/.DS_Store
 .vscode
