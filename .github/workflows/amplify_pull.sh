@@ -18,7 +18,7 @@ AWSCLOUDFORMATIONCONFIG="{\
 }"
 AMPLIFY="{\
 \"projectName\":\"CyberToolWebsite\",\
-\"appId\":\"dqijt2r7sg70n\",\
+\"appId\":\"dvsa9l5h0pihd\",\
 \"envName\":\"main\",\
 \"defaultEditor\":\"code\"\
 }"
