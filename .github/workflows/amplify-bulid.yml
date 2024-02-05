@@ -18,11 +18,11 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - name: configure and build
-      working-directory: ./code/websitesrc/cybertoolwebsite/
+      working-directory: ./frontend/
       run: |
         npm install -g @aws-amplify/cli --force
         # Reverse working dir path to root
-        ../../../.github/workflows/amplify_pull.sh
+        ../.github/workflows/amplify_pull.sh
         npm install --force # TODO(troy): remove --force
         npm run build
         # npm run test # TODO: re-enable when we actually have tests, until then I will be judging you very hard!
