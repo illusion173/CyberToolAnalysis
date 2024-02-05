@@ -57,45 +57,23 @@ def getDashboardToolData(scan_input: dict):
     # Reference the table
     table = dynamodb.Table(table_name)
 
-
-
     exclusive_start_key = scan_input['ExclusiveStartKey']
 
     filter_expression =  scan_input['FilterExpression']
 
     response = {}
     if exclusive_start_key is None and filter_expression is None:
-        print("HERE!")
         response = table.scan(Limit=PAGELIMIT)
 
     if exclusive_start_key is None and filter_expression:
-        print("HERE 1!")
         response = table.scan(Limit=PAGELIMIT,FilterExpression=filter_expression)
 
     if filter_expression is None and exclusive_start_key:
-        print("HERE 2!")
         response = table.scan(Limit=PAGELIMIT,ExclusiveStartKey=exclusive_start_key)
 
     if exclusive_start_key and filter_expression:
-        print("HERE 3!")
         response = table.scan(Limit=PAGELIMIT,ExclusiveStartKey=exclusive_start_key,FilterExpression=filter_expression)
 
-
-    #print(response)
-    #print(type(response))
-    '''
-
-    if exclusive_start_key is None:
-        if filter_expression is None:
-        else:
-            response = table.scan(Limit=PAGELIMIT,FilterExpression=filter_expression)
-    else:
-        if filter_expression is None:
-            response = table.scan(Limit=PAGELIMIT,ExclusiveStartKey=exclusive_start_key)
-        else:
-            response = table.scan(Limit=PAGELIMIT,ExclusiveStartKey=exclusive_start_key,FilterExpression=filter_expression)
-
-    '''
 
     items = response.get('Items', None)
     tool_list = []
@@ -136,7 +114,6 @@ def lambda_handler(event, context):
         "tool_list": tool_list,
         "last_evaluated_key": last_evaluated_key
         })
-    print("DONE!")
 
     #print(response)
     return response
