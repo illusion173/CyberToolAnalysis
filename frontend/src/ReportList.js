@@ -19,7 +19,7 @@ const ReportList = () => {
     const jwt = await fetchJwt();
     const username = await getUserId();
     try {
-      const apiName = "apiab9b8614";
+      const apiName = "apib5cf8c70";
       const path = "/getReportListForUser";
 
       const headers = {
@@ -46,7 +46,7 @@ const ReportList = () => {
   const fetchPreSignedUrl = async (report_id) => {
     const jwt = await fetchJwt();
     try {
-      const apiName = "apiab9b8614";
+      const apiName = "apib5cf8c70";
       const path = "/requestpresignedurl";
 
       const headers = {
