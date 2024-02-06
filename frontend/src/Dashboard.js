@@ -42,7 +42,7 @@ function Dashboard() {
 
         const jwt = await fetchJwt();
         try {
-            const apiName = "api7a6f0b7c";
+            const apiName = "apic25cd3ea";
             const path = "/fetchDashboard";
 
             const headers = {
