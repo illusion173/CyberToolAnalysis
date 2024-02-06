@@ -3,7 +3,8 @@ import { Auth } from "aws-amplify";
 export async function fetchJwt() {
   try {
     const session = await Auth.currentSession();
-    const jwt = session.getIdToken().getJwtToken();
+    const jwt = session.getAccessToken().getJwtToken();
+    //const jwt = session.getIdToken().getJwtToken();
     console.log(jwt);
     return jwt;
   } catch (error) {
