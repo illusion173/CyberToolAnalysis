@@ -17,6 +17,7 @@ function Dashboard() {
     useEffect(() => {
         // If this is bothering theuncaught runtime error thing "no current user on localhost"
         // Comment the line below me!
+        setFilterInput({});
         fetchToolDashboardList(true);
     }, []);
 
@@ -75,11 +76,11 @@ function Dashboard() {
             ItemstoDisplay();
             setLastEvaluatedKey(response["last_evaluated_key"]);
         } catch (error) {
+            console.log(error);
             alert("Unable to retrieve tool list");
         }
     };
 
-    /*
                             
                                 const fetchSingularToolData = async (tool_id) => {
                                     const jwt = await fetchJwt();
@@ -108,7 +109,7 @@ function Dashboard() {
                                     }
                                 };
                             
-                                */
+                               
 
     // NAVIGATION TO DIFFERENT PAGES
     const handleQuestionnaireClick = (e) => {
@@ -127,7 +128,6 @@ function Dashboard() {
         navigate("/Account");
     };
 
-    /*
                                                                                                                               const exampleToolData = [
                                                                                                                                   {
                                                                                                                                       Maturity_Level: 3, // Assuming conversion to a simple number
@@ -152,7 +152,7 @@ function Dashboard() {
                                                                                                                                   },
                                                                                                                               ];
                                                                                                                           
-                                                                                                                              */
+                                                                                                                              
 
     const ItemstoDisplay = (e) => {
         // Calculate start and end indices for slicing the toolData array
