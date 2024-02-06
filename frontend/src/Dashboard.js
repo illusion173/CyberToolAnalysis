@@ -17,6 +17,7 @@ function Dashboard() {
     useEffect(() => {
         // If this is bothering theuncaught runtime error thing "no current user on localhost"
         // Comment the line below me!
+        setFilterInput({});
         fetchToolDashboardList(true);
     }, []);
 
@@ -75,40 +76,41 @@ function Dashboard() {
             ItemstoDisplay();
             setLastEvaluatedKey(response["last_evaluated_key"]);
         } catch (error) {
+            console.log(error);
             alert("Unable to retrieve tool list");
         }
     };
 
     /*
-                          
-                              const fetchSingularToolData = async (tool_id) => {
-                                  const jwt = await fetchJwt();
-                          
-                                  try {
-                                      const apiName = "apiab9b8614";
-                                      const path = "/getDefaultDashboard";
-                          
-                                      const headers = {
-                                          Authorization: `Bearer ${jwt}`,
-                                      };
-                          
-                                      const requestBody = {
-                                          tool_id: `${tool_id}`,
-                                      };
-                          
-                                      const myInit = {
-                                          headers,
-                                          body: requestBody,
-                                      };
-                          
-                                      let response = await API.post(apiName, path, myInit);
-                                      console.log(response);
-                                  } catch (error) {
-                                      alert("Unable to retrieve tool data for " + tool_id);
-                                  }
-                              };
-                          
-                              */
+                              
+                                  const fetchSingularToolData = async (tool_id) => {
+                                      const jwt = await fetchJwt();
+                              
+                                      try {
+                                          const apiName = "apiab9b8614";
+                                          const path = "/getDefaultDashboard";
+                              
+                                          const headers = {
+                                              Authorization: `Bearer ${jwt}`,
+                                          };
+                              
+                                          const requestBody = {
+                                              tool_id: `${tool_id}`,
+                                          };
+                              
+                                          const myInit = {
+                                              headers,
+                                              body: requestBody,
+                                          };
+                              
+                                          let response = await API.post(apiName, path, myInit);
+                                          console.log(response);
+                                      } catch (error) {
+                                          alert("Unable to retrieve tool data for " + tool_id);
+                                      }
+                                  };
+                              
+                                  */
 
     // NAVIGATION TO DIFFERENT PAGES
     const handleQuestionnaireClick = (e) => {
@@ -128,31 +130,31 @@ function Dashboard() {
     };
 
     /*
-                                                                                                                            const exampleToolData = [
-                                                                                                                                {
-                                                                                                                                    Maturity_Level: 3, // Assuming conversion to a simple number
-                                                                                                                                    Tool_ID: "LA_00",
-                                                                                                                                    ToolBox: true,
-                                                                                                                                    Aviation_Specific: true,
-                                                                                                                                    Tool_Function: "Log_Analysis",
-                                                                                                                                    "AI/ML_Use": false,
-                                                                                                                                    Company: "Airbus",
-                                                                                                                                    Customers: [
-                                                                                                                                        "EasyJet",
-                                                                                                                                        "LATAM",
-                                                                                                                                        "WOW_Air",
-                                                                                                                                        "Peach_Aviation",
-                                                                                                                                        "Emirates",
-                                                                                                                                        "Bangkok_Airlines",
-                                                                                                                                        "AirAsia",
-                                                                                                                                        "Asian_Airlines",
-                                                                                                                                        "Ethihad_Airlines",
-                                                                                                                                    ], // Assuming conversion to an array
-                                                                                                                                    Tool_Name: "Skywise",
-                                                                                                                                },
-                                                                                                                            ];
-                                                                                                                        
-                                                                                                                            */
+                                                                                                                                const exampleToolData = [
+                                                                                                                                    {
+                                                                                                                                        Maturity_Level: 3, // Assuming conversion to a simple number
+                                                                                                                                        Tool_ID: "LA_00",
+                                                                                                                                        ToolBox: true,
+                                                                                                                                        Aviation_Specific: true,
+                                                                                                                                        Tool_Function: "Log_Analysis",
+                                                                                                                                        "AI/ML_Use": false,
+                                                                                                                                        Company: "Airbus",
+                                                                                                                                        Customers: [
+                                                                                                                                            "EasyJet",
+                                                                                                                                            "LATAM",
+                                                                                                                                            "WOW_Air",
+                                                                                                                                            "Peach_Aviation",
+                                                                                                                                            "Emirates",
+                                                                                                                                            "Bangkok_Airlines",
+                                                                                                                                            "AirAsia",
+                                                                                                                                            "Asian_Airlines",
+                                                                                                                                            "Ethihad_Airlines",
+                                                                                                                                        ], // Assuming conversion to an array
+                                                                                                                                        Tool_Name: "Skywise",
+                                                                                                                                    },
+                                                                                                                                ];
+                                                                                                                            
+                                                                                                                                */
 
     const ItemstoDisplay = (e) => {
         // Calculate start and end indices for slicing the toolData array
