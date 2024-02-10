@@ -87,33 +87,36 @@ def getDashboardToolData(scan_input: dict):
     return tool_list, last_evaluated_key_json
 
 def lambda_handler(event, context):
+    """
+    AWS Lambda handler function for fetching a user's requested dashboard of tools.
+    either returns nothing,
+    or returns a json obj with two items: list, json obj
+    """
     # Extracting data from the HTTP request
-    request_body_str = event.get('body', None)
+    request_body_str = event.get('body')
+    
+    if not request_body_str:
+        return {
+            'statusCode': 400,
+            'headers': {"Content-Type": "application/json", "Access-Control-Allow-Origin": "*"},
+            'body': json.dumps({"errorMsg": "No request_body_json!"})
+        }
 
     request_body_json = json.loads(request_body_str)
 
-    # Placeholder response
-    response = {}
-    last_evaluated_key = {}
-
-    if request_body_json is None:
-        response['statusCode'] = 400
-        response['headers'] = {"Content-Type": "application/json"}
-        response['body'] = json.dumps({
-            "errorMsg": "No request_body_json!",
-            })
-        return response   
-    #Prepare scan_input
+    # Prepare scan input
     scan_input = prepare_scan_input(request_body_json)
 
+    # Retrieve dashboard tool data
     tool_list, last_evaluated_key = getDashboardToolData(scan_input)
 
-    response['statusCode'] = 200
-    response['headers'] = {"Content-Type": "application/json"}
-    response['body'] = json.dumps({
-        "tool_list": tool_list,
-        "last_evaluated_key": last_evaluated_key
+    response = {
+        'statusCode': 200,
+        'headers': {"Content-Type": "application/json", "Access-Control-Allow-Origin": "*"},
+        'body': json.dumps({
+            "tool_list": tool_list,
+            "last_evaluated_key": last_evaluated_key
         })
+    }
 
-    #print(response)
     return response
