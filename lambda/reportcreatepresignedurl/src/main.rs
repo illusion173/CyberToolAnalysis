@@ -43,6 +43,7 @@ async fn function_handler(event: Request) -> Result<Response<Body>, Error> {
         Ok(body_str) => body_str,
         Err(_error) => {
             return Ok(Response::builder()
+                .header("Access-Control-Allow-Origin", "*")
                 .status(400)
                 .body(Body::from("Unable to derive request body, utf-8 error?"))
                 .expect("Failed to build a response"))
@@ -54,6 +55,7 @@ async fn function_handler(event: Request) -> Result<Response<Body>, Error> {
         Ok(file_request_struct) => file_request_struct,
         Err(_error) => {
             return Ok(Response::builder()
+                .header("Access-Control-Allow-Origin", "*")
                 .status(400)
                 .body(Body::from("Invalid Request Body, missing report_id"))
                 .expect("Failed to build a response, report_id_struct."))
@@ -64,6 +66,7 @@ async fn function_handler(event: Request) -> Result<Response<Body>, Error> {
 
     // Return back with url
     let resp = Response::builder()
+        .header("Access-Control-Allow-Origin", "*")
         .status(200)
         .header("content-type", "text/html")
         .body(presigned_url_message.into())
