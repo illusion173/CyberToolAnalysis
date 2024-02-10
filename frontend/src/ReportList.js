@@ -19,7 +19,6 @@ const ReportList = () => {
     const jwt = await fetchJwt();
     const username = await getUserId();
     try {
-
       const apiName = "apic25cd3ea";
 
       const path = "/getReportListForUser";
@@ -38,7 +37,7 @@ const ReportList = () => {
       };
 
       let report_array = await API.post(apiName, path, myInit);
-      console.log(report_array);
+      setReportListArray(report_array);
       //setReportListArray(report_array);
     } catch (error) {
       alert("Unable to retrieve report list");
@@ -48,7 +47,6 @@ const ReportList = () => {
   const fetchPreSignedUrl = async (report_id) => {
     const jwt = await fetchJwt();
     try {
-
       const apiName = "apic25cd3ea";
       const path = "/requestpresignedurl";
 
@@ -84,7 +82,7 @@ const ReportList = () => {
       <button onClick={fetchReportList} className="report-button-tools">
         Refresh
       </button>
-      <table className="styled-table">
+      <table className="report-styled-table">
         <thead>
           <tr>
             <th>File Name</th>
