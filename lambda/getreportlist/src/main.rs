@@ -2,7 +2,6 @@ use aws_sdk_dynamodb::types::AttributeValue;
 use aws_sdk_dynamodb::Client as DynamoClient;
 use lambda_http::{run, service_fn, Body, Error, Request, Response};
 use serde::{Deserialize, Serialize};
-use serde_json;
 use std::collections::HashMap;
 
 const FILETABLENAME: &str = "ReportLocationTable";
@@ -85,6 +84,7 @@ async fn function_handler(event: Request) -> Result<Response<Body>, Error> {
         Ok(body_str) => body_str,
         Err(_error) => {
             return Ok(Response::builder()
+                .header("Access-Control-Allow-Origin", "*")
                 .status(400)
                 .body(Body::from("Unable to derive request body, utf-8 error?"))
                 .expect("Failed to build a response"))
@@ -94,6 +94,7 @@ async fn function_handler(event: Request) -> Result<Response<Body>, Error> {
         Ok(user_data_struct) => user_data_struct,
         Err(_error) => {
             return Ok(Response::builder()
+                .header("Access-Control-Allow-Origin", "*")
                 .status(400)
                 .body(Body::from(
                     "Invalid Request Body, missing file_name or user data.",
@@ -106,6 +107,7 @@ async fn function_handler(event: Request) -> Result<Response<Body>, Error> {
 
     if report_vector.is_empty() {
         return Ok(Response::builder()
+            .header("Access-Control-Allow-Origin", "*")
             .status(400)
             .body(Body::from("No Reports For User."))
             .expect("Failed to build a response"));
@@ -116,6 +118,7 @@ async fn function_handler(event: Request) -> Result<Response<Body>, Error> {
     let resp = Response::builder()
         .status(200)
         .header("content-type", "text/html")
+        .header("Access-Control-Allow-Origin", "*")
         .body(serialized_report_list.into())
         .map_err(Box::new)?;
     Ok(resp)
