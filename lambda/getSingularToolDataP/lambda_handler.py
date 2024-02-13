@@ -2,6 +2,7 @@ import boto3
 from boto3.dynamodb.conditions import Key
 
 import json
+import simplejson
 def getSingularToolData(prepared_input: dict):
 
     # Create DynamoDB client
@@ -65,16 +66,7 @@ def lambda_handler(event, context):
         singular_tool_data = "No Tool Data Request Inputted!"
         response['statusCode'] = 400
 
-    response['body'] = singular_tool_data
+    response['headers'] = {"Content-Type": "application/json", "Access-Control-Allow-Origin": "*"}
+    response['body'] = simplejson.dumps(singular_tool_data, use_decimal=True)
 
     return response
-
-
-'''
-Local Test
-lambda_handler({'body':{
-    "tool_function" : "Log_Analysis",
-    "tool_id" : "LA_00"
-}},{})
-
-'''
