@@ -76,13 +76,16 @@ def getDashboardToolData(scan_input: dict):
 
 
     items = response.get('Items', None)
-    tool_list = []
-    for item in items:
-        if 'Customers' in item:
-            item['Customers'] = list(item['Customers'])
-        item = convert_decimal_to_int(item)
-        tool_list.append(item)
 
+    tool_list = []
+
+    for item in items:
+        item['Customers'] = list(item['Customers']) if isinstance(item.get('Customers'), set) else item.get('Customers')
+        item['Keywords'] = list(item['Keywords']) if isinstance(item.get('Keywords'), set) else item.get('Keywords')
+        
+        new_item = convert_decimal_to_int(item)
+        tool_list.append(new_item)
+   
     last_evaluated_key_json = response.get('LastEvaluatedKey', None)
     return tool_list, last_evaluated_key_json
 
