@@ -37,7 +37,7 @@ function Dashboard() {
         if (wipe) {
             setToolData([]);
             setLastEvaluatedKey({});
-            setCurrentPage(0);
+            setCurrentPage(1);
             ItemstoDisplay([]);
         }
 
