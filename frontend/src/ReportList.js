@@ -64,8 +64,10 @@ const ReportList = () => {
       };
 
       let presigned_url_data = await API.post(apiName, path, myInit);
-      navigate(presigned_url_data);
-      //return presigned_url_data;
+      var link = document.createElement("a");
+      link.href = presigned_url_data;
+      link.download = ""; // This will prompt the user for download location
+      link.click();
     } catch (error) {
       alert("Unable to retrieve presigned url");
     }
