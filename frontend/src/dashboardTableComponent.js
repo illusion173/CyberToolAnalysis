@@ -19,8 +19,8 @@ function ToolTable() {
         filterInput,
         lastEvaluatedKey,
       );
-      setToolData(await response[0]);
-      setLastEvaluatedKey(await response[1]);
+      setToolData(response[0]);
+      setLastEvaluatedKey(response[1]);
     };
 
     if (loadCount === 0) {
@@ -31,7 +31,13 @@ function ToolTable() {
     }
   }, [toolData]);
 
-  const wipeCache = () => { };
+  const wipeCache = () => {
+    setFilterInput([]);
+    setLastEvaluatedKey({});
+    setToolData([]);
+    setCurrentPage(1);
+    setItemstoDisplay([]);
+  };
 
   const handleRefreshClick = async () => {
     // We set the user to the beginninng of whatever they queried.
@@ -60,12 +66,20 @@ function ToolTable() {
 
   // On update of filter
   const updateFilterRequery = async (filter_from_frontend) => {
-    //setFilterInput(filter_from_frontend);
-    //fetchToolDashboardList(true);
+    wipeCache();
+    setFilterInput(filter_from_frontend);
+    // We set the user to the beginninng of whatever they queried.
+    let response = await fetchToolDashboardList(filterInput, {});
+    let tool_list = response[0] || {};
+    let lek = response[1] || {};
+    setToolData(tool_list);
+    setLastEvaluatedKey(lek);
+    ItemstoDisplay();
   };
 
   const handleFilterChange = (e) => {
-    updateFilterRequery(e.target.value);
+    wipeCache();
+    setFilterInput(e.target.value);
   };
 
   const handleNextPageClick = (e) => {
