@@ -1,9 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import "./Dashboard.css";
-import { API } from "aws-amplify";
-import { fetchJwt } from "./helperFunctionsForUserAPI.js";
-
+import { fetchToolDashboardList } from "./dashboardFunctionsAPI.js";
 function Dashboard() {
     // Pagination state and handlers
     const [currentPage, setCurrentPage] = useState(1);
@@ -15,97 +13,27 @@ function Dashboard() {
     const itemsPerPage = 10;
 
     useEffect(() => {
-        // If this is bothering theuncaught runtime error thing "no current user on localhost"
-        // Comment the line below me!
-        setFilterInput({});
-        fetchToolDashboardList(true);
+        const getInitial = async () => {
+            let response = await fetchToolDashboardList({}, {});
+            setToolData(response[0]);
+            setLastEvaluatedKey(response[1]);
+            ItemstoDisplay();
+        };
+
+        getInitial();
     }, []);
+
+    const handleRefreshClick = async () => {
+        let response = await fetchToolDashboardList(filterInput, lastEvaluatedKey);
+        setToolData(response[0]);
+        setLastEvaluatedKey(response[1]);
+        ItemstoDisplay();
+    };
 
     // On update of filter
     const updateFilterRequery = async (filter_from_frontend) => {
         setFilterInput(filter_from_frontend);
-        fetchToolDashboardList(true);
-    };
-
-    const formatString = (value) => {
-        return typeof value === "string" ? value.replace(/_/g, " ") : value;
-    };
-
-    // Main handler for all API requests to obtain tool data.
-
-    const fetchToolDashboardList = async (wipe) => {
-        if (wipe) {
-            setToolData([]);
-            setLastEvaluatedKey({});
-            setCurrentPage(1);
-            ItemstoDisplay([]);
-        }
-
-        const jwt = await fetchJwt();
-        try {
-            const apiName = "apic25cd3ea";
-            const path = "/fetchDashboard";
-
-            const headers = {
-                Authorization: `Bearer ${jwt}`,
-            };
-
-            const requestBody = {
-                filter_input: filterInput,
-                last_evaluated_key: lastEvaluatedKey,
-            };
-
-            const myInit = {
-                headers,
-                body: requestBody,
-            };
-
-            let response = await API.post(apiName, path, myInit);
-            // Process and format response data before setting state
-            const formattedData = response["tool_list"].map((tool) => ({
-                ...tool,
-                Tool_Name: formatString(tool.Tool_Name),
-                Tool_Function: formatString(tool.Tool_Function),
-                Company: formatString(tool.Company),
-                // Apply formatString to other fields if necessary
-            }));
-
-            // Append new data to existing toolData state
-
-            setToolData((prevToolData) => [...prevToolData, ...formattedData]);
-            ItemstoDisplay();
-            setLastEvaluatedKey(response["last_evaluated_key"]);
-        } catch (error) {
-            console.log(error);
-            alert("Unable to retrieve tool list");
-        }
-    };
-
-    const fetchSingularToolData = async (tool_id) => {
-        const jwt = await fetchJwt();
-
-        try {
-            const apiName = "apiab9b8614";
-            const path = "/getDefaultDashboard";
-
-            const headers = {
-                Authorization: `Bearer ${jwt}`,
-            };
-
-            const requestBody = {
-                tool_id: `${tool_id}`,
-            };
-
-            const myInit = {
-                headers,
-                body: requestBody,
-            };
-
-            let response = await API.post(apiName, path, myInit);
-            console.log(response);
-        } catch (error) {
-            alert("Unable to retrieve tool data for " + tool_id);
-        }
+        //fetchToolDashboardList(true);
     };
 
     // NAVIGATION TO DIFFERENT PAGES
@@ -125,30 +53,6 @@ function Dashboard() {
         navigate("/Account");
     };
 
-    const exampleToolData = [
-        {
-            Maturity_Level: 3, // Assuming conversion to a simple number
-            Tool_ID: "LA_00",
-            ToolBox: true,
-            Aviation_Specific: true,
-            Tool_Function: "Log_Analysis",
-            "AI/ML_Use": false,
-            Company: "Airbus",
-            Customers: [
-                "EasyJet",
-                "LATAM",
-                "WOW_Air",
-                "Peach_Aviation",
-                "Emirates",
-                "Bangkok_Airlines",
-                "AirAsia",
-                "Asian_Airlines",
-                "Ethihad_Airlines",
-            ], // Assuming conversion to an array
-            Tool_Name: "Skywise",
-        },
-    ];
-
     const ItemstoDisplay = (e) => {
         // Calculate start and end indices for slicing the toolData array
         const startIndex = (currentPage - 1) * itemsPerPage;
@@ -158,6 +62,10 @@ function Dashboard() {
     };
 
     const handleNextPageClick = (e) => {
+        if (lastEvaluatedKey === null) {
+            alert("No more tools to retrieve.");
+            return;
+        }
         const currentPageIndex = (currentPage - 1) * itemsPerPage;
 
         // ex page 1 -> page 2
@@ -198,41 +106,10 @@ function Dashboard() {
         ItemstoDisplay();
     };
 
-    const options = ["all", "date released", "price"];
-
     const handleFilterChange = (e) => {
         updateFilterRequery(e.target.value);
     };
 
-    const Dropdown = ({ trigger, menu }) => {
-        const [open, setOpen] = useState(false);
-
-        const handleOpen = () => {
-            setOpen(!open);
-        };
-
-        return (
-            <div className="dropdown">
-                {React.cloneElement(trigger, {
-                    onClick: handleOpen,
-                })}
-                {open ? (
-                    <ul className="menu">
-                        {menu.map((menuItem, index) => (
-                            <li key={index} className="menu-item">
-                                {React.cloneElement(menuItem, {
-                                    onClick: () => {
-                                        menuItem.props.onClick();
-                                        setOpen(false);
-                                    },
-                                })}
-                            </li>
-                        ))}
-                    </ul>
-                ) : null}
-            </div>
-        );
-    };
     return (
         <div className="App">
             <p className="dashboard-welcome">Welcome to your Dashboard!</p>
@@ -258,7 +135,7 @@ function Dashboard() {
                 Questionnaire
             </button>
             <button
-                onClick={fetchToolDashboardList(false)}
+                onClick={() => handleRefreshClick()}
                 className="dashboard-button-tools"
             >
                 Refresh
@@ -307,17 +184,6 @@ function Dashboard() {
                 <button className="dashboard-button-tools" onClick={handleAccountInfo}>
                     Account Information
                 </button>
-
-                <div className="filter-dropdown">
-                    <label htmlFor="status-filter"> Filter by Status</label>
-                    <select id="status-filter" onChange={handleFilterChange}>
-                        {options.map((option, index) => (
-                            <option key={index} value={option}>
-                                {option}
-                            </option>
-                        ))}
-                    </select>
-                </div>
             </div>
         </div>
     );
