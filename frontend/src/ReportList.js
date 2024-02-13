@@ -44,7 +44,7 @@ const ReportList = () => {
     }
   };
 
-  const fetchPreSignedUrl = async (report_id) => {
+  const fetchPreSignedUrl = async (report_id, file_name) => {
     const jwt = await fetchJwt();
     try {
       const apiName = "apic25cd3ea";
@@ -66,7 +66,7 @@ const ReportList = () => {
       let presigned_url_data = await API.post(apiName, path, myInit);
       var link = document.createElement("a");
       link.href = presigned_url_data;
-      link.download = ""; // This will prompt the user for download location
+      link.download = `${file_name}.pdf`; // Set the filename with the .pdf extension
       link.click();
     } catch (error) {
       alert("Unable to retrieve presigned url");
@@ -98,7 +98,11 @@ const ReportList = () => {
               <td>{report.file_name}</td>
               <td>{new Date(report.date_made).toLocaleDateString()}</td>
               <td>
-                <button onClick={() => fetchPreSignedUrl(report.report_id)}>
+                <button
+                  onClick={() =>
+                    fetchPreSignedUrl(report.report_id, report.file_name)
+                  }
+                >
                   Download
                 </button>
               </td>
