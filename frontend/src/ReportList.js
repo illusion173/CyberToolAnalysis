@@ -63,9 +63,8 @@ const ReportList = () => {
         body: requestBody,
       };
 
-      let presigned_url_data = await API.get(apiName, path, myInit);
-      console.log(presigned_url_data);
-      //return presigned_url_data;
+      let presigned_url_data = await API.post(apiName, path, myInit);
+      return presigned_url_data;
     } catch (error) {
       alert("Unable to retrieve presigned url");
     }
