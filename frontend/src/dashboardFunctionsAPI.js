@@ -42,18 +42,19 @@ export async function fetchToolDashboardList(filterInput, lastEvaluatedKey) {
   }
 }
 
-export async function fetchSingularToolData(tool_id) {
+export async function fetchSingularToolData(tool_id, tool_function) {
   const jwt = await fetchJwt();
-
+  let converted_tool_function = tool_function.replace(/\s/g, "_");
   try {
-    const apiName = "apiab9b8614";
-    const path = "/getDefaultDashboard";
+    const apiName = "apic25cd3ea";
+    const path = "/getSingularToolData";
 
     const headers = {
       Authorization: `Bearer ${jwt}`,
     };
 
     const requestBody = {
+      tool_function: `${converted_tool_function}`,
       tool_id: `${tool_id}`,
     };
 
@@ -65,6 +66,7 @@ export async function fetchSingularToolData(tool_id) {
     let response = await API.post(apiName, path, myInit);
     console.log(response);
   } catch (error) {
-    alert("Unable to retrieve tool data for " + tool_id);
+    console.log(error);
+    //alert("Unable to retrieve tool data for " + tool_id);
   }
 }

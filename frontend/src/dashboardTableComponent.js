@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import "./Dashboard.css";
-import { fetchToolDashboardList } from "./dashboardFunctionsAPI.js";
+import {
+  fetchToolDashboardList,
+  fetchSingularToolData,
+} from "./dashboardFunctionsAPI.js";
 
 function ToolTable() {
   // Pagination state and handlers
@@ -118,9 +121,9 @@ function ToolTable() {
     }
   };
 
-  const handleRowClick = (tool_id) => {
+  const handleRowClick = (tool_id, tool_function) => {
     //NAVIGATE TO SINGULAR TOOL PAGE HERE!
-    //fetchSingularToolData(tool_id);
+    fetchSingularToolData(tool_id, tool_function);
   };
 
   const handlePreviousPageClick = (e) => {
@@ -155,7 +158,7 @@ function ToolTable() {
             {itemsToDisplay.map((tool) => (
               <tr
                 key={tool.Tool_ID}
-                onClick={() => handleRowClick(tool.Tool_ID)}
+                onClick={() => handleRowClick(tool.Tool_ID, tool.Tool_Function)}
                 className="dashboard-table-row-tools"
               >
                 <td>{tool.Tool_Name}</td>
