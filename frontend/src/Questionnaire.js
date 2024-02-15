@@ -6,6 +6,8 @@ import { fetchJwt, getUserId } from "./helperFunctionsForUserAPI.js";
 import { API } from "aws-amplify";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
+import Navbar from "./navbar.js";
+
 const Questionnaire = () => {
   const navigate = useNavigate();
 
@@ -106,14 +108,6 @@ const Questionnaire = () => {
     doc.save("user_responses.pdf");
   };
 
-  const handleDashboardClick = (e) => {
-    navigate("/Dashboard");
-  };
-
-  const handleReportClick = (e) => {
-    navigate("/ReportList");
-  };
-
   const questionElements = question_list.map((question, index) => {
     const questionKey = `question_${index + 1}`;
     return (
@@ -147,15 +141,7 @@ const Questionnaire = () => {
   return (
     <div className="Questionnaire">
       <h1 className="questionnaire-header">Comparative Report Questionnaire</h1>
-      <span className="pagination">
-        <button className="questionnaire-button" onClick={handleDashboardClick}>
-          Dashboard
-        </button>
-        <button className="questionnaire-button" onClick={handleReportClick}>
-          Report Menu
-        </button>
-      </span>
-
+      <Navbar></Navbar>
       <form className="form-padding-style" onSubmit={handleSubmit}>
         {questionElements}
         <span className="pagination">

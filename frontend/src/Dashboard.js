@@ -2,26 +2,14 @@ import { useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import "./Dashboard.css";
 import ToolTable from "./dashboardTableComponent.js";
+import Navbar from "./navbar.js";
 function Dashboard() {
     const navigate = useNavigate();
 
     useEffect(() => { }, []);
 
-    // NAVIGATION TO DIFFERENT PAGES
-    const handleQuestionnaireClick = (e) => {
-        navigate("/Questionnaire");
-    };
-
-    const handleReportListClick = (e) => {
-        navigate("/ReportList");
-    };
-
     const handleAccountInfo = (e) => {
         navigate("/Account");
-    };
-
-    const handleUploadToolClick = () => {
-        navigate("/UploadTool");
     };
 
     return (
@@ -35,25 +23,7 @@ function Dashboard() {
                     placeholder="&#x1F50D; Start typing to search..."
                 />
             </header>
-
-            <button
-                className="dashboard-button-tools"
-                onClick={handleReportListClick}
-            >
-                Report Menu
-            </button>
-            <button
-                className="dashboard-button-tools"
-                onClick={handleQuestionnaireClick}
-            >
-                Questionnaire
-            </button>
-            <button
-                className="dashboard-button-tools"
-                onClick={handleUploadToolClick}
-            >
-                Upload Tool
-            </button>
+            <Navbar></Navbar>
 
             <ToolTable></ToolTable>
             <div>
