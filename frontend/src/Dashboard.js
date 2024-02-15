@@ -20,6 +20,10 @@ function Dashboard() {
         navigate("/Account");
     };
 
+    const handleUploadToolClick = () => {
+        navigate("/UploadTool");
+    };
+
     return (
         <div className="App">
             <p className="dashboard-welcome">Welcome to your Dashboard!</p>
@@ -43,6 +47,12 @@ function Dashboard() {
                 onClick={handleQuestionnaireClick}
             >
                 Questionnaire
+            </button>
+            <button
+                className="dashboard-button-tools"
+                onClick={handleUploadToolClick}
+            >
+                Upload Tool
             </button>
 
             <ToolTable></ToolTable>
