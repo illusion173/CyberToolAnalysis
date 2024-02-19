@@ -10,6 +10,7 @@ export async function fetchToolDashboardList(filterInput, lastEvaluatedKey) {
   try {
     const apiName = "apic25cd3ea";
     const path = "/fetchDashboard";
+    filterInput["Approved"] = true;
 
     const headers = {
       Authorization: `Bearer ${jwt}`,
