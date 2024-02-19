@@ -77,7 +77,7 @@ export async function sendApproval(tool_id, tool_function) {
   let converted_tool_function = tool_function.replace(/\s/g, "_");
   try {
     const apiName = "apic25cd3ea";
-    const path = "/ApproveTool";
+    const path = "/handleToolSubmitRequest";
 
     const headers = {
       Authorization: `Bearer ${jwt}`,
@@ -86,6 +86,7 @@ export async function sendApproval(tool_id, tool_function) {
     const requestBody = {
       tool_function: `${converted_tool_function}`,
       tool_id: `${tool_id}`,
+      action: "approve",
     };
 
     const myInit = {
@@ -106,7 +107,7 @@ export async function sendDenial(tool_id, tool_function) {
   let converted_tool_function = tool_function.replace(/\s/g, "_");
   try {
     const apiName = "apic25cd3ea";
-    const path = "/DenyTool";
+    const path = "/handleToolSubmitRequest";
 
     const headers = {
       Authorization: `Bearer ${jwt}`,
@@ -115,6 +116,7 @@ export async function sendDenial(tool_id, tool_function) {
     const requestBody = {
       tool_function: `${converted_tool_function}`,
       tool_id: `${tool_id}`,
+      action: "deny",
     };
 
     const myInit = {
