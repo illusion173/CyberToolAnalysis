@@ -24,7 +24,7 @@ def approve_tool(tool_id, tool_function):
 
 def deny_tool(tool_id, tool_function):
     dynamodb = boto3.resource('dynamodb')
-    table_name = 'YourTableName'
+    table_name = 'Cyber_Tools'
     table = dynamodb.Table(table_name)
 
     try:
