@@ -11,7 +11,7 @@ def approve_tool(tool_id, tool_function):
 
     try:
         response = table.update_item(
-            Key={'tool_id': tool_id, 'tool_function': tool_function},
+            Key={'Tool_ID': tool_id, 'Tool_Function': tool_function},
             UpdateExpression='SET Approved = :val',
             ExpressionAttributeValues={':val': True},
             ReturnValues="UPDATED_NEW"
