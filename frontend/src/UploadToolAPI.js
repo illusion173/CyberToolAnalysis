@@ -77,7 +77,7 @@ export async function sendApproval(tool_id, tool_function) {
   let converted_tool_function = tool_function.replace(/\s/g, "_");
   try {
     const apiName = "apic25cd3ea";
-    const path = "/handleToolSubmitRequest";
+    const path = "/handleApprovalDenialTool";
 
     const headers = {
       Authorization: `Bearer ${jwt}`,
@@ -107,7 +107,7 @@ export async function sendDenial(tool_id, tool_function) {
   let converted_tool_function = tool_function.replace(/\s/g, "_");
   try {
     const apiName = "apic25cd3ea";
-    const path = "/handleToolSubmitRequest";
+    const path = "/handleApprovalDenialTool";
 
     const headers = {
       Authorization: `Bearer ${jwt}`,
@@ -118,6 +118,34 @@ export async function sendDenial(tool_id, tool_function) {
       tool_id: `${tool_id}`,
       action: "deny",
     };
+
+    const myInit = {
+      headers,
+      body: requestBody,
+    };
+
+    let response = await API.post(apiName, path, myInit);
+    console.log(response);
+  } catch (error) {
+    console.log(error);
+    //alert("Unable to retrieve tool data for " + tool_id);
+  }
+}
+
+export async function submitPotentialTool(ToolData) {
+  const jwt = await fetchJwt();
+  try {
+    const apiName = "apic25cd3ea";
+
+    const path = "/submitPotentialTool";
+
+    ToolData["Approved"] = false;
+
+    const headers = {
+      Authorization: `Bearer ${jwt}`,
+    };
+
+    const requestBody = { ToolData };
 
     const myInit = {
       headers,
