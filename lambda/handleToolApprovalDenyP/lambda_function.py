@@ -29,7 +29,7 @@ def deny_tool(tool_id, tool_function):
 
     try:
         response = table.delete_item(
-            Key={'tool_id': tool_id, 'tool_function': tool_function}
+            Key={'Tool_ID': tool_id, 'Tool_Function': tool_function}
         )
         return generate_response(200, {"message": "Tool denied and deleted successfully."})
     except ClientError as e:
