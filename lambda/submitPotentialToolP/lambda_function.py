@@ -12,14 +12,17 @@ def lambda_handler(event, context):
     try:
         # Parse the JSON-formatted string from event['body'] to a Python dictionary
         item = json.loads(event['body'])
+        tool_data_dict = item['ToolData']
+        print(tool_data_dict)
+        print(type(tool_data_dict))
 
-        if 'Customers' in item:
-            item['Customers'] = set(item['Customers'])
+        if 'Customers' in tool_data_dict:
+            tool_data_dict['Customers'] = set(tool_data_dict['Customers'])
         
-        item["Approved"] = False
+        tool_data_dict["Approved"] = False
         
         # Attempt to insert the parsed and potentially modified item into the DynamoDB table
-        response = table.put_item(Item=item)
+        response = table.put_item(Item=tool_data_dict)
         
         # If the insert is successful, return a success status code
         return {

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Dashboard.css";
 import {
   fetchToolDashboardList,
@@ -16,6 +17,7 @@ function UploadToolTable() {
   const [filterInput, setFilterInput] = useState({});
   const [itemsToDisplay, setItemstoDisplay] = useState([]);
   const itemsPerPage = 10;
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Define the function within the useEffect to ensure it captures the current state
@@ -145,14 +147,29 @@ function UploadToolTable() {
     sendDenial(tool_id, tool_function);
   };
 
+  const handleFormNewToolClick = () => {
+    navigate("/uploadtoolform");
+  };
+
   return (
     <div>
-      <button
-        onClick={() => handleRefreshClick()}
-        className="dashboard-button-tools"
-      >
-        Refresh
-      </button>
+      <div>
+        <span>
+          <button
+            onClick={() => handleRefreshClick()}
+            className="dashboard-button-tools"
+          >
+            Refresh
+          </button>
+          <button
+            className="dashboard-button-tools"
+            onClick={() => handleFormNewToolClick()}
+          >
+            New Tool
+          </button>
+        </span>
+      </div>
+
       <div>
         <table className="dashboard-table-tools">
           <thead>
