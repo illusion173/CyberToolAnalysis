@@ -140,11 +140,13 @@ function UploadToolTable() {
   };
 
   const handleApproveToolClick = (tool_id, tool_function) => {
-    sendApproval(tool_id, tool_function);
+    let response = sendApproval(tool_id, tool_function);
+    //window.location.reload();
   };
 
   const handleDenyToolClick = (tool_id, tool_function) => {
-    sendDenial(tool_id, tool_function);
+    let response = sendDenial(tool_id, tool_function);
+    //window.location.reload();
   };
 
   const handleFormNewToolClick = () => {
