@@ -7,6 +7,7 @@ import {
   sendApproval,
   sendDenial,
 } from "./UploadToolAPI.js";
+import ShowToolData from "./ShowToolData.js";
 
 function UploadToolTable() {
   // Pagination state and handlers
@@ -16,6 +17,9 @@ function UploadToolTable() {
   const [lastEvaluatedKey, setLastEvaluatedKey] = useState({});
   const [filterInput, setFilterInput] = useState({});
   const [itemsToDisplay, setItemstoDisplay] = useState([]);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [singularToolData, setSingularToolData] = useState({});
+
   const itemsPerPage = 10;
   const navigate = useNavigate();
 
@@ -124,10 +128,18 @@ function UploadToolTable() {
       alert("No more items to display/get.");
     }
   };
-
-  const handleRowClick = (tool_id, tool_function) => {
+  const handleRowClick = async (tool_id, tool_function) => {
     //NAVIGATE TO SINGULAR TOOL PAGE HERE!
-    fetchSingularToolData(tool_id, tool_function);
+    let singular_tool_data = await fetchSingularToolData(
+      tool_id,
+      tool_function,
+    );
+    setIsModalVisible(true); // Show the modal
+    setSingularToolData(singular_tool_data);
+  };
+
+  const hideModal = () => {
+    setIsModalVisible(false);
   };
 
   const handlePreviousPageClick = (e) => {
@@ -231,6 +243,44 @@ function UploadToolTable() {
           </button>
         </span>
       </div>
+      {isModalVisible && (
+        <div className="modal-backdrop" onClick={hideModal}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <ShowToolData tool_data={singularToolData} />
+            <button
+              className="lower-button"
+              onClick={(e) => {
+                e.stopPropagation(); // Prevent row click event
+                handleApproveToolClick(
+                  singularToolData.Tool_ID,
+                  singularToolData.Tool_Function,
+                );
+              }}
+            >
+              Approve
+            </button>
+            <button
+              className="lower-button"
+              onClick={() => setIsModalVisible(false)}
+            >
+              Close
+            </button>
+            <button
+              className="lower-button"
+              onClick={(e) => {
+                e.stopPropagation(); // Prevent row click event
+                handleDenyToolClick(
+                  singularToolData.Tool_ID,
+                  singularToolData.Tool_Function,
+                );
+              }}
+            >
+              Deny
+            </button>
+            {/* Optionally, add a close button inside ShowToolData or here */}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

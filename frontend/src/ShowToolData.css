@@ -1,0 +1,106 @@
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Ensure it's above other content */
+}
+
+.modal-content {
+  width: 85%;
+  height: 90%;
+  background: white;
+  padding: 20px;
+  border-radius: 5px;
+  z-index: 1001; /* Above the backdrop */
+  max-height: 90vh; /* Example max height */
+  overflow-y: auto; /* Enables vertical scrolling if content overflows */
+}
+
+.tool-data {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; /* Align font with dashboard */
+  color: #333; /* Consistent text color */
+  padding: 20px;
+  background-color: #f5f5f5; /* Lighter background to match dashboard */
+  border-radius: 5px; /* Consistency in border radius */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Updated shadow for depth, matching dashboard widgets */
+  max-width: 1000px;
+  margin: 20px auto; /* Centers the block horizontally if it has a defined width */
+}
+
+.tool-data div {
+  margin-bottom: 10px;
+  text-align: left; /* Ensure content starts from left */
+  display: flex; /* Use Flexbox */
+  justify-content: space-between; /* Align key to left, value to right */
+  align-items: center; /* Center items vertically */
+}
+
+.tool-data strong {
+  display: inline-block;
+  min-width: 140px;
+  color: #4caf50; /* Using primary color for emphasis, similar to dashboard buttons */
+  margin-right: 50px;
+}
+
+.tool-data ul {
+  list-style-type: none;
+  padding: 0;
+  width: 100%; /* Ensure full width for alignment */
+}
+
+.tool-data li {
+  background-color: #f2f2f2; /* Light background for list items for consistency */
+  border: 1px solid #ddd; /* Softer border color */
+  border-radius: 5px; /* Consistent border radius */
+  padding: 5px 10px;
+  margin-top: 5px;
+  display: flex; /* Ensure items are flex containers for alignment */
+  justify-content: space-between; /* Spread items across the container */
+}
+
+.tool-data li:hover {
+  background-color: #ddd; /* Lighter shade for hover effect */
+}
+
+.tool-data button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  margin: 10px 0; /* Adjusted for spacing within tool data context */
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.tool-data button:hover {
+  background-color: #45a049;
+}
+
+.tool-title {
+  font-size: 24px; /* Larger font size for title */
+  color: #333; /* Title color */
+}
+
+.tool-subtitle {
+  font-size: 18px; /* Smaller than title but still prominent */
+  color: #777; /* Subtle color for subtitle */
+  margin-bottom: 20px; /* Space before the list starts */
+}
+
+.tool-title a {
+  color: #4caf50;
+}
+
+.tool-title a:hover {
+  color: #00000fff;
+}
+.tool-description {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; /* Align font with dashboard */
+}
