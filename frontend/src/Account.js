@@ -22,7 +22,7 @@ function Account () {
             const user = await Auth.currentAuthenticatedUser();
             setUsername(user.username);
             console.log(`The username: ${user.username}`);
-            alert(username);
+            
             return(user.username);
         } catch (err) {
             console.log(err);
