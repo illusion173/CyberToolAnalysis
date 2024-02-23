@@ -26,6 +26,7 @@ root.render(
       <Route path="signup" element={<Signup />} />
       <Route path="forgotpassword" element={<ForgotPassword />} />
       <Route path="uploadtool" element={<UploadTool />} />
+      <Route path="uploadtoolform" element={<UploadToolForm />} />
       <Route path="account" element={<Account />}/>
     </Routes>
   </BrowserRouter>,
