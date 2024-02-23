@@ -11,8 +11,8 @@ import Questionnaire from "./Questionnaire";
 import Signup from "./Signup";
 import UploadTool from "./UploadTool";
 import ForgotPassword from "./ForgotPassword";
+import Account from "./Account";
 import UploadToolForm from "./UploadToolForm";
-
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   //<React.StrictMode>
@@ -27,6 +27,7 @@ root.render(
       <Route path="forgotpassword" element={<ForgotPassword />} />
       <Route path="uploadtool" element={<UploadTool />} />
       <Route path="uploadtoolform" element={<UploadToolForm />} />
+      <Route path="account" element={<Account />}/>
     </Routes>
   </BrowserRouter>,
   //</React.StrictMode>
