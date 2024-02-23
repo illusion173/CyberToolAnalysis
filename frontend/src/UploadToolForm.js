@@ -27,12 +27,26 @@ function UploadToolForm() {
     setCustomers(customerArray);
   };
 
+  function abbreviatePrefix(str) {
+    // Split the string by underscore, then map each word to its first character,
+    // join these characters, and finally add an underscore at the end.
+    return (
+      str
+        .split("_")
+        .map((word) => word[0])
+        .join("")
+        .toUpperCase() + "_"
+    );
+  }
   // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    let prefix = abbreviatePrefix(toolFunction);
+
     const formData = {
       Tool_Function: toolFunction,
-      Tool_ID: toolID,
+      Tool_ID: prefix + toolID,
       "AI/ML_Use": aiMlUse,
       Aviation_Specific: aviationSpecific,
       Company: company,
@@ -43,16 +57,13 @@ function UploadToolForm() {
     };
 
     submitPotentialTool(formData);
-
-    console.log(formData); // For demonstration, replace with form submission logic
-    // navigate("/some-path"); // Redirect on form submit, adjust path as needed
-    //navigate("/uploadtool");
   };
 
   // Array of tool functions
   const toolFunctions = [
     { label: "Select Function", value: "" },
     { label: "Log Analysis", value: "Log_Analysis" },
+    { label: "Endpoint Security", value: "Endpoint_Security" },
   ];
   // Function to render the character count indicator
   const renderCharacterCount = () => {

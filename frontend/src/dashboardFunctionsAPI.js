@@ -65,7 +65,7 @@ export async function fetchSingularToolData(tool_id, tool_function) {
     };
 
     let response = await API.post(apiName, path, myInit);
-    console.log(response);
+    return response;
   } catch (error) {
     console.log(error);
     //alert("Unable to retrieve tool data for " + tool_id);

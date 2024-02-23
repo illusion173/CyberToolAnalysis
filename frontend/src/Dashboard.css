@@ -168,3 +168,14 @@ header {
 .search-bar [list]::-webkit-calendar-picker-indicator {
   display: none !important;
 }
+
+.lower-button {
+  margin: 0 10px;
+  padding: 5px 10px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
