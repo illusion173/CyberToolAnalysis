@@ -24,6 +24,7 @@
               # Lambda
               rustup
               rust-analyzer
+              zig
             ];
           };
         }
