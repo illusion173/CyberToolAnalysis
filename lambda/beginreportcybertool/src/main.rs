@@ -1,6 +1,7 @@
 use aws_sdk_sfn as sfn;
 use lambda_http::{run, service_fn, Body, Error, Request, Response};
 use serde::{Deserialize, Serialize};
+
 #[derive(Serialize, Deserialize, Debug)]
 struct FileData {
     file_name: String,
@@ -26,6 +27,7 @@ struct QuestionnaireData {
     question_14: String,
     question_15: String,
 }
+
 async fn function_handler(event: Request) -> Result<Response<Body>, Error> {
     let body_str = match std::str::from_utf8(event.body().as_ref()) {
         Ok(body_str) => body_str,
