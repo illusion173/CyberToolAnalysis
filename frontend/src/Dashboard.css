@@ -39,6 +39,19 @@
   color: #333;
 }
 
+.dashboard-filter {
+  margin: 20px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+}
+
+.dashboard-toolFunction {
+  margin: 20px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
 .dashboard-button-tools {
   background-color: #4caf50;
   color: white;
@@ -119,13 +132,16 @@
 }
 
 .pagination {
+  padding-right: 50px;
+  text-align: right;
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   align-items: center;
   margin-top: 20px;
 }
 
-.pagination button {
+.pagination-button {
+  text-align: right;
   margin: 0 10px;
   padding: 5px 10px;
   background-color: #4caf50;
@@ -168,3 +184,8 @@ header {
 .search-bar [list]::-webkit-calendar-picker-indicator {
   display: none !important;
 }
+
+.container {
+  display:flex;
+}
+

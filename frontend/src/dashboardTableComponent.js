@@ -266,109 +266,123 @@ const adjustMaturityLevelState = (prevState, updatedLevels) => {
 
   return (
     <div>
-      <button
-        onClick={() => handleRefreshClick()}
-        className="dashboard-button-tools"
-      >
+      {/* Move the Refresh button here, outside and above the .container div */}
+      <button onClick={handleRefreshClick} className="dashboard-button-tools">
         Refresh
       </button>
+  
+      {/* Start of .container div */}
+      <div className="container">
+
       <div>
-        <table className="dashboard-table-tools">
-          <thead>
-            <tr>
-              <th>Tool Name</th>
-              <th>Tool Function</th>
-              <th>Company</th>
-              <th>Aviation Specific</th>
-              <th>Maturity Level</th>
-            </tr>
-          </thead>
-          <tbody>
-            {itemsToDisplay.map((tool) => (
-              <tr
-                key={tool.Tool_ID}
-                onClick={() => handleRowClick(tool.Tool_ID)}
-                className="dashboard-table-row-tools"
-              >
-                <td>{tool.Tool_Name}</td>
-                <td>{tool.Tool_Function}</td>
-                <td>{tool.Company}</td>
-                <td>{tool.Aviation_Specific ? "Yes" : "No"}</td>
-                <td>{tool.Maturity_Level}</td>
-              </tr>
+          <div className="filter-section">
+            <p className="dashboard-filter">Filter Options</p>
+            {filterOptions.map((option, index) => {
+              const isMaturityLevel = option.startsWith("Maturity Level");
+              const level = isMaturityLevel ? parseInt(option.split(" ")[2], 10) : 0;
+  
+              return (
+                <div key={index}>
+                  <input
+                    type="checkbox"
+                    id={`checkbox-${index}`}
+                    value={option}
+                    onChange={handleMaturityLevel}
+                    checked={
+                      isMaturityLevel ?
+                      Array.isArray(filterInput["Maturity_Level"]) ?
+                        filterInput["Maturity_Level"].includes(level) :
+                        filterInput["Maturity_Level"] === level
+                      : filterInput[option] || false
+                    }
+                  />
+                  <label htmlFor={`checkbox-${index}`}>{option}</label>
+                </div>
+              );
+            })}
+          </div>
+  
+          <p className="dashboard-toolFunction">Tool Function</p>
+          <div className="filter-selection">
+            {filterOptionsForToolFunction.map((functionOption, index) => (
+              <div key={index}>
+                <input
+                  type="checkbox"
+                  id={`tool-function-${index}`}
+                  value={functionOption.replace(/_/g, ' ')}
+                  onChange={handleToolFunction}
+                  checked={toolFunctionSelections.includes(functionOption.replace(/\s+/g, '_'))}
+                />
+                <label htmlFor={`tool-function-${index}`}>{functionOption.replace(/_/g, ' ')}</label>
+              </div>
             ))}
-          </tbody>
-        </table>
-      </div>
-      <div>
-        <span className="pagination">
-          <button className="pagination" onClick={handlePreviousPageClick}>
-            &lt;
-          </button>
-          <button className="pagination" onClick={handleNextPageClick}>
-            &gt;
-          </button>
-        </span>
-      </div>
-
-      <div className="filter-section">
-                {filterOptions.map((option, index) => {
-                    const isMaturityLevel = option.startsWith("Maturity Level");
-                    const level = isMaturityLevel ? parseInt(option.split(" ")[2], 10) : 0;
-    
-                    return (
-                        <div key={index}>
-                            <input
-                                type="checkbox"
-                                id={`checkbox-${index}`}
-                                value={option}
-                                onChange={handleMaturityLevel}
-                                checked={
-                                    isMaturityLevel ? 
-                                    Array.isArray(filterInput["Maturity_Level"]) ? 
-                                        filterInput["Maturity_Level"].includes(level) : 
-                                        filterInput["Maturity_Level"] === level
-                                    : filterInput[option] || false
-                                }
-                            />
-                            <label htmlFor={`checkbox-${index}`}>{option}</label>
-                        </div>
-                    ); // Removed the erroneous </div> here
-                })}
-            </div>
-    
-            <p className="dashboard-toolFunction">Tool Function</p>
-    
-            <div className="filter-selection">
-                {filterOptionsForToolFunction.map((functionOption, index) => (
-                    <div key={index}>
-                        <input
-                            type="checkbox"
-                            id={`tool-function-${index}`}
-                            value={functionOption.replace(/_/g, ' ')}
-                            onChange={handleToolFunction}
-                            checked={toolFunctionSelections.includes(functionOption.replace(/\s+/g, '_'))}
-                        />
-                        <label htmlFor={`tool-function-${index}`}>{functionOption.replace(/_/g, ' ')}</label>
-                    </div>
-                ))}
-            </div>
-    
-            <p className="dashboard-toolFunction">Company</p>
-            <select value={selectedCompany} onChange={handleCompanyChange} className="dropdown">
-                <option value="">Select a Company</option>
-                {filterOptionsForCompany.map((company, index) => (
-                    <option key={index} value={company}>
-                        {company}
-                    </option>
-                ))}
-            </select>
-
-            <div className ="App">
-              <button onClick ={handleFilterSubmit}>Apply Filters</button>
-            </div>
+          </div>
+  
+          <p className="dashboard-toolFunction">Company</p>
+          <select value={selectedCompany} onChange={handleCompanyChange} className="dropdown">
+            <option value="">Select a Company</option>
+            {filterOptionsForCompany.map((company, index) => (
+              <option key={index} value={company}>
+                {company}
+              </option>
+            ))}
+          </select>
+  
+          <button onClick={handleFilterSubmit} className="dashboard-button-tools">Apply Filters</button>
         </div>
+
+
+        <div>
+          <table className="dashboard-table-tools">
+            <thead>
+              <tr>
+                <th>Tool Name</th>
+                <th>Tool Function</th>
+                <th>Company</th>
+                <th>Aviation Specific</th>
+                <th>Maturity Level</th>
+              </tr>
+            </thead>
+            <tbody>
+              {itemsToDisplay.map((tool) => (
+                <tr
+                  key={tool.Tool_ID}
+                  onClick={() => handleRowClick(tool.Tool_ID)}
+                  className="dashboard-table-row-tools"
+                >
+                  <td>{tool.Tool_Name}</td>
+                  <td>{tool.Tool_Function}</td>
+                  <td>{tool.Company}</td>
+                  <td>{tool.Aviation_Specific ? "Yes" : "No"}</td>
+                  <td>{tool.Maturity_Level}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <div className="pagination">
+            <button className="pagination-button" onClick={handlePreviousPageClick}>
+              &lt;
+            </button>
+            <button className="pagination-button" onClick={handleNextPageClick}>
+              &gt;
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    
+
+  
   );
-}
+              }
+          
+
+ 
+
+
+
+
+
 
 export default ToolTable;
