@@ -57,6 +57,10 @@ pub enum Industry {
     AviationFocusedTools,
     #[serde(rename = "General_Tools")]
     GeneralTools,
+    #[serde(rename = "Virtual_Private_Network")]
+    VirtualPrivateNetwork,
+    #[serde(rename = "Cybersecurity_Service_Provider")]
+    CybersecurityServiceProvider,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
