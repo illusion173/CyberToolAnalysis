@@ -1,4 +1,19 @@
 use serde::{Deserialize, Serialize};
+use std::time::Duration;
+
+fn display_seconds<S>(t: &Duration, s: S) -> Result<S::Ok, S::Error>
+where
+    S: serde::Serializer,
+{
+    s.serialize_str(&format!("{t:?}"))
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct RecommendToolsResponse {
+    pub status: Result<String, String>,
+    #[serde(serialize_with = "display_seconds")]
+    pub time_taken: Duration,
+}
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct RecommendationRequest {
@@ -29,6 +44,38 @@ pub struct QuestionnaireData {
     pub threat_intelligence_services: ThreatIntelligenceServices,
     pub securing_emerging_tech: SecuringEmergingTech,
     pub budget_constraints: BudgetConstraints,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct ToolRow {
+    #[serde(rename = "Tool_Function")]
+    tool_function: String,
+    #[serde(rename = "Tool_ID")]
+    id: String,
+    #[serde(rename = "AI/ML_Use")]
+    ai_ml_use: bool,
+    #[serde(rename = "Approved")]
+    pub approved: bool,
+    #[serde(rename = "Aviation_Specific")]
+    aviation_apecific: bool,
+    #[serde(rename = "Cloud_Capable")]
+    cloud_capable: Option<bool>,
+    #[serde(rename = "Company")]
+    company: String,
+    #[serde(rename = "Customers")]
+    customers: Vec<String>,
+    #[serde(rename = "Description")]
+    description: Option<String>,
+    #[serde(rename = "Keywords")]
+    keywords: Option<Vec<String>>,
+    #[serde(rename = "Maturity_Level")]
+    maturity_level: u32,
+    #[serde(rename = "Tool_Name")]
+    name: String,
+    #[serde(rename = "Tool_URL")]
+    url: Option<String>,
+    #[serde(rename = "ToolBox")]
+    tool_box: bool,
 }
 
 #[derive(Serialize, Deserialize, Debug)]

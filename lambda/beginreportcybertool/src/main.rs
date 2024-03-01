@@ -2,11 +2,13 @@ mod types;
 use types::*;
 
 use anyhow::{anyhow, Error};
-use aws_sdk_dynamodb::types::{AttributeValue, Condition};
+use aws_sdk_dynamodb::types::{AttributeValue, ComparisonOperator, Condition};
 use aws_sdk_dynamodb::Client as DynamoClient;
 use futures_util::FutureExt;
 use lambda_http::{run, service_fn, Body, Request, Response};
+use std::collections::HashMap;
 use std::panic::AssertUnwindSafe;
+use std::time::Instant;
 use tracing::info;
 
 macro_rules! dump {
@@ -36,16 +38,35 @@ async fn function_handler(event: Request) -> Result<String, Error> {
     let config = aws_config::load_from_env().await;
     let dynamo_client = DynamoClient::new(&config);
 
+    let mut conditions = HashMap::new();
+    conditions.insert(
+        "Tool_Function".to_owned(),
+        Condition::builder()
+            .attribute_value_list(AttributeValue::S("Log_Analysis".to_owned()))
+            .comparison_operator(ComparisonOperator::Eq)
+            .build()
+            .map_err(|e| anyhow!("Failed to build condition: {e:?}"))?,
+    );
+
     let results = dynamo_client
         .query()
         .table_name("Cyber_Tools")
-        //.get_key_condition_expression("Tool_Function", Condition::)
-        .key_condition_expression(" = :Log_Analysis")
+        .set_key_conditions(Some(conditions))
         .send()
         .await
         .map_err(|e| anyhow!("Failed to query database: {e:?}"))?;
+    let items = results
+        .items
+        .ok_or_else(|| anyhow!("No items found in database query"))?;
 
-    dump!(results);
+    let mut tool_rows: Vec<ToolRow> = serde_dynamo::from_items(items)?;
+
+    // Only show approved tools
+    tool_rows.retain(|i| i.approved);
+
+    // filter on cloud, aviation specific
+
+    dump!(tool_rows);
 }
 
 // Steps:
@@ -55,33 +76,25 @@ async fn function_handler(event: Request) -> Result<String, Error> {
 // 5. Store generated pdf into s3
 // 6. Return s3 pdf path in body of responce so frontend can download
 async fn raw_function_handler(event: Request) -> Result<Response<Body>, lambda_http::Error> {
-    let result = async {
-        Ok(match function_handler(event).await {
-            Ok(body) => Response::builder()
-                .status(200)
-                .header("content-type", "text/html")
-                .header("Access-Control-Allow-Origin", "*")
-                .body(body.into())
-                .expect("failed to build body"),
-            Err(e) => Response::builder()
-                .status(400)
-                .body(e.to_string().into())
-                .expect("failed to build body"),
-        })
-    }
-    .await;
+    let start = Instant::now();
+    let r = function_handler(event).await;
+    let time_taken = start.elapsed();
+    let (code, status) = match r {
+        Ok(msg) => (200, Ok(msg)),
+        Err(e) => (200, Err(e.to_string())),
+    };
+    let body = RecommendToolsResponse { status, time_taken };
 
-    result
-
-    /*
-    match result {
-        Ok(r) => r,
-        Err(e) => Ok(Response::builder()
-            .status(400)
-            .body(format!("Lambda panicked: {e:?}").into())
-            .expect("failed to build body")),
-    }
-    */
+    Ok(Response::builder()
+        .status(code)
+        .header("content-type", "text/html")
+        .header("Access-Control-Allow-Origin", "*")
+        .body(
+            serde_json::to_string(&body)
+                .expect("Failed to serailize json response")
+                .into(),
+        )
+        .expect("failed to build body"))
 }
 
 #[tokio::main]
