@@ -10,7 +10,7 @@ function ToolTable() {
   const [lastEvaluatedKey, setLastEvaluatedKey] = useState({});
   const [filterInput, setFilterInput] = useState({});
   const [itemsToDisplay, setItemstoDisplay] = useState([]);
-  const [toolFunctionSelections, setToolFunctionSelections] = useState([]);
+  const [selectedToolFunction, setSelectedToolFunction] = useState("");
   const [selectedCompany, setSelectedCompany] = useState("");
   const itemsPerPage = 10;
 
@@ -19,11 +19,18 @@ function ToolTable() {
   }, [filterInput]);
 
   useEffect(() => {
-    setFilterInput((prev) => ({
-      ...prev,
-      Tool_Functions: toolFunctionSelections,
-    })); //updates every time the toolFunctionSelections state changes
-  }, [toolFunctionSelections]);
+    if (selectedToolFunction) {
+      const toolFunctionForJson = selectedToolFunction.replace(/\s+/g, "_");
+      setFilterInput((prev) => ({
+        ...prev,
+        Tool_Function: toolFunctionForJson,
+      }));
+    } else {
+      // If no tool function is selected, remove the key from filterInput
+      const { Tool_Function, ...rest } = filterInput;
+      setFilterInput(rest);
+    }
+  }, [selectedToolFunction]);
 
   // updates process for the tool_functions key based on what the user chose
   useEffect(() => {
@@ -49,22 +56,7 @@ function ToolTable() {
       "General Tools": "General_Tools",
       "Endpoint Security": "Endpoint_Security",
     };
-
-    if (toolFunctionSelections.length > 0) {
-      // If there are selected tool functions, add/replace the tool_functions key in filterInput
-      const updatedToolFunctions = toolFunctionSelections.map((tf) =>
-        tf.replace(/\s+/g, "_"),
-      ); // Use underscore for JSON
-      setFilterInput((prevFilterInput) => ({
-        ...prevFilterInput,
-        Tool_Functions: updatedToolFunctions,
-      }));
-    } else {
-      // If there are no selections, take off the tool_functions key from filterInput
-      const { Tool_Functions, ...restFilterInput } = filterInput;
-      setFilterInput(restFilterInput);
-    }
-  }, [toolFunctionSelections]);
+  }, [selectedToolFunction]);
 
   useEffect(() => {
     // Define the function within the useEffect to ensure it captures the current state
@@ -113,20 +105,7 @@ function ToolTable() {
     setSelectedCompany(companyName);
   };
 
-  const handleToolFunction = (e) => {
-    const { value, checked } = e.target; //Value is the tool, checked is the boolean
-    const adjustedValue = value.replace(/\s+/g, "_");
 
-    setToolFunctionSelections((prevSelections) => {
-      const newSelections = new Set(prevSelections); // Set is for no duplicates
-      if (checked) {
-        newSelections.add(adjustedValue); //Underscored tool function is added to set
-      } else {
-        newSelections.delete(adjustedValue); //Underscored tool is removed for deselecting tool
-      }
-      return [...newSelections]; // Converted back to array
-    });
-  };
 
   // All the options
   const filterOptions = [
@@ -152,6 +131,7 @@ function ToolTable() {
     "Aviation Focused Tools",
     "General Tools",
     "Industrial Control Systems Cyber Tools",
+    "Log Analysis"
   ];
   const filterOptionsForCompany = [
     "Airbus",
@@ -399,24 +379,20 @@ function ToolTable() {
           </div>
 
           <p className="dashboard-toolFunction">Tool Function</p>
-          <div className="filter-selection">
+          <select
+            value={selectedToolFunction}
+            onChange={(e) => setSelectedToolFunction(e.target.value)}
+            className="dropdown"
+          >
+            <option value="">Select a Tool Function</option>
             {filterOptionsForToolFunction.map((functionOption, index) => (
-              <div key={index}>
-                <input
-                  type="checkbox"
-                  id={`tool-function-${index}`}
-                  value={functionOption.replace(/_/g, " ")}
-                  onChange={handleToolFunction}
-                  checked={toolFunctionSelections.includes(
-                    functionOption.replace(/\s+/g, "_"),
-                  )}
-                />
-                <label htmlFor={`tool-function-${index}`}>
-                  {functionOption.replace(/_/g, " ")}
-                </label>
-              </div>
+              <option key={index} value={functionOption}>
+                {functionOption}
+              </option>
             ))}
-          </div>
+          </select>
+
+
 
           <p className="dashboard-toolFunction">Company</p>
           <select
