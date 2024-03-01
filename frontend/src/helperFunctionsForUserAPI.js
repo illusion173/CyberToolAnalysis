@@ -15,7 +15,6 @@ export async function getUserId() {
   try {
     const User = await Auth.currentAuthenticatedUser();
     let username = User.getUsername();
-    console.log(username);
     return username;
   } catch (error) {
     console.error("Error getting a cognito ID for user.");
