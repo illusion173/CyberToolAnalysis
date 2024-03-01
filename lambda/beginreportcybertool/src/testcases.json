@@ -1,8 +1,0 @@
-Header: {
-  content-type:application/json
-}
-
-Body: {
-  "file_name": "IAMANOTHERTEST",
-  "user_identifier": "IAMATEST"
-}
