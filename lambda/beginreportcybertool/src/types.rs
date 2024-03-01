@@ -123,7 +123,7 @@ pub enum RegulatoryAgencies {
 #[derive(Serialize, Deserialize, Debug)]
 pub enum Threats {
     #[serde(rename = "Insider threats")]
-    InsiderThreats,
+    Insider,
     #[serde(rename = "Cyber espionage")]
     CyberEspionage,
     #[serde(rename = "Malware attacks")]
@@ -279,7 +279,7 @@ impl Default for RecommendationRequest {
                 free_response: "I run a satellite company, and want a tool to verify my communication solutions are secure".into(),
                 industry: Industry::AviationFocusedTools,
                 regulatory_needs: vec![RegulatoryAgencies::Faa, RegulatoryAgencies::Nist],
-                threats: Threats::InsiderThreats,
+                threats: Threats::Insider,
                 aware_of_cyber_incidents: BasicYesno::NotSure,
                 legacy_systems: LegacySystems::Upgrading,
                 communications: Comms::Satellite,

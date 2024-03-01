@@ -4,11 +4,9 @@ use types::*;
 use anyhow::{anyhow, Error};
 use aws_sdk_dynamodb::types::{AttributeValue, ComparisonOperator, Condition};
 use aws_sdk_dynamodb::Client as DynamoClient;
-use futures_util::FutureExt;
 use lambda_http::{run, service_fn, Body, Request, Response};
 use std::cmp::Ordering;
 use std::collections::HashMap;
-use std::panic::AssertUnwindSafe;
 use std::time::Instant;
 use tracing::info;
 
@@ -67,7 +65,7 @@ async fn function_handler(event: Request) -> Result<String, Error> {
     // scores start at 0 by default
     let mut scores: Vec<_> = tool_rows.into_iter().map(|t| (t, 0.0)).collect();
 
-    // perform cloud hueristic
+    // perform cloud heuristic
     for (t, score) in &mut scores {
         if let Some(true) = t.cloud_capable {
             match request.responses.cloud_reliance {
@@ -79,6 +77,7 @@ async fn function_handler(event: Request) -> Result<String, Error> {
         }
     }
 
+    // perform aviation specific heuristic
     for (t, score) in &mut scores {
         if let Some(true) = t.aviation_apecific {
             if let Industry::AviationFocusedTools = request.responses.industry {
