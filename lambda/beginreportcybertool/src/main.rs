@@ -1,5 +1,7 @@
 mod types;
 use types::*;
+mod embedding;
+use embedding::*;
 
 use anyhow::{anyhow, Error};
 use aws_sdk_dynamodb::types::{AttributeValue, ComparisonOperator, Condition};
@@ -10,6 +12,7 @@ use std::collections::HashMap;
 use std::time::Instant;
 use tracing::info;
 
+#[allow(unused_macros)]
 macro_rules! dump {
     ($a:ident) => {
         return Ok(format!("{:?}", $a));
@@ -53,6 +56,7 @@ async fn function_handler(event: Request) -> Result<String, Error> {
         .send()
         .await
         .map_err(|e| anyhow!("Failed to query database: {e:?}"))?;
+
     let items = results
         .items
         .ok_or_else(|| anyhow!("No items found in database query"))?;
@@ -86,6 +90,16 @@ async fn function_handler(event: Request) -> Result<String, Error> {
         }
     }
 
+    // perform embedding vector space heuristic on natural language input
+    if !request.responses.free_response.is_empty() {
+        let request_embedding = &get_embeddings(vec![&request.responses.free_response])?[0];
+        for (t, score) in &mut scores {
+            if let Some(description) = &t.description {
+                let tool_embedding = &get_embeddings(vec![description])?[0];
+            }
+        }
+    }
+
     // Rank by score
     scores.sort_unstable_by(|(_, score1), (_, score2)| {
         (*score1).partial_cmp(score2).unwrap_or(Ordering::Equal)
@@ -98,6 +112,7 @@ async fn function_handler(event: Request) -> Result<String, Error> {
 // 1. Parse http request body into `FileData` containing result of form
 // 2. Get all tools from database
 // 3. Compare each tool with input form using heuristic to find best matching tools
+//    Get embeddings for input `free_response` and do vector comparison to find closest match
 // 5. Store generated pdf into s3
 // 6. Return s3 pdf path in body of responce so frontend can download
 async fn raw_function_handler(event: Request) -> Result<Response<Body>, lambda_http::Error> {
