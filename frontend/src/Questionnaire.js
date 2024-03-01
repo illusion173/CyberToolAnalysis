@@ -117,7 +117,7 @@ const Questionnaire = () => {
     console.log(corrected_user_responses);
     let corrected_keys = convertQuestionKeys(corrected_user_responses);
     corrected_keys["free_response"] = description;
-    corrected_keys["budget_constraints"] = budget;
+    corrected_keys["budget_constraints"] = parseFloat(budget);
     let report_status = await createReportForUser(corrected_keys, file_name);
 
     if (report_status["header"]["statuscode"] === 200) {
