@@ -6,7 +6,6 @@ function ReportTable() {
   const [reportListArray, setReportListArray] = useState([]);
 
   useEffect(() => {
-    console.log("HELLLLPPPP");
     refreshClick();
   }, []);
 
