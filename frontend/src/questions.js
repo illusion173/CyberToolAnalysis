@@ -317,24 +317,4 @@ export const question_list = [
       ],
     },
   },
-  {
-    question_15: {
-      Question:
-        "What budget constraints or limitations do you have when it comes to investing in cybersecurity technologies for the aerospace industry?",
-      "Answer choices": [
-        {
-          A: "Limited budget for cybersecurity",
-        },
-        {
-          B: "Moderate budget for cybersecurity",
-        },
-        {
-          C: "Sufficient budget for cybersecurity",
-        },
-        {
-          D: "No budget",
-        },
-      ],
-    },
-  },
 ];
