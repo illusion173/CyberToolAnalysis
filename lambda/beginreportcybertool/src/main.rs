@@ -6,6 +6,7 @@ use aws_sdk_dynamodb::types::{AttributeValue, ComparisonOperator, Condition};
 use aws_sdk_dynamodb::Client as DynamoClient;
 use futures_util::FutureExt;
 use lambda_http::{run, service_fn, Body, Request, Response};
+use std::cmp::Ordering;
 use std::collections::HashMap;
 use std::panic::AssertUnwindSafe;
 use std::time::Instant;
@@ -13,8 +14,7 @@ use tracing::info;
 
 macro_rules! dump {
     ($a:ident) => {
-        let s = $a;
-        return Ok(format!("Lambda returned: {s:?}"));
+        return Ok(format!("{:?}", $a));
     };
     () => {};
 }
@@ -61,12 +61,38 @@ async fn function_handler(event: Request) -> Result<String, Error> {
 
     let mut tool_rows: Vec<ToolRow> = serde_dynamo::from_items(items)?;
 
-    // Only show approved tools
-    tool_rows.retain(|i| i.approved);
+    // Hide non-approved tools
+    tool_rows.retain(|i| i.approved.unwrap_or(true));
 
-    // filter on cloud, aviation specific
+    // scores start at 0 by default
+    let mut scores: Vec<_> = tool_rows.into_iter().map(|t| (t, 0.0)).collect();
 
-    dump!(tool_rows);
+    // perform cloud hueristic
+    for (t, score) in &mut scores {
+        if let Some(true) = t.cloud_capable {
+            match request.responses.cloud_reliance {
+                CloudReliance::Heavily => *score += 1.0,
+                CloudReliance::Partially => *score += 0.5,
+                CloudReliance::Minimal => *score += 0.25,
+                CloudReliance::None => {}
+            }
+        }
+    }
+
+    for (t, score) in &mut scores {
+        if let Some(true) = t.aviation_apecific {
+            if let Industry::AviationFocusedTools = request.responses.industry {
+                *score += 1.0;
+            }
+        }
+    }
+
+    // Rank by score
+    scores.sort_unstable_by(|(_, score1), (_, score2)| {
+        (*score1).partial_cmp(score2).unwrap_or(Ordering::Equal)
+    });
+
+    dump!(scores);
 }
 
 // Steps:

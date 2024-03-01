@@ -49,33 +49,35 @@ pub struct QuestionnaireData {
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ToolRow {
     #[serde(rename = "Tool_Function")]
-    tool_function: String,
-    #[serde(rename = "Tool_ID")]
-    id: String,
-    #[serde(rename = "AI/ML_Use")]
-    ai_ml_use: bool,
-    #[serde(rename = "Approved")]
-    pub approved: bool,
-    #[serde(rename = "Aviation_Specific")]
-    aviation_apecific: bool,
-    #[serde(rename = "Cloud_Capable")]
-    cloud_capable: Option<bool>,
-    #[serde(rename = "Company")]
-    company: String,
-    #[serde(rename = "Customers")]
-    customers: Vec<String>,
-    #[serde(rename = "Description")]
-    description: Option<String>,
-    #[serde(rename = "Keywords")]
-    keywords: Option<Vec<String>>,
-    #[serde(rename = "Maturity_Level")]
-    maturity_level: u32,
+    pub tool_function: String,
     #[serde(rename = "Tool_Name")]
-    name: String,
+    pub name: String,
+    #[serde(rename = "Tool_ID")]
+    pub id: String,
+
+    // Optional fields:
+    #[serde(rename = "AI/ML_Use")]
+    pub ai_ml_use: Option<bool>,
+    #[serde(rename = "Approved")]
+    pub approved: Option<bool>,
+    #[serde(rename = "Aviation_Specific")]
+    pub aviation_apecific: Option<bool>,
+    #[serde(rename = "Cloud_Capable")]
+    pub cloud_capable: Option<bool>,
+    #[serde(rename = "Company")]
+    pub company: Option<String>,
+    #[serde(rename = "Customers")]
+    pub customers: Option<Vec<String>>,
+    #[serde(rename = "Description")]
+    pub description: Option<String>,
+    #[serde(rename = "Keywords")]
+    pub keywords: Option<Vec<String>>,
+    #[serde(rename = "Maturity_Level")]
+    pub maturity_level: Option<u32>,
     #[serde(rename = "Tool_URL")]
-    url: Option<String>,
+    pub url: Option<String>,
     #[serde(rename = "ToolBox")]
-    tool_box: bool,
+    pub tool_box: Option<bool>,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -275,7 +277,7 @@ impl Default for RecommendationRequest {
             user_identifier: "illusion173@hotmail.com".into(),
             responses: QuestionnaireData {
                 free_response: "I run a satellite company, and want a tool to verify my communication solutions are secure".into(),
-                industry: Industry::LogAnalysis,
+                industry: Industry::AviationFocusedTools,
                 regulatory_needs: vec![RegulatoryAgencies::Faa, RegulatoryAgencies::Nist],
                 threats: Threats::InsiderThreats,
                 aware_of_cyber_incidents: BasicYesno::NotSure,
