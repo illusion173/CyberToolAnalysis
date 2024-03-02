@@ -1033,6 +1033,7 @@ dependencies = [
  "candle-core 0.4.1",
  "candle-nn 0.4.1",
  "candle-transformers 0.4.1",
+ "debug-ignore",
  "futures-util",
  "hf-hub",
  "lambda_http 0.10.0",
@@ -1494,6 +1495,15 @@ dependencies = [
  "darling_core",
  "quote",
  "syn 1.0.109",
+]
+
+[[package]]
+name = "debug-ignore"
+version = "1.0.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ffe7ed1d93f4553003e20b629abe9085e1e81b1429520f897f8f8860bc6dfc21"
+dependencies = [
+ "serde",
 ]
 
 [[package]]

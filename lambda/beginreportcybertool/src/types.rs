@@ -1,3 +1,6 @@
+//! Rust types related to the tools database and requests for this endpoint.
+
+use debug_ignore::DebugIgnore;
 use serde::{Deserialize, Serialize};
 use std::time::Duration;
 
@@ -49,7 +52,7 @@ pub struct QuestionnaireData {
 #[derive(Clone, Deserialize, Debug, Serialize)]
 pub struct ToolRow {
     #[serde(rename = "Tool_Function")]
-    pub tool_function: String,
+    pub industry: Industry,
     #[serde(rename = "Tool_Name")]
     pub name: String,
     #[serde(rename = "Tool_ID")]
@@ -81,10 +84,10 @@ pub struct ToolRow {
 
     // Modified automatically by this function
     #[serde(rename = "Cached_Sentence_Embedding")]
-    pub cached_sentence_embedding: Option<Vec<f32>>,
+    pub cached_sentence_embedding: DebugIgnore<Option<Vec<f32>>>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Copy, Clone, Deserialize, Debug, Serialize)]
 pub enum Industry {
     #[serde(rename = "Log_Analysis")]
     LogAnalysis,
@@ -116,7 +119,7 @@ pub enum Industry {
     CybersecurityServiceProvider,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Copy, Clone, Deserialize, Debug, Serialize)]
 pub enum RegulatoryAgencies {
     #[serde(rename = "FAA")]
     Faa,
@@ -124,7 +127,7 @@ pub enum RegulatoryAgencies {
     Nist,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Copy, Clone, Deserialize, Debug, Serialize)]
 pub enum Threats {
     #[serde(rename = "Insider threats")]
     Insider,
@@ -136,7 +139,7 @@ pub enum Threats {
     SupplyChainVulnerabilities,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Copy, Clone, Deserialize, Debug, Serialize)]
 pub enum BasicYesno {
     Yes,
     No,
@@ -146,7 +149,7 @@ pub enum BasicYesno {
     PreferNotToAnswer,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Copy, Clone, Deserialize, Debug, Serialize)]
 pub enum LegacySystems {
     Yes,
     No,
@@ -156,7 +159,7 @@ pub enum LegacySystems {
     NotApplicable,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Copy, Clone, Deserialize, Debug, Serialize)]
 pub enum Comms {
     #[serde(rename = "Wired networks (e.g., Ethernet)")]
     Wired,
@@ -168,7 +171,7 @@ pub enum Comms {
     Satellite,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Copy, Clone, Deserialize, Debug, Serialize)]
 pub enum RemoteSystemsNeedingSecurity {
     #[serde(rename = "Yes, drones")]
     Drones,
@@ -180,7 +183,7 @@ pub enum RemoteSystemsNeedingSecurity {
     NotApplicable,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Copy, Clone, Deserialize, Debug, Serialize)]
 pub enum CloudReliance {
     #[serde(rename = "Heavily reliant on cloud services")]
     Heavily,
@@ -192,7 +195,7 @@ pub enum CloudReliance {
     None,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Copy, Clone, Deserialize, Debug, Serialize)]
 pub enum DedicatedItStatus {
     #[serde(rename = "Yes, dedicated cybersecurity team")]
     DedicatedCyberSecurityTeam,
@@ -204,7 +207,7 @@ pub enum DedicatedItStatus {
     NotApplicable,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Copy, Clone, Deserialize, Debug, Serialize)]
 pub enum SpecificCyberSecurityMeasures {
     #[serde(rename = "Encryption")]
     Encryption,
@@ -216,7 +219,7 @@ pub enum SpecificCyberSecurityMeasures {
     None,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Copy, Clone, Deserialize, Debug, Serialize)]
 pub enum CybersecurityTrainingInterval {
     Annually,
     #[serde(rename = "Semi-annually")]
@@ -226,7 +229,7 @@ pub enum CybersecurityTrainingInterval {
     Rarely,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Copy, Clone, Deserialize, Debug, Serialize)]
 pub enum FormalIncidentPlan {
     #[serde(rename = "Yes, a well-defined plan")]
     WellDefined,
@@ -238,7 +241,7 @@ pub enum FormalIncidentPlan {
     NotSure,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Copy, Clone, Deserialize, Debug, Serialize)]
 pub enum ThreatIntelligenceServices {
     #[serde(rename = "Yes, currently using threat intelligence")]
     Using,
@@ -250,7 +253,7 @@ pub enum ThreatIntelligenceServices {
     NotSure,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Copy, Clone, Deserialize, Debug, Serialize)]
 pub enum SecuringEmergingTech {
     #[serde(rename = "IoT devices with security measures")]
     Iot,
@@ -262,7 +265,7 @@ pub enum SecuringEmergingTech {
     None,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Copy, Clone, Deserialize, Debug, Serialize)]
 pub enum BudgetConstraints {
     #[serde(rename = "Limited budget for cybersecurity")]
     Sufficent,
@@ -299,4 +302,12 @@ impl Default for RecommendationRequest {
             },
         }
     }
+}
+
+// Used to generate mock json request for testing with aws Api Gateway
+#[test]
+fn print_rec_request() {
+    let a = RecommendationRequest::default();
+    println!("{}", serde_json::to_string_pretty(&a).unwrap());
+    panic!("Json printed above");
 }
