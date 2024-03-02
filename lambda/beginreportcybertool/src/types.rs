@@ -26,7 +26,7 @@ pub struct RecommendationRequest {
 }
 
 /// Parsed form from the user concerning their needs
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Deserialize, Debug, Serialize)]
 pub struct QuestionnaireData {
     pub free_response: String,
     pub industry: Industry,
@@ -46,7 +46,7 @@ pub struct QuestionnaireData {
     pub budget_constraints: BudgetConstraints,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Clone, Deserialize, Debug, Serialize)]
 pub struct ToolRow {
     #[serde(rename = "Tool_Function")]
     pub tool_function: String,
@@ -78,6 +78,10 @@ pub struct ToolRow {
     pub url: Option<String>,
     #[serde(rename = "ToolBox")]
     pub tool_box: Option<bool>,
+
+    // Modified automatically by this function
+    #[serde(rename = "Cached_Sentence_Embedding")]
+    pub cached_sentence_embedding: Option<Vec<f32>>,
 }
 
 #[derive(Serialize, Deserialize, Debug)]

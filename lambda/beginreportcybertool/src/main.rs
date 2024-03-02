@@ -47,10 +47,11 @@ async fn function_handler(event: Request) -> Result<String, Error> {
             .build()
             .map_err(|e| anyhow!("Failed to build condition: {e:?}"))?,
     );
+    let tools_table_name = "Cyber_Tools";
 
     let results = dynamo_client
         .query()
-        .table_name("Cyber_Tools")
+        .table_name(tools_table_name)
         .set_key_conditions(Some(conditions))
         .send()
         .await
@@ -100,43 +101,55 @@ async fn function_handler(event: Request) -> Result<String, Error> {
 
     // perform llm embedding similarity heuristic based on free response from user and tool descriptions
     if !request.responses.free_response.is_empty() {
-        let mut text_inputs: Vec<&str> = vec![];
-        // Map tools with descriptions back to their indices for adding to scores
-        let mut tool_indices = vec![];
-        text_inputs.push(&request.responses.free_response);
-        tool_indices.push(None);
-        for (i, (t, _score)) in scores.iter().enumerate() {
-            if let Some(desc) = &t.description {
-                text_inputs.push(&desc);
-                tool_indices.push(Some(i));
+        let frq_embedding = &get_embeddings(vec![&request.responses.free_response])?[0];
+
+        for (t, score) in &mut scores {
+            if let Some(tool_desc) = &t.description {
+                let (needs_update, tool_desc_embedding) = match &t.cached_sentence_embedding {
+                    Some(e) => {
+                        s.push_str(&format!("Using cached embedding for tool {}", t.name));
+                        (false, e.clone())
+                    }
+                    None => {
+                        s.push_str(&format!("Generating embedding for {}", t.name));
+                        (true, get_embeddings(vec![&tool_desc])?.remove(0))
+                    }
+                };
+
+                let vector_similarity =
+                    acap::cos::cosine_distance(frq_embedding.clone(), tool_desc_embedding.clone());
+
+                *score += 10.0 * vector_similarity;
+                s.push_str(&format!(
+                    "Got similarity for tool {}: {vector_similarity}\n",
+                    t.name
+                ));
+
+                // update cached vector embedding if it needs an update from what was in the table before
+                if needs_update {
+                    let mut tool = t.clone();
+                    tool.cached_sentence_embedding = Some(tool_desc_embedding);
+
+                    let item = serde_dynamo::to_item(&tool)
+                        .map_err(|e| anyhow!("Failed to serialize tool {tool:?}: {e:?}"))?;
+
+                    s.push_str(&format!("Inserting item {item:?}\n",));
+
+                    let out = dynamo_client
+                        .put_item()
+                        .table_name(tools_table_name)
+                        .set_item(Some(item))
+                        .send()
+                        .await
+                        .map_err(|e| {
+                            anyhow!(
+                                "Failed to cache embedding for tool {}: {e:?}\n info: {s}",
+                                t.name
+                            )
+                        })?;
+                    s.push_str(&format!("Added to table! {out:?}\n",));
+                }
             }
-        }
-
-        s.push_str(&format!(
-            "Generating embeddings for: {} strings, on tools: {:?}\n",
-            text_inputs.len(),
-            tool_indices
-                .iter()
-                .flatten()
-                .map(|i| &scores[*i].0)
-                .collect::<Vec<_>>()
-        ));
-
-        let embeddings = get_embeddings(text_inputs)?;
-        let query_embedding = &embeddings[0];
-
-        s.push_str(&format!("Got embeddings: {embeddings:?}\n"));
-
-        for (embedding_idx, tool_idx) in tool_indices.iter().copied().enumerate().skip(1) {
-            let tool_idx = tool_idx.unwrap();
-            let vector_similarity =
-                acap::cos::cosine_distance(query_embedding, embeddings[embedding_idx].clone());
-
-            let (_t, score) = &mut scores[tool_idx];
-            *score += 10.0 * vector_similarity;
-            s.push_str(&format!(
-                "Got similarity for tool #{tool_idx}: {vector_similarity}\n"
-            ));
         }
         dump!(s);
     }
