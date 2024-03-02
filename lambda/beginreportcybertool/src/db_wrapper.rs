@@ -15,7 +15,7 @@ pub async fn get_tools_in_industry(
 ) -> Result<Vec<ToolRow>> {
     let mut conditions = HashMap::new();
 
-    let tool_function = serde_dynamo::to_attribute_value(&industry)
+    let tool_function = serde_dynamo::to_attribute_value(industry)
         .map_err(|e| anyhow!("Failed to serialize industry: {e:?}"))?;
 
     conditions.insert(

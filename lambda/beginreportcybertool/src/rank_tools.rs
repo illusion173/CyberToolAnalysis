@@ -87,5 +87,5 @@ pub async fn get_tool_rankings(
         (*score2).partial_cmp(score1).unwrap_or(Ordering::Equal)
     });
 
-    return Ok(scores);
+    Ok(scores)
 }
