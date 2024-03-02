@@ -3,6 +3,15 @@
 version = 3
 
 [[package]]
+name = "acap"
+version = "0.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6851a0b3b2d5729a0b7e61e3c36923ed9d72240146b0efda61121b0b84ad595d"
+dependencies = [
+ "num-traits",
+]
+
+[[package]]
 name = "addr2line"
 version = "0.21.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1016,6 +1025,7 @@ checksum = "8c3c1a368f70d6cf7302d78f8f7093da241fb8e8807c05cc9e51a125895a6d5b"
 name = "beginreportcybertool"
 version = "0.1.0"
 dependencies = [
+ "acap",
  "anyhow",
  "aws-config 1.1.7",
  "aws-sdk-dynamodb",

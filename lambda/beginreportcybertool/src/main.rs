@@ -12,7 +12,6 @@ use std::collections::HashMap;
 use std::time::Instant;
 use tracing::info;
 
-#[allow(unused_macros)]
 macro_rules! dump {
     ($a:ident) => {
         return Ok(format!("{:?}", $a));
@@ -61,23 +60,30 @@ async fn function_handler(event: Request) -> Result<String, Error> {
         .items
         .ok_or_else(|| anyhow!("No items found in database query"))?;
 
-    let mut tool_rows: Vec<ToolRow> = serde_dynamo::from_items(items)?;
+    let mut tools: Vec<ToolRow> = serde_dynamo::from_items(items)?;
 
     // Hide non-approved tools
-    tool_rows.retain(|i| i.approved.unwrap_or(true));
+    tools.retain(|i| i.approved.unwrap_or(true));
 
     // scores start at 0 by default
-    let mut scores: Vec<_> = tool_rows.into_iter().map(|t| (t, 0.0)).collect();
+    let mut scores: Vec<_> = tools.into_iter().map(|t| (t, 0.0)).collect();
 
     // perform cloud heuristic
     for (t, score) in &mut scores {
-        if let Some(true) = t.cloud_capable {
-            match request.responses.cloud_reliance {
+        match t.cloud_capable {
+            Some(true) => match request.responses.cloud_reliance {
+                // if the tool is cloud capable, then the more cloud reliance you have, the better
                 CloudReliance::Heavily => *score += 1.0,
                 CloudReliance::Partially => *score += 0.5,
                 CloudReliance::Minimal => *score += 0.25,
                 CloudReliance::None => {}
-            }
+            },
+            Some(false) => match request.responses.cloud_reliance {
+                // if you are not cloud capable, only increase score if the tool doesn't require cloud
+                CloudReliance::None => *score += 0.5,
+                _ => {}
+            },
+            None => {}
         }
     }
 
@@ -90,14 +96,49 @@ async fn function_handler(event: Request) -> Result<String, Error> {
         }
     }
 
-    // perform embedding vector space heuristic on natural language input
+    let mut s = String::new();
+
+    // perform llm embedding similarity heuristic based on free response from user and tool descriptions
     if !request.responses.free_response.is_empty() {
-        let request_embedding = &get_embeddings(vec![&request.responses.free_response])?[0];
-        for (t, score) in &mut scores {
-            if let Some(description) = &t.description {
-                let tool_embedding = &get_embeddings(vec![description])?[0];
+        let mut text_inputs: Vec<&str> = vec![];
+        // Map tools with descriptions back to their indices for adding to scores
+        let mut tool_indices = vec![];
+        text_inputs.push(&request.responses.free_response);
+        tool_indices.push(None);
+        for (i, (t, _score)) in scores.iter().enumerate() {
+            if let Some(desc) = &t.description {
+                text_inputs.push(&desc);
+                tool_indices.push(Some(i));
             }
         }
+
+        s.push_str(&format!(
+            "Generating embeddings for: {} strings, on tools: {:?}\n",
+            text_inputs.len(),
+            tool_indices
+                .iter()
+                .flatten()
+                .map(|i| &scores[*i].0)
+                .collect::<Vec<_>>()
+        ));
+
+        let embeddings = get_embeddings(text_inputs)?;
+        let query_embedding = &embeddings[0];
+
+        s.push_str(&format!("Got embeddings: {embeddings:?}\n"));
+
+        for (embedding_idx, tool_idx) in tool_indices.iter().copied().enumerate().skip(1) {
+            let tool_idx = tool_idx.unwrap();
+            let vector_similarity =
+                acap::cos::cosine_distance(query_embedding, embeddings[embedding_idx].clone());
+
+            let (_t, score) = &mut scores[tool_idx];
+            *score += 10.0 * vector_similarity;
+            s.push_str(&format!(
+                "Got similarity for tool #{tool_idx}: {vector_similarity}\n"
+            ));
+        }
+        dump!(s);
     }
 
     // Rank by score
@@ -105,14 +146,13 @@ async fn function_handler(event: Request) -> Result<String, Error> {
         (*score1).partial_cmp(score2).unwrap_or(Ordering::Equal)
     });
 
-    dump!(scores);
+    Ok("".into())
 }
 
 // Steps:
 // 1. Parse http request body into `FileData` containing result of form
 // 2. Get all tools from database
 // 3. Compare each tool with input form using heuristic to find best matching tools
-//    Get embeddings for input `free_response` and do vector comparison to find closest match
 // 5. Store generated pdf into s3
 // 6. Return s3 pdf path in body of responce so frontend can download
 async fn raw_function_handler(event: Request) -> Result<Response<Body>, lambda_http::Error> {

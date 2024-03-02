@@ -28,7 +28,15 @@
             # Lambda
             rust
             zig
+            pkg-config
+            openssl
+            stdenv.cc.cc
           ];
+
+          shellHook = ''
+            LD_LIBRARY_PATH=${pkgs.stdenv.cc.cc.lib}/lib/:$LD_LIBRARY_PATH
+            LD_LIBRARY_PATH=/nix/store/l0rxwrg41k3lsdiybf8q0rf3nk430zr8-openssl-3.0.12/lib:$LD_LIBRARY_PATH
+          '';
         };
       }
     );
