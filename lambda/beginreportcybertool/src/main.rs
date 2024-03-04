@@ -1,88 +1,92 @@
-use aws_sdk_sfn as sfn;
-use lambda_http::{run, service_fn, Body, Error, Request, Response};
-use serde::{Deserialize, Serialize};
-#[derive(Serialize, Deserialize, Debug)]
-struct FileData {
-    file_name: String,
-    user_identifier: String,
-    responses: QuestionnaireData,
+mod types;
+use types::*;
+mod embedding;
+mod rank_tools;
+pub use rank_tools::*;
+mod db_wrapper;
+pub use db_wrapper::*;
+
+use anyhow::{anyhow, Error};
+use aws_sdk_dynamodb::Client as DynamoClient;
+use lambda_http::{run, service_fn, Body, Request, Response};
+use std::time::Instant;
+use tracing::info;
+
+#[allow(unused_macros)]
+macro_rules! dump {
+    ($a:ident) => {
+        return Ok(format!("{:?}", $a));
+    };
+    () => {};
 }
 
-#[derive(Serialize, Deserialize, Debug)]
-struct QuestionnaireData {
-    question_1: String,
-    question_2: String,
-    question_3: String,
-    question_4: String,
-    question_5: String,
-    question_6: String,
-    question_7: String,
-    question_8: String,
-    question_9: String,
-    question_10: String,
-    question_11: String,
-    question_12: String,
-    question_13: String,
-    question_14: String,
-    question_15: String,
+#[test]
+fn print_rec_request() {
+    let a = RecommendationRequest::default();
+    println!("{}", serde_json::to_string_pretty(&a).unwrap());
+    panic!();
 }
-async fn function_handler(event: Request) -> Result<Response<Body>, Error> {
-    let body_str = match std::str::from_utf8(event.body().as_ref()) {
-        Ok(body_str) => body_str,
-        Err(_error) => {
-            return Ok(Response::builder()
-                .status(400)
-                .body(Body::from("Unable to derive request body, utf-8 error?"))
-                .expect("Failed to build a response"))
-        }
-    };
 
-    let file_data_struct: FileData = match serde_json::from_str(body_str) {
-        Ok(file_data_struct) => file_data_struct,
-        Err(_error) => {
-            return Ok(Response::builder()
-                .status(400)
-                .body(Body::from(
-                    "Invalid Request Body, missing file_name or user data.",
-                ))
-                .expect("Failed to build a response, file_data_structure."))
-        }
-    };
+async fn function_handler(event: Request) -> Result<String, Error> {
+    let body_str = std::str::from_utf8(event.body().as_ref())
+        .map_err(|e| anyhow!("Request is not valid utf8: {e:?}"))?;
 
-    let serialized_file_data_struct = serde_json::to_string(&file_data_struct).unwrap();
+    let request: RecommendationRequest =
+        serde_json::from_str(body_str).map_err(|e| anyhow!("Failed to parse json body: {e:?}"))?;
 
-    // Begin Report Step Function
+    info!("Parsed request: {:?}", request);
+
     let config = aws_config::load_from_env().await;
-    let sfn_client = sfn::Client::new(&config);
-    sfn_client
-        .start_execution()
-        .state_machine_arn(
-            "arn:aws:states:us-east-1:417838760454:stateMachine:StateMachineReportCyberTool",
-        )
-        .input(serialized_file_data_struct)
-        .send()
-        .await?;
+    let db_client = DynamoClient::new(&config);
 
-    let message = "Success, report being created.".to_string();
-    // Return something that implements IntoResponse.
-    // It will be serialized to the right response event automatically by the runtime
-    let resp = Response::builder()
-        .status(200)
+    let tools = get_tools_in_industry(&db_client, request.responses.industry).await?;
+
+    let ranked_tools = get_tool_rankings(&db_client, &request, tools).await?;
+
+    // TODO: generate pdf from tools
+    // TODO: upload pdf to s3
+
+    // Return tools and their score for now
+    let s = format!(
+        "{:?}",
+        ranked_tools
+            .iter()
+            .map(|(t, score)| format!("{}: {score}", t.name))
+            .collect::<Vec<_>>()
+    );
+
+    Ok(s)
+}
+
+async fn raw_function_handler(event: Request) -> Result<Response<Body>, lambda_http::Error> {
+    let start = Instant::now();
+    let r = function_handler(event).await;
+    let time_taken = start.elapsed();
+    let (code, status) = match r {
+        Ok(msg) => (200, Ok(msg)),
+        Err(e) => (200, Err(e.to_string())),
+    };
+    let body = RecommendToolsResponse { status, time_taken };
+
+    Ok(Response::builder()
+        .status(code)
         .header("content-type", "text/html")
-        .body(message.into())
-        .map_err(Box::new)?;
-    Ok(resp)
+        .header("Access-Control-Allow-Origin", "*")
+        .body(
+            serde_json::to_string(&body)
+                .expect("Failed to serailize json response")
+                .into(),
+        )
+        .expect("failed to build body"))
 }
 
 #[tokio::main]
-async fn main() -> Result<(), Error> {
+async fn main() -> Result<(), lambda_http::Error> {
     tracing_subscriber::fmt()
         .with_max_level(tracing::Level::INFO)
-        // disable printing the name of the module in every log line.
         .with_target(false)
-        // disabling time is handy because CloudWatch will add the ingestion time.
         .without_time()
         .init();
 
-    run(service_fn(function_handler)).await
+    run(service_fn(raw_function_handler)).await
 }

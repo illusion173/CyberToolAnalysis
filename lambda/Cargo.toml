@@ -2,7 +2,6 @@
 
 members = [
     "beginreportcybertool",
-
     #"getAllTools",
     #"getreportlist",
     "getsingulartooldata",
