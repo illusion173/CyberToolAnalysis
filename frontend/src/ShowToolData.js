@@ -59,7 +59,7 @@ function ShowToolData({ tool_data }) {
           ),
         )}
         <div>
-          <strong>Tool Description</strong>
+          <strong>Tool Description:</strong>
         </div>
         <div className="tool-description">{Description}</div>
       </div>

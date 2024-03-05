@@ -133,6 +133,7 @@ export async function sendDenial(tool_id, tool_function) {
 }
 
 export async function submitPotentialTool(ToolData) {
+  console.log(ToolData);
   const jwt = await fetchJwt();
   try {
     const apiName = "apic25cd3ea";
