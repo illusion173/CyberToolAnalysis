@@ -54,6 +54,7 @@ function UploadToolForm() {
       Maturity_Level: parseInt(maturityLevel, 10),
       ToolBox: toolBox,
       Tool_Name: toolName,
+      Description: description,
     };
 
     submitPotentialTool(formData);
