@@ -1,6 +1,5 @@
 import React from "react";
 import "./ShowToolData.css";
-import { sendApproval, sendDenial } from "./UploadToolAPI.js";
 function ShowToolData({ tool_data }) {
   function formatString(value) {
     return typeof value === "string" ? value.replace(/_/g, " ") : value;
@@ -18,15 +17,6 @@ function ShowToolData({ tool_data }) {
     return array.map((item) => formatString(formatBoolean(item))).join(", ");
   }
 
-  const handleApproveToolClick = (tool_id, tool_function) => {
-    let response = sendApproval(tool_id, tool_function);
-    //window.location.reload();
-  };
-
-  const handleDenyToolClick = (tool_id, tool_function) => {
-    let response = sendDenial(tool_id, tool_function);
-    //window.location.reload();
-  };
   // Extract Tool Name and Company, Description for specific styling
   const {
     Description,

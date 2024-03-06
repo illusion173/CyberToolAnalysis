@@ -65,6 +65,7 @@ export async function fetchSingularToolData(tool_id, tool_function) {
     };
 
     let response = await API.post(apiName, path, myInit);
+    delete response.Cached_Sentence_Embedding;
     return response;
   } catch (error) {
     console.log(error);
