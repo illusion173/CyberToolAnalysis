@@ -12,11 +12,10 @@ function Dashboard() {
         navigate("/Account");
     };
 
- 
     return (
         <div className="App">
             <p className="dashboard-welcome">Welcome to your Dashboard!</p>
-    
+
             <header>
                 <input
                     id="search"
@@ -32,12 +31,8 @@ function Dashboard() {
                     Account Information
                 </button>
             </div>
-            <ToolTable></ToolTable>
-    
         </div>
     );
-    
-                }
-
+}
 
 export default Dashboard;
