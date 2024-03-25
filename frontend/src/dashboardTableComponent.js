@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 import "./Dashboard.css";
-import { fetchToolDashboardList } from "./dashboardFunctionsAPI.js";
+import {
+  fetchToolDashboardList,
+  fetchSingularToolData,
+} from "./dashboardFunctionsAPI.js";
+import ShowToolData from "./ShowToolData.js";
 
 function ToolTable() {
   // Pagination state and handlers
@@ -10,8 +14,12 @@ function ToolTable() {
   const [lastEvaluatedKey, setLastEvaluatedKey] = useState({});
   const [filterInput, setFilterInput] = useState({});
   const [itemsToDisplay, setItemstoDisplay] = useState([]);
+
   const [selectedToolFunction, setSelectedToolFunction] = useState("");
   const [selectedCompany, setSelectedCompany] = useState("");
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [singularToolData, setSingularToolData] = useState({});
   const itemsPerPage = 10;
 
   useEffect(() => {
@@ -321,9 +329,18 @@ function ToolTable() {
     }
   };
 
-  const handleRowClick = (tool_id) => {
+  const handleRowClick = async (tool_id, tool_function) => {
     //NAVIGATE TO SINGULAR TOOL PAGE HERE!
-    //fetchSingularToolData(tool_id);
+    let singular_tool_data = await fetchSingularToolData(
+      tool_id,
+      tool_function,
+    );
+    setIsModalVisible(true); // Show the modal
+    setSingularToolData(singular_tool_data);
+  };
+
+  const hideModal = () => {
+    setIsModalVisible(false);
   };
 
   const handlePreviousPageClick = (e) => {
@@ -345,6 +362,7 @@ function ToolTable() {
       <button onClick={handleRefreshClick} className="dashboard-button-tools">
         Refresh
       </button>
+
 
       {/* Start of .container div */}
       <div className="container">
@@ -389,6 +407,30 @@ function ToolTable() {
               <option key={index} value={functionOption}>
                 {functionOption}
               </option>
+      <div>
+        <table className="dashboard-table-tools">
+          <thead>
+            <tr>
+              <th>Tool Name</th>
+              <th>Tool Function</th>
+              <th>Company</th>
+              <th>Aviation Specific</th>
+              <th>Maturity Level</th>
+            </tr>
+          </thead>
+          <tbody>
+            {itemsToDisplay.map((tool) => (
+              <tr
+                key={tool.Tool_ID}
+                onClick={() => handleRowClick(tool.Tool_ID, tool.Tool_Function)}
+                className="dashboard-table-row-tools"
+              >
+                <td>{tool.Tool_Name}</td>
+                <td>{tool.Tool_Function}</td>
+                <td>{tool.Company}</td>
+                <td>{tool.Aviation_Specific ? "Yes" : "No"}</td>
+                <td>{tool.Maturity_Level}</td>
+              </tr>
             ))}
           </select>
 
@@ -456,6 +498,15 @@ function ToolTable() {
           </div>
         </div>
       </div>
+      {isModalVisible && (
+        <div className="modal-backdrop" onClick={hideModal}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <ShowToolData tool_data={singularToolData} />
+            {/* Optionally, add a close button inside ShowToolData or here */}
+            <button onClick={() => setIsModalVisible(false)}>Close</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

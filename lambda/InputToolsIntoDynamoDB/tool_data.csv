@@ -1,0 +1,130 @@
+String,String,String,String,String,String,String,String,String,String,String,String,JSON,String,String,String Set,String,Bool,Bool,String Set,String Set,Bool,Bool,Bool
+Tool_Function,Tool_ID,Tool_Name,Company,Tool_URL,Phone,Device,Launched,Requirements,Features,Drawbacks,Pricing,Compliance,Accuracy,Documentation_Link,Keywords,Description,AI/ML_Use,Cloud_Capable,Customers,Maturity Level,ToolBox,Approved,Aviation_Specific
+Industrial_Control_Systems,ICS_01,FortiGate,Fortinet,https://www.fortinet.com/support/support-services/fortiguard-security-subscriptions/industrial-security,1-408-235-7700,"Linux, SD-WAN",1/5/2002,"VM, WAN","Hybrid Cloud Capable, application control, advanced persistent threat (APT) protection, web and content filtering, IP reputation, integrated WLAN controller, intrusion prevention system (IPS), data loss prevention (DLP), and anti-malware (antivirus and antispam).","Forti DNS server occasional unavailability, log service requires enhancement for detailed reporting, firewall upgrades necessitate downtime, initial configuration complexity, and higher cost for advanced features.",Dependent on Deployment,"FIPS 140-2/140-3, NIST, Common Criteria (ISO/IEC 15408).","FortiGate's accuracy in threat detection and mitigation is enhanced by FortiGuard Labs' AI and machine learning technologies, along with regular validations by independent testing organizations like NSS Labs.",https://docs.fortinet.com/,Unified Threat Management,"FortiGate provides flawless convergence that can scale to any location: remote office, branch, campus, data center, and cloud. We’ve always delivered on the concept of hybrid mesh firewalls with FortiManager for unified management and consistent security across complex hybrid environments. The Fortinet FortiOS operating system provides deep visibility and security across a variety of form factors, FortiGate NGFWs provide industry-leading threat protection and decryption at scale with a custom ASIC architecture. They also deliver Secure Networking with integrated features like SD-WAN, switching and wireless, and 5G. Converge your security and networking point solutions into a simple-to-use, centralized management console powered by a single operating system, FortiOS, and make IT management easy.",TRUE,TRUE,“”,3,TRUE,TRUE,FALSE
+Industrial_Control_Systems,ICS_02,Trend Vision One,Trend Micro,https://www.trendmicro.com/en_us/business/solutions/iot/ics-ot.html,+1 (817) 569-8900,"MacOS, Linux, Windows, POS, ATM, VMs",6/15/2024,"Device, AIX, HP-UX","Advanced threat protection, EDR/XDR, and threat intelligenceStreamlined IT/security operationsIntegrated EDR with prioritized alerts and incident viewsThreat hunting and automated intelligence sweepingCentralized management and automated protectionProtection against a wide range of threats including malware, ransomware, fileless malware, and exploitsCompliance aids for GDPR, HIPAA, NIST, etc.Intrusion prevention, integrity monitoring, and log inspection for servers and cloud workloads",,Dependent on Deployment,"GDPR, HIPAA, NIST","Mitre
+
+Achieved 100% protection rate
+Forrrestor
+
+Trend Micro is Named a Leader in The Forrester New Wave™: Extended Detection and Response (XDR), Q4 2021
+Gartner
+
+Leader in Gartner Magic Quadrant™ for Endpoint Protection Platforms (EPP) since 2002
+IDC
+
+#1 hybrid cloud workload security market share, IDC Worldwide Cloud Workload Security",https://cloudone.trendmicro.com/docs/,"Threat detection capabilities
+High-fidelity machine learning
+(pre-execution and runtime)
+Behavioral analysis (against scripts,
+injection, ransomware, memory, and
+browser attacks)
+In-memory analysis for identification
+of fileless malware
+Variant protection
+Census check
+Web reputation
+Exploit prevention (host firewall,
+exploit protection)
+Command and control (C&C) blocking
+Data loss prevention (DLP)
+Device and application control
+Ransomware rollback
+Sandbox and breach detection
+integration
+Extended detection and
+response (XDR)","Solution BriefOptimized prevention, detection, and response for endpoints, servers,and cloud workloadsTrend Vision One™ – Endpoint Security is the leading endpoint security solution that ispurpose-built for endpoints, servers, and cloud workloads, integrating advanced threatprotection, EDR/XDR, and threat intelligence. With this platform, you can streamline IT/security operations, reduce complexity, and achieve optimal security outcomes acrossyour on-premises, cloud, multi-cloud, and hybrid environments.As part of Trend Vision One™—a modern, cloud-native cybersecurity platform with thebroadest set of native solutions complimented with third-party integration—connectendpoint and workload security with other protection products, threat intel, SIEM,orchestration, build pipeline, attack surface management, and more. Endpoint Securitysupports your diverse hybrid IT environments, helps in automating and orchestratingworkflows, and delivers expert cybersecurity services, so you can stop adversariesfaster and take control of your cyber risks.Integrated EDRWith Trend Vision One, you get the XDR advantage with integrated EDR capabilities.• Receive prioritized, actionable alerts, and comprehensive incident views• Investigate root cause and execution profile across Linux and Windows systemattacks to uncover their scope and initiate direct response• Hunt for threats via multiple methods—from powerful queries to simple textsearch—to proactively pinpoint tactics or techniques and validate suspiciousactivity in your environment• Continuously search for newly discovered IoCs via Trend Micro automatedintelligence or custom intelligence sweepingStreamlined workflow for IT and security operationsProtect user endpoints, servers, and cloud workloads using a single solution withcentralized visibility, management, licensing, and role-based access control. Automatedprotection from a single pane of glass allows you to manage endpoint inventory,detections, mitigation actions, and policies.Protection Points• Physical endpoints• Microsoft Windows PCs and servers• Mac computers• Point-of-sale (POS) and ATMendpoints• Server• Cloud workload• Virtual machinesThreat detection capabilities• High-fidelity machine learning(pre-execution and runtime)• Behavioral analysis (against scripts,injection, ransomware, memory, andbrowser attacks)• In-memory analysis for identificationof fileless malware• Variant protection• Census check• Web reputation• Exploit prevention (host firewall,exploit protection)• Command and control (C&C) blocking• Data loss prevention (DLP)• Device and application control• Ransomware rollback• Sandbox and breach detectionintegration• Extended detection andresponse (XDR)",TRUE,TRUE,“”,3,TRUE,TRUE,FALSE
+Industrial_Control_Systems,ICS_03,Tipping Point,Trend Micro,https://www.trendmicro.com/en_us/business/solutions/iot/ics-ot.html,+1 (817) 569-8900,"Intrusion Prevention System, IPS",11/21/2015,"For physical appliances: Various form factors (1RU, 2RU), power, and environmental specs are listed.
+Cloud Network IPS: AWS instance types like C5.2XLARGE and C5.9XLARGE.
+vTPS: Requires VMware ESXi or KVM with specific memory, disk space, and logical cores.","Real-time machine learning for evolving threat detection.
+Enterprise Vulnerability Remediation (eVR).
+Advanced Threat Analysis with sandbox integration.
+High Availability and fault tolerance.
+Integrated Advanced Threat Prevention.Asymmetric Traffic Inspection.
+Best-in-Class Threat Intelligence from Trend Micro™ Zero Day Initiative™ (ZDI).
+Virtual Patching for network-level protection.
+Support for a broad set of traffic types and protocols.
+Centralized Management via the TippingPoint Security Management System (SMS).",,Dependent on Deployment,NetSecOpen,"Verified 100% block rate against public and private CVE lists, indicating high accuracy in threat detection and prevention.",https://success.trendmicro.com/dcx/s/solution/TP000118725-TippingPoint-Support-Documentation?language=en_US,"Network security, threat protection, machine learning","Trend Micro™ TippingPoint™ Threat Protection System (TPS) is a powerful network security
+platform that delivers comprehensive threat protection against known and undisclosed
+vulnerabilities with high accuracy. TippingPoint TPS provides your organization with
+industry-leading coverage across different threat vectors with extreme flexibility and high
+performance, keeping you resilient against advanced threats like malware and phishing. The
+TippingPoint TPS uses a combination of technologies--including deep packet inspection,
+threat reputation, URL reputation, and advanced malware analysis on a flow-by-flow basis—
+to detect and prevent attacks on your network. The TippingPoint TPS enables your teams
+to take a proactive approach to security, providing you with comprehensive contextual
+awareness and deeper analysis of network traffic. ",TRUE,TRUE,“”,3,TRUE,TRUE,FALSE
+Industrial_Control_Systems,ICS_04,TXOne StellarProtect,Trend Micro,https://www.trendmicro.com/en_us/business/solutions/iot/ics-ot.html,+1 (817) 569-8900,Windows,10/1/2023,"Needs Physical Appliances, machines, sensors.","OT-NATIVE COMPLETE PROTECTION 
+l Industrial-Grade Next-Generation Antivirus
+OT/ICS root of trust and advanced threat scan secure the OT/ICS assets
+with no interruption to operations
+l Operations Behavior Anomaly Detection
+Auto-learn the runtime behavior for being adaptive to dynamic and
+autonomous operations, and efficiently detect abnormal operations
+with least privilege control to prevent malware-free attacks
+l Operation Lockdown
+Lock down the operational integrity, reducing the chance of downtime
+and cost of resilience especially for the unpatchable systems
+l Trusted USB Device Control
+Provide protection against unauthorized access of USB devices
+l A single lightweight agent specifically optimizes for the OT/ICS
+environment to ensure high performance and minimal impact to the
+operations INDUSTRIAL APPLICATION AND CERTIFICATE REPOSITORY
+l Industry’s only database with OT context focus that can identify
+thousands of applications adopted in various OT environments to
+ensure undisturbed operations
+l OT Application Safeguard
+Intelligently locate and secure the operational integrity of the critical
+OT applications by preventing the un-authorized changesASSET LIFETIME SECURITY","Telemetry, need physical sensors on machine","Dependent on Deployment, Lite, Complete versions available","NERC CIP, ISA/IEC 62443, OT/ICS","Verified 100% block rate against public and private CVE lists, MITRE ATT&CK ICS Framework",https://docs.trendmicro.com/en-us/documentation/txone-stellarprotect/,"Zero-Trust Operations, ICS, ","TXOne Stellar Series offers a comprehensive OT solution for persistent security coverage, aiming to fulfill different industry
+requirements varying from electric power, oil and gas, manufacturing, pharmaceutical, semiconductor and retail cybersecurity.
+Throughout the asset life cycle, Stellar Series is dedicated to boosting the reliability and efficiency in the OT environment for great
+operational stability.
+Stellar Series consists of StellarProtect the unified agent and StellarOne the centralized management console. StellarProtect secures
+modernized assets by consolidating process monitoring and behavioral anomaly detection with a library of ICS application and
+certificate inventory. For fixed-use and legacy systems, StellarProtect locks them down so they can only perform tasks related to
+their specific roles. Moreover, StellarOne empowers security administrators smooth management and instant response from a single
+pane of glass. OT-NATIVE COMPLETE PROTECTION
+l Industrial-Grade Next-Generation Antivirus
+OT/ICS root of trust and advanced threat scan secure the OT/ICS assets
+with no interruption to operations
+l Operations Behavior Anomaly Detection
+Auto-learn the runtime behavior for being adaptive to dynamic and
+autonomous operations, and efficiently detect abnormal operations
+with least privilege control to prevent malware-free attacks
+l Operation Lockdown
+Lock down the operational integrity, reducing the chance of downtime
+and cost of resilience especially for the unpatchable systems
+l Trusted USB Device Control
+Provide protection against unauthorized access of USB devices
+l A single lightweight agent specifically optimizes for the OT/ICS
+environment to ensure high performance and minimal impact to the
+operations
+INDUSTRIAL APPLICATION AND CERTIFICATE REPOSITORY
+l Industry’s only database with OT context focus that can identify
+thousands of applications adopted in various OT environments to
+ensure undisturbed operations
+l OT Application Safeguard
+Intelligently locate and secure the operational integrity of the critical
+OT applications by preventing the un-authorized changes
+KEY BENEFITS
+ALL-IN-1 SINGLE AGENT
+One unified lightweight agent
+simplifies security by combining
+industrial-grade next-generation
+antivirus, operation lockdown, and
+OT anomaly detection
+OT CONTEXT FOCUS
+Industrial application repository
+builds the operational baseline,
+detects operational anomalies,
+and enforces operational integrity
+LONG-TERM PROTECTION ON
+LEGACY SYSTEMS
+All-terrain OT endpoint security
+ensures lifetime protection along
+the entire life cycle of asset
+systems
+ASSET LIFETIME SECURITY
+l Offer the long-term support while the modern
+assets become legacy
+l Compatible with legacy platforms and preserves
+critical systems with OT Zero Trust technology",TRUE,TRUE,“”,3,TRUE,TRUE,FALSE

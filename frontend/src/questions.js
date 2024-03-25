@@ -1,22 +1,66 @@
+export const tool_function_categories = [
+  "",
+  "Aircraft Log & Anomaly Detection Tools",
+  "Firewall and Network Security",
+  "Endpoint Security",
+  "Secure Communication and Data Encryption",
+  "Access Control and Identity Management",
+  "Security Information and Event Management (SIEM) Systems",
+  "Vulnerability Management",
+  "Threat Intelligence Platforms",
+  "Supply Chain Risk Management Solution",
+  "Regulatory Compliance Tools",
+  "Aviation Focused Tools",
+  "General Tools",
+  "Industrial Control Systems Cyber Tools",
+];
+
+export const tool_function_categories_cleaner_dict = {
+  "Industrial Control Systems": "Industrial_Control_Systems",
+  "Cybersecurity Service Provider": "Cybersecurity_Service_Provider",
+  "Virtual Private Network": "Virtual_Private_Network",
+  "Aircraft Log & Anomaly Detection Tools": "Log_Analysis",
+  "Firewall and Network Security": "Firewall_Network_Security",
+  "Secure Communication and Data Encryption":
+    "Secure_Communication_Data_Encryption",
+  "Access Control and Identity Management":
+    "Access_Control_Identity_Management",
+  "Security Information and Event Management (SIEM) Systems":
+    "Security_Information_Event_Management_Systems",
+  "Vulnerability Management": "Vulnerability_Management",
+  "Threat Intelligence Platforms": "Threat_Intelligence_Platforms",
+  "Supply Chain Risk Management Solution":
+    "Supply_Chain_Risk_Management_Solution",
+  "Regulatory Compliance Tools": "Regulatory_Compliance_Tools",
+  "Aviation Focused Tools": "Aviation_Focused_Tools",
+  "General Tools": "General_Tools",
+  "Endpoint Security": "Endpoint_Security",
+};
+
+export const question_list_converter_dict = {
+  question_1: "industry",
+  question_2: "regulatory_needs",
+  question_3: "threats",
+  question_4: "aware_of_cyber_incidents",
+  question_5: "legacy_systems",
+  question_6: "communications",
+  question_7: "remote_systems_needing_security",
+  question_8: "cloud_reliance",
+  question_9: "dedicated_it_status",
+  question_10: "specific_cyber_security_measures",
+  question_11: "cybersecurity_training_interval",
+  question_12: "formal_incident_plan",
+  question_13: "threat_intelligence_services",
+  question_14: "securing_emerging_tech",
+  question_15: "budget_constraints",
+};
+
 export const question_list = [
   {
     question_1: {
       Question:
         "What specific aerospace-related projects or systems are you involved in, and what kind of data or assets do they handle?",
-      "Answer choices": [
-        {
-          A: "Aircraft design and manufacturing",
-        },
-        {
-          B: "Satellite communication systems",
-        },
-        {
-          C: "Air traffic control systems",
-        },
-        {
-          D: "Drone operations",
-        },
-      ],
+      "Answer choices": tool_function_categories,
     },
   },
   {
@@ -25,16 +69,10 @@ export const question_list = [
         "Are there any regulatory compliance requirements (e.g., FAA, NIST, or other standards) that your organization must adhere to regarding cybersecurity?",
       "Answer choices": [
         {
-          A: "Yes, FAA regulations",
+          A: "FAA",
         },
         {
-          B: "Yes, NIST standards",
-        },
-        {
-          C: "No specific regulations",
-        },
-        {
-          D: "Other (please specify)",
+          B: "NIST",
         },
       ],
     },
@@ -275,26 +313,6 @@ export const question_list = [
         },
         {
           D: "Not planning to integrate emerging technologies",
-        },
-      ],
-    },
-  },
-  {
-    question_15: {
-      Question:
-        "What budget constraints or limitations do you have when it comes to investing in cybersecurity technologies for the aerospace industry?",
-      "Answer choices": [
-        {
-          A: "Limited budget for cybersecurity",
-        },
-        {
-          B: "Moderate budget for cybersecurity",
-        },
-        {
-          C: "Sufficient budget for cybersecurity",
-        },
-        {
-          D: "No budget",
         },
       ],
     },

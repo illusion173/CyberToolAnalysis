@@ -114,5 +114,25 @@
 .login-message { /* If you have any messages to display, style them here */
   margin-top: 10px;
 }
+/* Add this to your App.css or a separate CSS file */
+.green-button {
+  background-color: #4CAF50; /* Green background */
+  color: white; /* White text */
+  padding: 10px 24px; /* Padding for size */
+  border: none; /* No border */
+  border-radius: 5px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor on hover */
+  font-size: 16px; /* Button text size */
+}
+
+.green-button:hover {
+  background-color: #45a049; /* Darker shade of green on hover */
+}
+
+.bold-text {
+  font-weight: bold; /* Make text bold */
+}
+
+
 
 /* You can add success and error classes if you have messages that use them */
