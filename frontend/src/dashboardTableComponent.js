@@ -14,9 +14,57 @@ function ToolTable() {
   const [lastEvaluatedKey, setLastEvaluatedKey] = useState({});
   const [filterInput, setFilterInput] = useState({});
   const [itemsToDisplay, setItemstoDisplay] = useState([]);
+
+  const [selectedToolFunction, setSelectedToolFunction] = useState("");
+  const [selectedCompany, setSelectedCompany] = useState("");
+
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [singularToolData, setSingularToolData] = useState({});
   const itemsPerPage = 10;
+
+  useEffect(() => {
+    alert(JSON.stringify(filterInput));
+  }, [filterInput]);
+
+  useEffect(() => {
+    if (selectedToolFunction) {
+      const toolFunctionForJson = selectedToolFunction.replace(/\s+/g, "_");
+      setFilterInput((prev) => ({
+        ...prev,
+        Tool_Function: toolFunctionForJson,
+      }));
+    } else {
+      // If no tool function is selected, remove the key from filterInput
+      const { Tool_Function, ...rest } = filterInput;
+      setFilterInput(rest);
+    }
+  }, [selectedToolFunction]);
+
+  // updates process for the tool_functions key based on what the user chose
+  useEffect(() => {
+    // THe appropriate dictionary for Tool Function dropdown
+    const tool_function_categories_cleaner_dict = {
+      "Industrial Control Systems": "Industrial_Control_Systems",
+      "Cybersecurity Service Provider": "Cybersecurity_Service_Provider",
+      "Virtual Private Network": "Virtual_Private_Network",
+      "Aircraft Log & Anomaly Detection Tools": "Log_Analysis",
+      "Firewall and Network Security": "Firewall_Network_Security",
+      "Secure Communication and Data Encryption":
+        "Secure_Communication_Data_Encryption",
+      "Access Control and Identity Management":
+        "Access_Control_Identity_Management",
+      "Security Information and Event Management (SIEM) Systems":
+        "Security_Information_Event_Management_Systems",
+      "Vulnerability Management": "Vulnerability_Management",
+      "Threat Intelligence Platforms": "Threat_Intelligence_Platforms",
+      "Supply Chain Risk Management Solution":
+        "Supply_Chain_Risk_Management_Solution",
+      "Regulatory Compliance Tools": "Regulatory_Compliance_Tools",
+      "Aviation Focused Tools": "Aviation_Focused_Tools",
+      "General Tools": "General_Tools",
+      "Endpoint Security": "Endpoint_Security",
+    };
+  }, [selectedToolFunction]);
 
   useEffect(() => {
     // Define the function within the useEffect to ensure it captures the current state
@@ -43,6 +91,163 @@ function ToolTable() {
     setToolData([]);
     setCurrentPage(1);
     setItemstoDisplay([]);
+  };
+
+  const handleCompanyChange = (event) => {
+    const companyName = event.target.value; //Gets user's company choice
+
+    //Checks if a company name was selected
+    setFilterInput((prev) => {
+      // If the compant name is not an empty string, it replaces spaces with underscores for JSON
+      if (companyName.trim() !== "") {
+        const companyNameForJson = companyName.replace(/\s+/g, "_");
+        return { ...prev, Company: companyNameForJson };
+      } else {
+        // If the company name is empty, remove the company key from the filterInput state
+        const { Company, ...rest } = prev; //Destructures filterInput state to exlude the company key and keeps the rest so no keys are in JSON
+        return rest;
+      }
+    });
+
+    // Update the selected company state
+    setSelectedCompany(companyName);
+  };
+
+
+
+  // All the options
+  const filterOptions = [
+    "Aviation Specific",
+    "ToolBox",
+    "Maturity Level 1",
+    "Maturity Level 2",
+    "Maturity Level 3",
+    "Maturity Level 4",
+    "AI/ML Use",
+  ];
+  const filterOptionsForToolFunction = [
+    "Aircraft Log & Anamaly Detection Tools",
+    "Firewall and Network Security",
+    "Endpoint Security",
+    "Secure Communication and Data Encryption",
+    "Access Control and Identity Management",
+    "Security Information and Event Management (SIEM) Systems",
+    "Vulnerability Management",
+    "Threat Intelligence Platforms",
+    "Supply Chain Risk Management Solution",
+    "Regulatory Compliance Tools",
+    "Aviation Focused Tools",
+    "General Tools",
+    "Industrial Control Systems Cyber Tools",
+    "Log Analysis"
+  ];
+  const filterOptionsForCompany = [
+    "Airbus",
+    "Jepperson",
+    "Cisco",
+    "Fortinet",
+    "Check Point",
+    "SonicWall",
+    "Sophos",
+    "WatchGuard",
+    "Palo Alto",
+    "McAfee",
+    "Darktrace",
+    "Vectra",
+    "VMWare",
+    "Cylance",
+    "Sophos",
+    "Bitdefender",
+    "Fidelis",
+    "SentinelOne",
+    "Tanium",
+    "CrowdStrike",
+    "Cisco",
+    "Okta",
+    "Microsoft",
+    "Ping",
+    "Splunk",
+    "IBM",
+    "Tenable",
+    "Rapid7",
+    "ThreatConnect",
+    "Mandiant",
+    "Anomali",
+    "Recorded Future",
+    "MasterCard",
+    "Tripwire",
+    "SolarWinds",
+    "CyberArk",
+    "Fireye",
+    "Palo Alto Networks",
+    "WithSecure",
+    "Trendo Micro",
+    "Claroty",
+    "Nozomi Networks",
+    "Dragos",
+    "ForeScout Technologies",
+    "Boeing",
+    "AT&T",
+    "CISCO",
+    "Vectra",
+    "United Technologies",
+  ];
+
+  // Handles changes to maturity level checkboxes and updates the filter state.
+  const handleMaturityLevel = (e) => {
+    const { value, checked } = e.target;
+
+    // Skip processing for inputs not related to maturity levels.
+    if (!value.startsWith("Maturity Level")) {
+      setFilterInput((prev) => ({ ...prev, [value]: checked }));
+      return;
+    }
+
+    // Extract the numerical maturity level from the checkbox value.
+    const level = parseInt(value.split(" ")[2], 10);
+
+    // Update the filter input state with the new set of maturity levels.
+    setFilterInput((prev) => {
+      const currentLevels = prev.Maturity_Level;
+      const updatedLevels = computeMaturityLevels(
+        currentLevels,
+        level,
+        checked,
+      );
+      return adjustMaturityLevelState(prev, updatedLevels);
+    });
+  };
+
+  //Update list of maturity levels based on the user's action.
+  const computeMaturityLevels = (currentLevels, newLevel, isChecked) => {
+    let levels = Array.isArray(currentLevels)
+      ? currentLevels
+      : [currentLevels].filter(Boolean);
+
+    if (isChecked) {
+      //Add the new level if the checkbox is checked.
+      levels.push(newLevel);
+    } else {
+      //Remove the level if the checkbox is unchecked.
+      levels = levels.filter((level) => level !== newLevel);
+    }
+
+    //Makes sure the levels list contains unique values and is sorted.
+    return Array.from(new Set(levels)).sort((a, b) => a - b);
+  };
+
+  //Update the filter levels
+  const adjustMaturityLevelState = (prevState, updatedLevels) => {
+    if (updatedLevels.length === 0) {
+      //Remove the maturity level key if no levels are chosen
+      const { Maturity_Level, ...rest } = prevState;
+      return rest;
+    } else if (updatedLevels.length === 1) {
+      //Stores as a single integer if only one level is selected.
+      return { ...prevState, Maturity_Level: updatedLevels[0] };
+    }
+    //Stores as an array if multiple levels are selected.
+    return { ...prevState, Maturity_Level: updatedLevels };
   };
 
   const handleRefreshClick = async () => {
@@ -147,14 +352,61 @@ function ToolTable() {
     ItemstoDisplay();
   };
 
+  const handleFilterSubmit = () => {
+    updateFilterRequery(filterInput);
+  };
+
   return (
     <div>
-      <button
-        onClick={() => handleRefreshClick()}
-        className="dashboard-button-tools"
-      >
+      {/* Move the Refresh button here, outside and above the .container div */}
+      <button onClick={handleRefreshClick} className="dashboard-button-tools">
         Refresh
       </button>
+
+
+      {/* Start of .container div */}
+      <div className="container">
+        <div>
+          <div className="filter-section">
+            <p className="dashboard-filter">Filter Options</p>
+            {filterOptions.map((option, index) => {
+              const isMaturityLevel = option.startsWith("Maturity Level");
+              const level = isMaturityLevel
+                ? parseInt(option.split(" ")[2], 10)
+                : 0;
+
+              return (
+                <div key={index}>
+                  <input
+                    type="checkbox"
+                    id={`checkbox-${index}`}
+                    value={option}
+                    onChange={handleMaturityLevel}
+                    checked={
+                      isMaturityLevel
+                        ? Array.isArray(filterInput["Maturity_Level"])
+                          ? filterInput["Maturity_Level"].includes(level)
+                          : filterInput["Maturity_Level"] === level
+                        : filterInput[option] || false
+                    }
+                  />
+                  <label htmlFor={`checkbox-${index}`}>{option}</label>
+                </div>
+              );
+            })}
+          </div>
+
+          <p className="dashboard-toolFunction">Tool Function</p>
+          <select
+            value={selectedToolFunction}
+            onChange={(e) => setSelectedToolFunction(e.target.value)}
+            className="dropdown"
+          >
+            <option value="">Select a Tool Function</option>
+            {filterOptionsForToolFunction.map((functionOption, index) => (
+              <option key={index} value={functionOption}>
+                {functionOption}
+              </option>
       <div>
         <table className="dashboard-table-tools">
           <thead>
@@ -180,18 +432,71 @@ function ToolTable() {
                 <td>{tool.Maturity_Level}</td>
               </tr>
             ))}
-          </tbody>
-        </table>
-      </div>
-      <div>
-        <span className="pagination">
-          <button className="pagination" onClick={handlePreviousPageClick}>
-            &lt;
+          </select>
+
+
+
+          <p className="dashboard-toolFunction">Company</p>
+          <select
+            value={selectedCompany}
+            onChange={handleCompanyChange}
+            className="dropdown"
+          >
+            <option value="">Select a Company</option>
+            {filterOptionsForCompany.map((company, index) => (
+              <option key={index} value={company}>
+                {company}
+              </option>
+            ))}
+          </select>
+
+          <button
+            onClick={handleFilterSubmit}
+            className="dashboard-button-tools"
+          >
+            Apply Filters
           </button>
-          <button className="pagination" onClick={handleNextPageClick}>
-            &gt;
-          </button>
-        </span>
+        </div>
+
+        <div>
+          <table className="dashboard-table-tools">
+            <thead>
+              <tr>
+                <th>Tool Name</th>
+                <th>Tool Function</th>
+                <th>Company</th>
+                <th>Aviation Specific</th>
+                <th>Maturity Level</th>
+              </tr>
+            </thead>
+            <tbody>
+              {itemsToDisplay.map((tool) => (
+                <tr
+                  key={tool.Tool_ID}
+                  onClick={() => handleRowClick(tool.Tool_ID)}
+                  className="dashboard-table-row-tools"
+                >
+                  <td>{tool.Tool_Name}</td>
+                  <td>{tool.Tool_Function}</td>
+                  <td>{tool.Company}</td>
+                  <td>{tool.Aviation_Specific ? "Yes" : "No"}</td>
+                  <td>{tool.Maturity_Level}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <div className="pagination">
+            <button
+              className="pagination-button"
+              onClick={handlePreviousPageClick}
+            >
+              &lt;
+            </button>
+            <button className="pagination-button" onClick={handleNextPageClick}>
+              &gt;
+            </button>
+          </div>
+        </div>
       </div>
       {isModalVisible && (
         <div className="modal-backdrop" onClick={hideModal}>
