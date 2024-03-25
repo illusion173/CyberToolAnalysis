@@ -210,35 +210,35 @@ function ToolTable() {
     });
   };
 
-  // Computes the updated list of maturity levels based on the user's action.
+  //Update list of maturity levels based on the user's action.
   const computeMaturityLevels = (currentLevels, newLevel, isChecked) => {
     let levels = Array.isArray(currentLevels)
       ? currentLevels
       : [currentLevels].filter(Boolean);
 
     if (isChecked) {
-      // Add the new level if the checkbox is checked.
+      //Add the new level if the checkbox is checked.
       levels.push(newLevel);
     } else {
-      // Remove the level if the checkbox is unchecked.
+      //Remove the level if the checkbox is unchecked.
       levels = levels.filter((level) => level !== newLevel);
     }
 
-    // Ensure the levels list contains unique values and is sorted.
+    //Makes sure the levels list contains unique values and is sorted.
     return Array.from(new Set(levels)).sort((a, b) => a - b);
   };
 
-  // Updates the filter input state specifically for maturity levels.
+  //Update the filter levels
   const adjustMaturityLevelState = (prevState, updatedLevels) => {
     if (updatedLevels.length === 0) {
-      // Remove the maturity level key if no levels are selected.
+      //Remove the maturity level key if no levels are chosen
       const { Maturity_Level, ...rest } = prevState;
       return rest;
     } else if (updatedLevels.length === 1) {
-      // Store as a single integer if only one level is selected.
+      //Stores as a single integer if only one level is selected.
       return { ...prevState, Maturity_Level: updatedLevels[0] };
     }
-    // Store as an array if multiple levels are selected.
+    //Stores as an array if multiple levels are selected.
     return { ...prevState, Maturity_Level: updatedLevels };
   };
 
