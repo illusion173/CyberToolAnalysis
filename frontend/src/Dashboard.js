@@ -3,6 +3,8 @@ import React, { useState, useEffect } from "react";
 import "./Dashboard.css";
 import ToolTable from "./dashboardTableComponent.js";
 function Dashboard() {
+
+    //Hello 
     const navigate = useNavigate();
 
     useEffect(() => { }, []);
