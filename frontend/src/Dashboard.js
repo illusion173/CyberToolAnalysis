@@ -14,15 +14,7 @@ function Dashboard() {
 
     return (
         <div className="App">
-            <p className="dashboard-welcome">Welcome to your Dashboard!</p>
-
-            <header>
-                <input
-                    id="search"
-                    type="search"
-                    placeholder="&#x1F50D; Start typing to search..."
-                />
-            </header>
+            <p className="dashboard-welcome">Welcome to CyberTool</p>
             <Navbar></Navbar>
 
             <ToolTable></ToolTable>
