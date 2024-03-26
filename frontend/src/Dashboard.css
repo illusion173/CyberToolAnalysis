@@ -179,3 +179,22 @@ header {
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
+/* Layout for the dashboard, including filters and table */
+.dashboard-layout {
+  display: flex; /* Enables flexbox */
+  justify-content: center; /* Centers children horizontally in the container */
+  align-items: start; /* Aligns items at the start of the cross axis */
+  gap: 20px; /* Adds some space between the filter and the table */
+}
+
+/* Ensures the table container is centered with filters on the left */
+.dashboard-table-container {
+}
+.filter-layout {
+  
+}
+
+
+.drop-down-filter-window {
+  
+}
