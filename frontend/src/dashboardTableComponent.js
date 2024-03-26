@@ -340,7 +340,7 @@ function ToolTable() {
                 <th>Tool Function</th>
                 <th>Company</th>
                 <th>Aviation Specific</th>
-                <th>Maturity Level</th>
+                <th>Phone</th>
               </tr>
             </thead>
             <tbody>
@@ -356,7 +356,7 @@ function ToolTable() {
                   <td>{tool.Tool_Function}</td>
                   <td>{tool.Company}</td>
                   <td>{tool.Aviation_Specific ? "Yes" : "No"}</td>
-                  <td>{tool.Maturity_Level}</td>
+                  <td>{tool.Phone}</td>
                 </tr>
               ))}
             </tbody>
