@@ -55,5 +55,6 @@ export async function fetchReportList() {
     return report_array;
   } catch (error) {
     alert("Unable to retrieve report list");
+    return [];
   }
 }
