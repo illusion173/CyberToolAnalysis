@@ -11,6 +11,7 @@ const Questionnaire = () => {
   const navigate = useNavigate();
 
   // Define the state to store user responses
+  const [budget, setBudget] = useState(0);
   const [responses, setResponses] = useState({});
   const [description, setDescription] = useState("");
 
@@ -116,6 +117,7 @@ const Questionnaire = () => {
     console.log(corrected_user_responses);
     let corrected_keys = convertQuestionKeys(corrected_user_responses);
     corrected_keys["free_response"] = description;
+    corrected_keys["budget_constraints"] = parseFloat(budget);
     let report_status = await createReportForUser(corrected_keys, file_name);
   };
 
@@ -226,6 +228,19 @@ const Questionnaire = () => {
 
       <form className="form-padding-style" onSubmit={handleSubmit}>
         {questionElements}
+        <div className="form-group">
+          {" "}
+          <label>
+            {" "}
+            What budget constraints or limitations do you have when it comes to
+            investing in cybersecurity technologies for the aerospace industry?
+            <input
+              type="number"
+              placeholder="Enter a $ dollar amount"
+              onChange={(e) => setBudget(e.target.value)}
+            ></input>
+          </label>
+        </div>
         <div className="form-group">
           <label className="form-group-label">
             Description
