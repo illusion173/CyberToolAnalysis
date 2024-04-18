@@ -29,7 +29,7 @@ fn print_rec_request() {
     panic!();
 }
 
-async fn function_handler(event: Request) -> Result<(), Error> {
+async fn function_handler(event: Request) -> Result<String, Error> {
     let body_str = std::str::from_utf8(event.body().as_ref())
         .map_err(|e| anyhow!("Request is not valid utf8: {e:?}"))?;
 
@@ -46,14 +46,19 @@ async fn function_handler(event: Request) -> Result<(), Error> {
 
     let ranked_tools = get_tool_rankings(&db_client, &request, tools).await?;
 
-    let pdf_key = upload_report(&ranked_tools, &request.file_name, &s3_client).await?;
+    let report_id = upload_report(
+        &ranked_tools,
+        &request.file_name,
+        &request.user_identifier,
+        &s3_client,
+        &db_client,
+    )
+    .await?;
 
-    // TODO: upload pdf to s3
-
-    // TODO: Insert to database to link user's file name to the UUID so the client can download the
-    // file
-
-    Ok(())
+    Ok(format!(
+        "Successfully created report id: {report_id}, for user: {}, with file name: {}",
+        &request.user_identifier, &request.file_name
+    ))
 }
 
 async fn raw_function_handler(event: Request) -> Result<Response<Body>, lambda_http::Error> {

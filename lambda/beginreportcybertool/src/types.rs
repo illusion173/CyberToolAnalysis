@@ -13,9 +13,21 @@ where
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct RecommendToolsResponse {
-    pub status: Result<(), String>,
+    pub status: Result<String, String>,
     #[serde(serialize_with = "display_seconds")]
     pub time_taken: Duration,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct ReportLocation {
+    /// The name of the final report once stored in s3
+    pub user_id: String,
+    /// The user making the request
+    pub report_id: String,
+    /// The user's selection from the form
+    pub date_made: String,
+    /// The file name the user entered
+    pub file_name: String,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
