@@ -8,7 +8,7 @@ pub use db_wrapper::*;
 mod pdf;
 pub use pdf::*;
 
-use anyhow::{anyhow, Error};
+use anyhow::{anyhow, Context, Error};
 use aws_sdk_dynamodb::Client as DynamoClient;
 use lambda_http::{run, service_fn, Body, Request, Response};
 use std::time::Instant;
@@ -41,9 +41,13 @@ async fn function_handler(event: Request) -> Result<String, Error> {
     let db_client = DynamoClient::new(&config);
     let s3_client = aws_sdk_s3::Client::new(&config);
 
-    let tools = get_tools_in_industry(&db_client, request.responses.industry).await?;
+    let tools = get_tools_in_industry(&db_client, request.responses.industry)
+        .await
+        .context("get tools in industry")?;
 
-    let ranked_tools = get_tool_rankings(&db_client, &request, tools).await?;
+    let ranked_tools = get_tool_rankings(&db_client, &request, tools)
+        .await
+        .context("get tool rankings")?;
 
     let report_id = upload_report(
         &ranked_tools,
@@ -52,7 +56,8 @@ async fn function_handler(event: Request) -> Result<String, Error> {
         &s3_client,
         &db_client,
     )
-    .await?;
+    .await
+    .context("upload report")?;
 
     Ok(format!(
         "Successfully created report id: {report_id}, for user: {}, with file name: {}",

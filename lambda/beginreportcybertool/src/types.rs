@@ -312,33 +312,10 @@ fn print_rec_request() {
     panic!("Json printed above");
 }
 
-//#[test]
-#[doc(hidden)]
+#[test]
 fn prod_bug() {
     let s = r#"
-{
-  "file_name": "Test",
-  "user_identifier": "illusion173@hotmail.com",
-  "responses": {
-    "regulatory_needs": [
-      "NIST"
-    ],
-    "threats": "Insider threats",
-    "aware_of_cyber_incidents": "No",
-    "legacy_systems": "No",
-    "remote_systems_needing_security": "Yes, satellites",
-    "communications": "Wired networks (e.g., Ethernet)",
-    "cloud_reliance": "Heavily reliant on cloud services",
-    "dedicated_it_status": "Yes, dedicated cybersecurity team",
-    "specific_cyber_security_measures": "Encryption",
-    "cybersecurity_training_interval": "Annually",
-    "formal_incident_plan": "Yes, a well-defined plan",
-    "threat_intelligence_services": "Yes, currently using threat intelligence",
-    "securing_emerging_tech": "IoT devices with security measures",
-    "free_response": "I need a great security tool!",
-    "budget_constraints": 9999
-  }
-}
+{"file_name":"anothertest.pdf","user_identifier":"illusion173@hotmail.com","responses":{"industry":"Industrial_Control_Systems","regulatory_needs":["NIST","FAA"],"threats":"Insider threats","aware_of_cyber_incidents":"Yes","legacy_systems":"Yes","communications":"Wired networks (e.g., Ethernet)","remote_systems_needing_security":"Yes, drones","cloud_reliance":"Heavily reliant on cloud services","dedicated_it_status":"Yes, dedicated cybersecurity team","specific_cyber_security_measures":"Encryption","cybersecurity_training_interval":"Annually","formal_incident_plan":"Yes, a well-defined plan","threat_intelligence_services":"Yes, currently using threat intelligence","securing_emerging_tech":"IoT devices with security measures","free_response":"I need a good tiool!","budget_constraints":9999}}
 "#;
     let a: RecommendationRequest = serde_json::from_str(s).unwrap();
 }
