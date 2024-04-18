@@ -5,16 +5,12 @@ use aws_sdk_s3::{primitives::ByteStream, Client};
 use flate2::read::GzDecoder;
 use genpdf::{elements, style, Element};
 use serde::Serialize;
-use std::{fs, fs::File, io::Write};
+use std::{fs, io::Cursor};
 use tar::Archive;
 use uuid::Uuid;
 
-const TEMPDIR: &str = "/tmp";
 const FONTSDIR: &str = "/tmp/fonts";
 const DEFAULT_FONT_NAME: &str = "LiberationSans";
-const FONTBUCKET: &str = "reportcybertool-cs490";
-const FONTZIPNAME: &str = "fonts.tar.gz";
-const FONTZIPKEY: &str = "fonts/fonts.tar.gz";
 const REPORTBUCKET: &str = "reportcybertool-cs490";
 
 #[derive(Serialize)]
@@ -51,40 +47,14 @@ async fn put_file_s3(pdf: Vec<u8>, s3client: &Client) -> Result<String> {
     Ok(uuid)
 }
 
-async fn load_fonts(s3client: &Client) -> Result<()> {
-    // Create the /tmp/fonts directory
+async fn load_fonts() -> Result<()> {
     fs::create_dir_all(FONTSDIR)?;
 
-    let fonts_tar_path = format!("{TEMPDIR}/{FONTZIPNAME}");
-    // Create a local dummy file
-    let mut file = File::create(&fonts_tar_path).context("create fonts tar file in /tmp")?;
+    let fonts_tar_bytes = include_bytes!("../fonts.tar.gz");
 
-    // Retrieve file
-    let mut s3_file_object = s3client
-        .get_object()
-        .bucket(FONTBUCKET)
-        .key(FONTZIPKEY)
-        .send()
-        .await?;
-    println!("FINISHED DOWNLOADING FONT FROM S3");
-
-    // Write to /tmp/fonts
-    while let Some(bytes) = s3_file_object
-        .body
-        .try_next()
-        .await
-        .context("read s3 object body")?
-    {
-        file.write_all(&bytes).context("streaming font to disk")?;
-    }
-
-    println!("FINISHED WRITING TO /tmp/fonts");
-
-    let tar_gz = File::open(fonts_tar_path).context("open fonts tar file")?;
-
-    let tar = GzDecoder::new(tar_gz);
+    let tar = GzDecoder::new(Cursor::new(fonts_tar_bytes));
     let mut archive = Archive::new(tar);
-    archive.unpack(".").context("unpacking fonts tar")?;
+    archive.unpack(FONTSDIR).context("unpacking fonts tar")?;
 
     Ok(())
 }
@@ -144,7 +114,7 @@ pub async fn upload_report(
     s3_client: &aws_sdk_s3::Client,
     db_client: &DynamoClient,
 ) -> Result<String> {
-    load_fonts(s3_client).await?;
+    load_fonts().await?;
 
     let pdf_bytes = gen_pdf(ranked_tools).await.context("generate report pdf")?;
 
