@@ -5,6 +5,8 @@ mod rank_tools;
 pub use rank_tools::*;
 mod db_wrapper;
 pub use db_wrapper::*;
+mod pdf;
+pub use pdf::*;
 
 use anyhow::{anyhow, Error};
 use aws_sdk_dynamodb::Client as DynamoClient;
@@ -27,7 +29,7 @@ fn print_rec_request() {
     panic!();
 }
 
-async fn function_handler(event: Request) -> Result<String, Error> {
+async fn function_handler(event: Request) -> Result<(), Error> {
     let body_str = std::str::from_utf8(event.body().as_ref())
         .map_err(|e| anyhow!("Request is not valid utf8: {e:?}"))?;
 
@@ -38,24 +40,20 @@ async fn function_handler(event: Request) -> Result<String, Error> {
 
     let config = aws_config::load_from_env().await;
     let db_client = DynamoClient::new(&config);
+    let s3_client = aws_sdk_s3::Client::new(&config);
 
     let tools = get_tools_in_industry(&db_client, request.responses.industry).await?;
 
     let ranked_tools = get_tool_rankings(&db_client, &request, tools).await?;
 
-    // TODO: generate pdf from tools
+    let pdf_key = upload_report(&ranked_tools, &request.file_name, &s3_client).await?;
+
     // TODO: upload pdf to s3
 
-    // Return tools and their score for now
-    let s = format!(
-        "{:?}",
-        ranked_tools
-            .iter()
-            .map(|(t, score)| format!("{}: {score}", t.name))
-            .collect::<Vec<_>>()
-    );
+    // TODO: Insert to database to link user's file name to the UUID so the client can download the
+    // file
 
-    Ok(s)
+    Ok(())
 }
 
 async fn raw_function_handler(event: Request) -> Result<Response<Body>, lambda_http::Error> {

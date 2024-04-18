@@ -13,7 +13,7 @@ where
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct RecommendToolsResponse {
-    pub status: Result<String, String>,
+    pub status: Result<(), String>,
     #[serde(serialize_with = "display_seconds")]
     pub time_taken: Duration,
 }
