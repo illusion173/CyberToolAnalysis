@@ -317,4 +317,24 @@ export const question_list = [
       ],
     },
   },
+  {
+    question_15: {
+      Question:
+        "Are there any emerging technologies (e.g., IoT devices, AI, or blockchain) that you plan to integrate into your aerospace systems, and how will you secure them?",
+      "Answer choices": [
+        {
+          A: "Limited budget for cybersecurity",
+        },
+        {
+          B: "Moderate budget for cybersecurity",
+        },
+        {
+          C: "Limited budget for cybersecurity",
+        },
+        {
+          D: "No budget",
+        },
+      ],
+    },
+  },
 ];
