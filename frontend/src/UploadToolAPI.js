@@ -154,7 +154,7 @@ export async function submitPotentialTool(ToolData) {
     };
 
     let response = await API.post(apiName, path, myInit);
-    console.log(response);
+    alert(response);
   } catch (error) {
     console.log(error);
     //alert("Unable to retrieve tool data for " + tool_id);
