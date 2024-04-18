@@ -13,7 +13,6 @@ const Questionnaire = () => {
   // Define the state to store user responses
   const [responses, setResponses] = useState({});
   const [description, setDescription] = useState("");
-  const [budget, setBudget] = useState(1);
 
   // Function to render the character count indicator
   const renderCharacterCount = () => {
@@ -117,12 +116,7 @@ const Questionnaire = () => {
     console.log(corrected_user_responses);
     let corrected_keys = convertQuestionKeys(corrected_user_responses);
     corrected_keys["free_response"] = description;
-    corrected_keys["budget_constraints"] = parseFloat(budget);
     let report_status = await createReportForUser(corrected_keys, file_name);
-
-    if (report_status["header"]["statuscode"] === 200) {
-      console.log(report_status["body"]);
-    }
   };
 
   const handleDashboardClick = (e) => {
@@ -232,19 +226,6 @@ const Questionnaire = () => {
 
       <form className="form-padding-style" onSubmit={handleSubmit}>
         {questionElements}
-        <div className="form-group">
-          {" "}
-          <label>
-            {" "}
-            What budget constraints or limitations do you have when it comes to
-            investing in cybersecurity technologies for the aerospace industry?
-            <input
-              type="number"
-              placeholder="Enter a $ dollar amount"
-              onChange={(e) => setBudget(e.target.value)}
-            ></input>
-          </label>
-        </div>
         <div className="form-group">
           <label className="form-group-label">
             Description
