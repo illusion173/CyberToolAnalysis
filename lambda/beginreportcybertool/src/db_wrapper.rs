@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use anyhow::{anyhow, Result};
+use anyhow::{anyhow, Context, Result};
 use aws_sdk_dynamodb::types::{ComparisonOperator, Condition};
 use aws_sdk_dynamodb::Client as DynamoClient;
 use chrono::Local;
@@ -41,7 +41,8 @@ pub async fn get_tools_in_industry(
         .items
         .ok_or_else(|| anyhow!("No items found in database query"))?;
 
-    Ok(serde_dynamo::from_items(items)?)
+    tracing::info!("About to deserialize items: {items:?} to db format for request");
+    Ok(serde_dynamo::from_items(items).context("serialize items to dynamodb json")?)
 }
 
 pub async fn update_embedding(
