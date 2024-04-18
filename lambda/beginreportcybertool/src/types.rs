@@ -58,7 +58,7 @@ pub struct QuestionnaireData {
     pub formal_incident_plan: FormalIncidentPlan,
     pub threat_intelligence_services: ThreatIntelligenceServices,
     pub securing_emerging_tech: SecuringEmergingTech,
-    pub budget_constraints: BudgetConstraints,
+    pub budget_constraints: u32,
 }
 
 #[derive(Clone, Deserialize, Debug, Serialize)]
@@ -277,18 +277,6 @@ pub enum SecuringEmergingTech {
     None,
 }
 
-#[derive(Copy, Clone, Deserialize, Debug, Serialize)]
-pub enum BudgetConstraints {
-    #[serde(rename = "Limited budget for cybersecurity")]
-    Sufficent,
-    #[serde(rename = "Moderate budget for cybersecurity")]
-    Moderate,
-    #[serde(rename = "Limited budget for cybersecurity")]
-    Limited,
-    #[serde(rename = "No budget")]
-    None,
-}
-
 impl Default for RecommendationRequest {
     fn default() -> Self {
         Self {
@@ -310,16 +298,47 @@ impl Default for RecommendationRequest {
                 formal_incident_plan: FormalIncidentPlan::WellDefined,
                 threat_intelligence_services: ThreatIntelligenceServices::Considering,
                 securing_emerging_tech: SecuringEmergingTech::Ai,
-                budget_constraints: BudgetConstraints::Sufficent,
+                budget_constraints: 5000,
             },
         }
     }
 }
 
 // Used to generate mock json request for testing with aws Api Gateway
-#[test]
+//#[test]
 fn print_rec_request() {
     let a = RecommendationRequest::default();
     println!("{}", serde_json::to_string_pretty(&a).unwrap());
     panic!("Json printed above");
+}
+
+//#[test]
+#[doc(hidden)]
+fn prod_bug() {
+    let s = r#"
+{
+  "file_name": "Test",
+  "user_identifier": "illusion173@hotmail.com",
+  "responses": {
+    "regulatory_needs": [
+      "NIST"
+    ],
+    "threats": "Insider threats",
+    "aware_of_cyber_incidents": "No",
+    "legacy_systems": "No",
+    "remote_systems_needing_security": "Yes, satellites",
+    "communications": "Wired networks (e.g., Ethernet)",
+    "cloud_reliance": "Heavily reliant on cloud services",
+    "dedicated_it_status": "Yes, dedicated cybersecurity team",
+    "specific_cyber_security_measures": "Encryption",
+    "cybersecurity_training_interval": "Annually",
+    "formal_incident_plan": "Yes, a well-defined plan",
+    "threat_intelligence_services": "Yes, currently using threat intelligence",
+    "securing_emerging_tech": "IoT devices with security measures",
+    "free_response": "I need a great security tool!",
+    "budget_constraints": 9999
+  }
+}
+"#;
+    let a: RecommendationRequest = serde_json::from_str(s).unwrap();
 }

@@ -26,7 +26,6 @@ macro_rules! dump {
 fn print_rec_request() {
     let a = RecommendationRequest::default();
     println!("{}", serde_json::to_string_pretty(&a).unwrap());
-    panic!();
 }
 
 async fn function_handler(event: Request) -> Result<String, Error> {

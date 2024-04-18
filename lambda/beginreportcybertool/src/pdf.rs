@@ -9,7 +9,6 @@ use std::{fs, io::Cursor};
 use tar::Archive;
 use uuid::Uuid;
 
-const FONTSDIR: &str = "/tmp/fonts";
 const DEFAULT_FONT_NAME: &str = "LiberationSans";
 const REPORTBUCKET: &str = "reportcybertool-cs490";
 
@@ -48,23 +47,23 @@ async fn put_file_s3(pdf: Vec<u8>, s3client: &Client) -> Result<String> {
 }
 
 async fn load_fonts() -> Result<()> {
-    fs::create_dir_all(FONTSDIR)?;
-
     let fonts_tar_bytes = include_bytes!("../fonts.tar.gz");
 
     let tar = GzDecoder::new(Cursor::new(fonts_tar_bytes));
     let mut archive = Archive::new(tar);
-    archive.unpack(FONTSDIR).context("unpacking fonts tar")?;
+    archive.unpack("/tmp").context("unpacking fonts tar")?;
 
     Ok(())
 }
 
 async fn gen_pdf(ranked_tools: &[(ToolRow, f32)]) -> Result<Vec<u8>> {
     let font_family = genpdf::fonts::from_files(
-        FONTSDIR,
+        "/tmp/fonts",
         DEFAULT_FONT_NAME,
         Some(genpdf::fonts::Builtin::Helvetica),
-    )?;
+    )
+    .context("read fonts from /tmp/fonts")?;
+
     // Create a document and set the default font family
     let mut doc = genpdf::Document::new(font_family);
     doc.set_title("CyberTool Analysis - Report");
@@ -102,7 +101,7 @@ async fn gen_pdf(ranked_tools: &[(ToolRow, f32)]) -> Result<Vec<u8>> {
     doc.push(tool_table);
 
     let mut pdf = vec![];
-    doc.render(&mut pdf)?;
+    doc.render(&mut pdf).context("render pdf")?;
 
     Ok(pdf)
 }
