@@ -129,6 +129,8 @@ pub enum Industry {
     VirtualPrivateNetwork,
     #[serde(rename = "Cybersecurity_Service_Provider")]
     CybersecurityServiceProvider,
+    #[serde(rename = "Endpoint_Security")]
+    EndpointSecurity,
 }
 
 #[derive(Copy, Clone, Deserialize, Debug, Serialize)]
