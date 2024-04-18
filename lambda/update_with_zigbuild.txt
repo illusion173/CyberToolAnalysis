@@ -1,0 +1,6 @@
+
+cargo zigbuild --release --target x86_64-unknown-linux-musl
+cp ./target/x86_64-unknown-linux-musl/release/your_project_name ./bootstrap
+zip lambda.zip bootstrap
+aws lambda update-function-code --function-name your_function_name \
+--zip-file fileb://lambda.zip
