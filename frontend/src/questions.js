@@ -12,7 +12,7 @@ export const tool_function_categories = [
   "Regulatory Compliance Tools",
   "Aviation Focused Tools",
   "General Tools",
-  "Industrial Control Systems Cyber Tools",
+  "Industrial Control Systems",
 ];
 
 export const tool_function_categories_cleaner_dict = {
@@ -313,26 +313,6 @@ export const question_list = [
         },
         {
           D: "Not planning to integrate emerging technologies",
-        },
-      ],
-    },
-  },
-  {
-    question_15: {
-      Question:
-        "Are there any emerging technologies (e.g., IoT devices, AI, or blockchain) that you plan to integrate into your aerospace systems, and how will you secure them?",
-      "Answer choices": [
-        {
-          A: "Limited budget for cybersecurity",
-        },
-        {
-          B: "Moderate budget for cybersecurity",
-        },
-        {
-          C: "Limited budget for cybersecurity",
-        },
-        {
-          D: "No budget",
         },
       ],
     },
