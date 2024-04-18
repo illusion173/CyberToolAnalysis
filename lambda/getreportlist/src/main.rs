@@ -105,21 +105,13 @@ async fn function_handler(event: Request) -> Result<Response<Body>, Error> {
 
     let report_vector = get_report_list(user_data_struct.user_identifier).await?;
 
-    if report_vector.is_empty() {
-        return Ok(Response::builder()
-            .header("Access-Control-Allow-Origin", "*")
-            .status(400)
-            .body(Body::from("No Reports For User."))
-            .expect("Failed to build a response"));
-    }
-
     let serialized_report_list = serde_json::to_string(&report_vector)?;
 
     let resp = Response::builder()
         .status(200)
-        .header("content-type", "text/html")
+        .header("content-type", "application/json")
         .header("Access-Control-Allow-Origin", "*")
-        .body(serialized_report_list.into())
+        .body(Body::from(serialized_report_list))
         .map_err(Box::new)?;
     Ok(resp)
 }
