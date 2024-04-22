@@ -19,6 +19,18 @@ pub struct RecommendToolsResponse {
 }
 
 #[derive(Serialize, Deserialize, Debug)]
+pub struct ReportLocation {
+    /// The name of the final report once stored in s3
+    pub user_id: String,
+    /// The user making the request
+    pub report_id: String,
+    /// The user's selection from the form
+    pub date_made: String,
+    /// The file name the user entered
+    pub file_name: String,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
 pub struct RecommendationRequest {
     /// The name of the final report once stored in s3
     pub file_name: String,
@@ -46,7 +58,7 @@ pub struct QuestionnaireData {
     pub formal_incident_plan: FormalIncidentPlan,
     pub threat_intelligence_services: ThreatIntelligenceServices,
     pub securing_emerging_tech: SecuringEmergingTech,
-    pub budget_constraints: BudgetConstraints,
+    pub budget_constraints: u32,
 }
 
 #[derive(Clone, Deserialize, Debug, Serialize)]
@@ -117,6 +129,8 @@ pub enum Industry {
     VirtualPrivateNetwork,
     #[serde(rename = "Cybersecurity_Service_Provider")]
     CybersecurityServiceProvider,
+    #[serde(rename = "Endpoint_Security")]
+    EndpointSecurity,
 }
 
 #[derive(Copy, Clone, Deserialize, Debug, Serialize)]
@@ -265,18 +279,6 @@ pub enum SecuringEmergingTech {
     None,
 }
 
-#[derive(Copy, Clone, Deserialize, Debug, Serialize)]
-pub enum BudgetConstraints {
-    #[serde(rename = "Limited budget for cybersecurity")]
-    Sufficent,
-    #[serde(rename = "Moderate budget for cybersecurity")]
-    Moderate,
-    #[serde(rename = "Limited budget for cybersecurity")]
-    Limited,
-    #[serde(rename = "No budget")]
-    None,
-}
-
 impl Default for RecommendationRequest {
     fn default() -> Self {
         Self {
@@ -298,16 +300,24 @@ impl Default for RecommendationRequest {
                 formal_incident_plan: FormalIncidentPlan::WellDefined,
                 threat_intelligence_services: ThreatIntelligenceServices::Considering,
                 securing_emerging_tech: SecuringEmergingTech::Ai,
-                budget_constraints: BudgetConstraints::Sufficent,
+                budget_constraints: 5000,
             },
         }
     }
 }
 
 // Used to generate mock json request for testing with aws Api Gateway
-#[test]
+//#[test]
 fn print_rec_request() {
     let a = RecommendationRequest::default();
     println!("{}", serde_json::to_string_pretty(&a).unwrap());
     panic!("Json printed above");
+}
+
+#[test]
+fn prod_bug() {
+    let s = r#"
+{"file_name":"anothertest.pdf","user_identifier":"illusion173@hotmail.com","responses":{"industry":"Industrial_Control_Systems","regulatory_needs":["NIST","FAA"],"threats":"Insider threats","aware_of_cyber_incidents":"Yes","legacy_systems":"Yes","communications":"Wired networks (e.g., Ethernet)","remote_systems_needing_security":"Yes, drones","cloud_reliance":"Heavily reliant on cloud services","dedicated_it_status":"Yes, dedicated cybersecurity team","specific_cyber_security_measures":"Encryption","cybersecurity_training_interval":"Annually","formal_incident_plan":"Yes, a well-defined plan","threat_intelligence_services":"Yes, currently using threat intelligence","securing_emerging_tech":"IoT devices with security measures","free_response":"I need a good tiool!","budget_constraints":9999}}
+"#;
+    let a: RecommendationRequest = serde_json::from_str(s).unwrap();
 }
